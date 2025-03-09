@@ -25,7 +25,6 @@ class project {
 
     // std::vector<library> libs;
     // std::vector<execution> exes;
-    // std::vector<command> cmds;
 
     void process();
 };
