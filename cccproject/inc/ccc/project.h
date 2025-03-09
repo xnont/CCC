@@ -12,13 +12,13 @@ enum func_status {};
 
 class project {
   public:
-    project(auto (*init_func)(project*)->void,
-            auto (*exit_func)(project*)->void);
+    project(auto (*init_func)(project*, int, char**)->void,
+            auto (*exit_func)(project*, int, char**)->void);
 
     /* The init_func is executed before processing the project. */
-    void (*init_func)(project*);
+    void (*init_func)(project*, int, char**);
     /* The exit_func is executed after processing the project. */
-    void (*exit_func)(project*);
+    void (*exit_func)(project*, int, char**);
 
     /* Used to pass parameters between init_func and exit_func. */
     void* arg;

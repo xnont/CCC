@@ -17,11 +17,10 @@ class command {
     void (*run)(int argc, char** argv);
 
     command(std::string name, auto (*run)(int, char**)->void,
-            std::string description)
-        : name(name), run(run), description(description) {}
+            std::string description);
 };
 
-extern std::vector<ccc::command> cmds;
+extern std::vector<ccc::command*> cmds;
 
 } // namespace ccc
 
