@@ -1,4 +1,5 @@
-#include "cccmain.h"
+#include "ccc/project.h"
+#include <iostream>
 
 int main(int argc, char* argv[]) {
     std::string target_cmd = "";
@@ -11,9 +12,11 @@ int main(int argc, char* argv[]) {
 
     // Run the target command
     for (auto cmd : ccc::cmds) {
-        if (cmd->name == target_cmd) {
-            cmd->run(argc, argv);
-            return 0;
+        for (auto name : cmd->names) {
+            if (name == target_cmd) {
+                cmd->run(argc, argv);
+                return 0;
+            }
         }
     }
 

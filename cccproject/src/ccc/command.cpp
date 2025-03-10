@@ -6,10 +6,17 @@ std::vector<ccc::command*> cmds;
 
 ccc::command::command(std::string name, auto (*run)(int, char**)->void,
                       std::string description)
-    : name(name), run(run), description(description) {
+    : run(run), description(description) {
+    this->names.push_back(name);
     cmds.push_back(this);
 }
 
+ccc::command::command(std::vector<std::string> names,
+                      auto (*run)(int, char**)->void, std::string description)
+    : run(run), description(description) {
+    this->names = names;
+    cmds.push_back(this);
+}
 #include "ccc/project.h"
 void build(int argc, char** argv) {
     for (auto project : ccc::projects) {
@@ -28,10 +35,13 @@ void describe(int argc, char** argv) {
     }
 
     for (auto cmd : ccc::cmds) {
-        if (cmd->name == argv[2]) {
-            std::cout << cmd->name << ": " << cmd->description << std::endl;
-            return;
+        for (auto name : cmd->names) {
+            if (name == argv[2]) {
+                std::cout << name << ": " << cmd->description << std::endl;
+                return;
+            }
         }
     }
 }
-ccc::command desc_cmd("desc", describe, "Describes all projects");
+ccc::command desc_cmd(std::vector<std::string>{"desc", "describe"}, describe,
+                      "Describes all projects");
