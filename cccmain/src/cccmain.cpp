@@ -5,9 +5,7 @@ int main(int argc, char* argv[]) {
     std::string target_cmd = "";
 
     // Determine the target command
-    if (argc == 1)
-        target_cmd = "build";
-    else
+    if (argc > 1)
         target_cmd = argv[1];
 
     // Run the target command

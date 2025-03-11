@@ -25,7 +25,8 @@ void build(int argc, char** argv) {
         project->exit_func(project, argc, argv);
     }
 }
-ccc::command build_cmd("build", build, "Builds all projects");
+ccc::command build_cmd(std::vector<std::string>{"", "build"}, build,
+                       "Builds all projects");
 
 #include <iostream>
 void describe(int argc, char** argv) {
