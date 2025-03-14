@@ -4,7 +4,8 @@ namespace ccc {
 std::vector<ccc::command*> cmds;
 }
 
-ccc::command::command(std::string name, auto (*run)(int, char**)->void,
+ccc::command::command(std::string name,
+                      auto (*run)(std::vector<std::string> args)->void,
                       std::string description)
     : run(run), description(description) {
     this->names.push_back(name);
@@ -12,32 +13,33 @@ ccc::command::command(std::string name, auto (*run)(int, char**)->void,
 }
 
 ccc::command::command(std::vector<std::string> names,
-                      auto (*run)(int, char**)->void, std::string description)
+                      auto (*run)(std::vector<std::string> args)->void,
+                      std::string description)
     : run(run), description(description) {
     this->names = names;
     cmds.push_back(this);
 }
 #include "ccc/project.h"
-void build(int argc, char** argv) {
+void build(std::vector<std::string> args) {
     for (auto project : ccc::projects) {
-        project->init_func(project, argc, argv);
+        project->init_func(project, args);
         project->process();
-        project->exit_func(project, argc, argv);
+        project->exit_func(project, args);
     }
 }
 ccc::command build_cmd(std::vector<std::string>{"", "build"}, build,
                        "Builds all projects");
 
 #include <iostream>
-void describe(int argc, char** argv) {
-    if (argc != 3) {
+void describe(std::vector<std::string> args) {
+    if (args.size() != 3) {
         std::cout << "Usage: ccc desc <command name>" << std::endl;
         return;
     }
 
     for (auto cmd : ccc::cmds) {
         for (auto name : cmd->names) {
-            if (name == argv[2]) {
+            if (name == args[2]) {
                 std::cout << name << ": " << cmd->description << std::endl;
                 return;
             }

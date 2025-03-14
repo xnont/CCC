@@ -14,12 +14,13 @@ class command {
     std::string description;
 
     /* Run the command  */
-    void (*run)(int argc, char** argv);
+    void (*run)(std::vector<std::string> args);
 
-    command(std::string name, auto (*run)(int, char**)->void,
+    command(std::string name, auto (*run)(std::vector<std::string> args)->void,
             std::string description);
 
-    command(std::vector<std::string> names, auto (*run)(int, char**)->void,
+    command(std::vector<std::string> names,
+            auto (*run)(std::vector<std::string> args)->void,
             std::string description);
 };
 
