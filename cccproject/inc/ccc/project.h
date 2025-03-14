@@ -2,6 +2,7 @@
 #define __CCC_H__
 
 #include "ccc/command.h"
+#include "ccc/config.h"
 #include "ccc/execution.h"
 #include "ccc/library.h"
 #include <vector>
@@ -23,8 +24,10 @@ class project {
     /* Used to pass parameters between init_func and exit_func. */
     void* arg;
 
-    // std::vector<library> libs;
-    // std::vector<execution> exes;
+    // std::vector<ccc::library> libs;
+    std::vector<ccc::execution> exes;
+
+    ccc::config cfg;
 
     void process();
 };

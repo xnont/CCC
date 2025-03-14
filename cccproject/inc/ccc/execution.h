@@ -1,8 +1,14 @@
 #ifndef __EXECUTION_H__
 #define __EXECUTION_H__
 
+#include "ccc/compile.h"
+#include <numeric>
+
 namespace ccc {
-class execution;
-}
+class execution : public ccc::compile {
+  public:
+    void process(ccc::config project_cfg);
+};
+} // namespace ccc
 
 #endif

@@ -10,4 +10,13 @@ ccc::project::project(
     : init_func(init_func), exit_func(exit_func), arg(nullptr) {
     ccc::projects.push_back(this);
 }
-void ccc::project::process() {}
+void ccc::project::process() {
+
+    // for (auto& lib : libs) {
+    //     lib.process();
+    // }
+
+    for (auto& exe : exes) {
+        exe.process(this->cfg);
+    }
+}
