@@ -2,7 +2,10 @@
 #define __COMPILE_H__
 
 #include "ccc/config.h"
+#include <filesystem>
 #include <string>
+
+namespace fs = std::filesystem;
 
 namespace ccc {
 class compile {
