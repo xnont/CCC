@@ -5,6 +5,7 @@
 #include "ccc/config.h"
 #include "ccc/execution.h"
 #include "ccc/library.h"
+#include <iostream>
 #include <vector>
 
 namespace ccc {
@@ -15,6 +16,8 @@ class project {
   public:
     project(auto (*init_func)(project*, std::vector<std::string>)->void,
             auto (*exit_func)(project*, std::vector<std::string>)->void);
+
+    std::string name;
 
     /* The init_func is executed before processing the project. */
     void (*init_func)(project*, std::vector<std::string>);
@@ -27,9 +30,14 @@ class project {
     // std::vector<ccc::library> libs;
     std::vector<ccc::execution> exes;
 
-    ccc::config cfg;
+    /* The configuration of the project. */
+    ccc::config config;
 
+    /* Process the project.  */
     void process();
+
+  private:
+    bool check();
 };
 
 /* All initialized project variables will be automatically added to this

@@ -41,8 +41,8 @@ void ccc::compile::handle(ccc::config project_cfg) {
 
         std::string cmd = (
             // Compiler
-            (this->cfg.compiler.length() != 0 ? this->cfg.compiler
-                                              : project_cfg.compiler) +
+            (this->config.compiler.length() != 0 ? this->config.compiler
+                                                 : project_cfg.compiler) +
             // Only compile without linking
             " -c " +
             // Source file

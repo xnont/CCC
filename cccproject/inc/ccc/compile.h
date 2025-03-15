@@ -16,7 +16,7 @@ class compile {
     std::vector<std::string> source_files;
     std::vector<std::string> obj_files;
 
-    ccc::config cfg;
+    ccc::config config;
 
     void handle(ccc::config project_cfg);
 };
