@@ -2,8 +2,8 @@
 #define __EXECUTION_H__
 
 #include "ccc/compile.h"
+#include "ccc/util.h"
 #include <iostream>
-#include <numeric>
 
 namespace ccc {
 class execution : public ccc::compile {

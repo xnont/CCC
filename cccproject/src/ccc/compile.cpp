@@ -50,13 +50,9 @@ void ccc::compile::handle(ccc::config project_cfg) {
             // Output file
             obj_file_path + " " +
             // Compile flags from project
-            std::accumulate(project_cfg.compile_flags.begin(),
-                            project_cfg.compile_flags.end(), std::string(" ")) +
-            " " +
+            ccc::joinWithSpace(project_cfg.compile_flags) + " " +
             // Compile flags from execution
-            std::accumulate(this->config.compile_flags.begin(),
-                            this->config.compile_flags.end(),
-                            std::string(" ")));
+            ccc::joinWithSpace(this->config.compile_flags));
 
         std::cout << cmd << std::endl;
         std::system(cmd.c_str());

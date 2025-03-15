@@ -2,6 +2,7 @@
 #define __COMPILE_H__
 
 #include "ccc/config.h"
+#include "ccc/util.h"
 #include <filesystem>
 #include <iostream>
 #include <numeric>
