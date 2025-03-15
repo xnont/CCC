@@ -14,17 +14,21 @@ void ccc::execution::process(ccc::config project_cfg) {
         (this->config.linker.length() != 0 ? this->config.linker
                                            : project_cfg.linker) +
         " " +
-        // Linker flags
-        // std::accumulate(this->config.link_flags.begin(),
-        //                 this->config.link_flags.end(), std::string(" ")) +
-        " " +
         // Object files
         std::accumulate(this->obj_files.begin(), this->obj_files.end(),
                         std::string(" ")) +
         " -o " +
         // Output file
-        this->build_dir_path + "/" + this->name);
+        this->build_dir_path + "/" + this->name + " " +
+        // Linker flags from project
+        std::accumulate(project_cfg.link_flags.begin(),
+                        project_cfg.link_flags.end(), std::string(" ")) +
+
+        // Linker flags from execution
+        std::accumulate(this->config.link_flags.begin(),
+                        this->config.link_flags.end(), std::string(" ")));
 
     // Link
+    std::cout << cmd << std::endl;
     std::system(cmd.c_str());
 }

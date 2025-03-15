@@ -48,8 +48,17 @@ void ccc::compile::handle(ccc::config project_cfg) {
             // Source file
             source_file + " -o " +
             // Output file
-            obj_file_path);
+            obj_file_path + " " +
+            // Compile flags from project
+            std::accumulate(project_cfg.compile_flags.begin(),
+                            project_cfg.compile_flags.end(), std::string(" ")) +
+            " " +
+            // Compile flags from execution
+            std::accumulate(this->config.compile_flags.begin(),
+                            this->config.compile_flags.end(),
+                            std::string(" ")));
 
+        std::cout << cmd << std::endl;
         std::system(cmd.c_str());
 
         // Add the obj file to the list.

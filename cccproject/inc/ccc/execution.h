@@ -2,6 +2,7 @@
 #define __EXECUTION_H__
 
 #include "ccc/compile.h"
+#include <iostream>
 #include <numeric>
 
 namespace ccc {

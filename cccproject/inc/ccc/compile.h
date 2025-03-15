@@ -3,6 +3,8 @@
 
 #include "ccc/config.h"
 #include <filesystem>
+#include <iostream>
+#include <numeric>
 #include <string>
 
 namespace fs = std::filesystem;
