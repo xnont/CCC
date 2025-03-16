@@ -24,6 +24,14 @@ static std::string extractPath(const std::string& fullPath) {
     return "";
 }
 
+// AI generated.
+static bool compareFileModificationTime(const std::string& first,
+                                        const std::string& second) {
+    auto firstTime = fs::last_write_time(first);
+    auto secondTime = fs::last_write_time(second);
+    return firstTime < secondTime;
+}
+
 void ccc::compile::handle(ccc::config project_cfg) {
     // Iteratively compile all source files.
     for (auto source_file : source_files) {
@@ -31,6 +39,14 @@ void ccc::compile::handle(ccc::config project_cfg) {
         // Get the obj file path.
         std::string obj_file_path =
             this->build_dir_path + "/" + replaceCppWithO(source_file);
+        // Add the obj file to the list.
+        obj_files.push_back(obj_file_path);
+
+        // If the obj file exists and is newer than the source file, skip it.
+        if (fs::exists(obj_file_path) &&
+            compareFileModificationTime(source_file, obj_file_path)) {
+            continue;
+        }
 
         // Get the target folder(The storage path of the obj file.)
         std::string target_folder = extractPath(obj_file_path);
@@ -56,8 +72,5 @@ void ccc::compile::handle(ccc::config project_cfg) {
 
         std::cout << cmd << std::endl;
         std::system(cmd.c_str());
-
-        // Add the obj file to the list.
-        obj_files.push_back(obj_file_path);
     }
 }
