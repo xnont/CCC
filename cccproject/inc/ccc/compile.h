@@ -15,8 +15,8 @@ class compile {
   public:
     std::string name;
     std::string description;
-    std::string output_path;
-    std::string obj_path;
+    std::string output_path = "./build/";
+    std::string obj_path = "./build/obj/";
     std::vector<std::string> source_files;
     std::vector<std::string> obj_files;
 
