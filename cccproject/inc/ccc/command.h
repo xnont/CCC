@@ -19,7 +19,7 @@ class command {
     command(std::string name, auto (*run)(std::vector<std::string> args)->void,
             std::string description);
 
-    command(std::vector<std::string> names,
+    command(std::initializer_list<std::string> names,
             auto (*run)(std::vector<std::string> args)->void,
             std::string description);
 };

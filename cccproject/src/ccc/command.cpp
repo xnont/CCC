@@ -12,7 +12,7 @@ ccc::command::command(std::string name,
     cmds.push_back(this);
 }
 
-ccc::command::command(std::vector<std::string> names,
+ccc::command::command(std::initializer_list<std::string> names,
                       auto (*run)(std::vector<std::string> args)->void,
                       std::string description)
     : run(run), description(description) {
@@ -27,8 +27,7 @@ void build(std::vector<std::string> args) {
         project->exit_func(project, args);
     }
 }
-ccc::command build_cmd(std::vector<std::string>{"", "build"}, build,
-                       "Builds all projects");
+ccc::command build_cmd({"", "build"}, build, "Builds all projects");
 
 #include <iostream>
 void describe(std::vector<std::string> args) {
@@ -46,5 +45,4 @@ void describe(std::vector<std::string> args) {
         }
     }
 }
-ccc::command desc_cmd(std::vector<std::string>{"desc", "describe"}, describe,
-                      "Describes all projects");
+ccc::command desc_cmd({"desc", "describe"}, describe, "Describes all projects");
