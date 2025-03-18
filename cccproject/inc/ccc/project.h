@@ -1,5 +1,5 @@
-#ifndef __CCC_H__
-#define __CCC_H__
+#ifndef __CCC_PROJECT_H__
+#define __CCC_PROJECT_H__
 
 #include "ccc/command.h"
 #include "ccc/config.h"
