@@ -66,9 +66,9 @@ void ccc::compile::handle(ccc::config project_cfg) {
             // Output file
             obj_file_path + " " +
             // Compile flags from project
-            ccc::joinWithSpace(project_cfg.compile_flags) + " " +
+            joinWithSpace(project_cfg.compile_flags) + " " +
             // Compile flags from execution
-            ccc::joinWithSpace(this->config.compile_flags));
+            joinWithSpace(this->config.compile_flags));
 
         std::cout << cmd << std::endl;
         std::system(cmd.c_str());

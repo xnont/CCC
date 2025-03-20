@@ -15,13 +15,13 @@ void ccc::execution::process(ccc::config project_cfg) {
                                            : project_cfg.linker) +
         " " +
         // Object files
-        ccc::joinWithSpace(this->obj_files) + " -o " +
+        joinWithSpace(this->obj_files) + " -o " +
         // Output file
         this->output_path + "/" + this->name + " " +
         // Linker flags from project
-        ccc::joinWithSpace(project_cfg.link_flags) + " " +
+        joinWithSpace(project_cfg.link_flags) + " " +
         // Linker flags from execution
-        ccc::joinWithSpace(this->config.link_flags));
+        joinWithSpace(this->config.link_flags));
 
     // Link
     std::cout << cmd << std::endl;

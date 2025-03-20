@@ -2,7 +2,7 @@
 #define __EXECUTION_H__
 
 #include "ccc/compile.h"
-#include "ccc/util.h"
+#include "ccc/util.hpp"
 #include <iostream>
 
 namespace ccc {
