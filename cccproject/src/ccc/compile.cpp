@@ -1,37 +1,5 @@
 #include "ccc/compile.h"
 
-// AI generated.
-static std::string replaceCppWithO(const std::string& filename) {
-    std::string result = filename;
-    size_t pos = result.find(".cpp");
-    if (pos != std::string::npos) {
-        result.replace(pos, 4, ".o");
-    }
-    return result;
-}
-
-// AI generated.
-static bool directoryExists(const std::string& path) {
-    return fs::exists(path) && fs::is_directory(path);
-}
-
-// AI generated.
-static std::string extractPath(const std::string& fullPath) {
-    size_t found = fullPath.find_last_of("/\\");
-    if (found != std::string::npos) {
-        return fullPath.substr(0, found);
-    }
-    return "";
-}
-
-// AI generated.
-static bool compareFileModificationTime(const std::string& first,
-                                        const std::string& second) {
-    auto firstTime = fs::last_write_time(first);
-    auto secondTime = fs::last_write_time(second);
-    return firstTime < secondTime;
-}
-
 void ccc::compile::handle(ccc::config project_cfg) {
     // Iteratively compile all source files.
     for (auto source_file : source_files) {

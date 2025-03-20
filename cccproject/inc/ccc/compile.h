@@ -3,12 +3,9 @@
 
 #include "ccc/config.h"
 #include "ccc/util.hpp"
-#include <filesystem>
 #include <iostream>
 #include <numeric>
 #include <string>
-
-namespace fs = std::filesystem;
 
 namespace ccc {
 class compile {
