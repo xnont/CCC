@@ -6,7 +6,7 @@ void ccc::compile::handle(ccc::config project_cfg) {
 
         // Get the obj file path.
         std::string obj_file_path =
-            this->obj_path + "/" + replaceCppWithO(source_file);
+            this->obj_path + "/" + changeFileExtensionToO(source_file);
         // Add the obj file to the list.
         obj_files.push_back(obj_file_path);
 

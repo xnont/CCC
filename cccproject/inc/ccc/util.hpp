@@ -8,6 +8,7 @@
 
 namespace fs = std::filesystem;
 
+// AI generated.
 inline std::string joinWithSpace(const std::vector<std::string>& vec) {
     return std::accumulate(vec.begin(), vec.end(), std::string(),
                            [](const std::string& a, const std::string& b) {
@@ -16,13 +17,13 @@ inline std::string joinWithSpace(const std::vector<std::string>& vec) {
 }
 
 // AI generated.
-inline std::string replaceCppWithO(const std::string& filename) {
-    std::string result = filename;
-    size_t pos = result.find(".cpp");
-    if (pos != std::string::npos) {
-        result.replace(pos, 4, ".o");
+inline std::string changeFileExtensionToO(const std::string& filePath) {
+    size_t dotPos = filePath.rfind('.');
+    if (dotPos != std::string::npos && dotPos > filePath.find_last_of("/\\")) {
+        return filePath.substr(0, dotPos) + ".o";
+    } else {
+        return filePath + ".o";
     }
-    return result;
 }
 
 // AI generated.
