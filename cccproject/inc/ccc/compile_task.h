@@ -1,14 +1,16 @@
 #ifndef __COMPILE_H__
 #define __COMPILE_H__
 
+#include "ThreadPool/ThreadPool.h"
 #include "ccc/config.h"
 #include "ccc/util.hpp"
 #include <iostream>
 #include <numeric>
 #include <string>
+#include <thread>
 
 namespace ccc {
-class compile {
+class compile_task {
   public:
     std::string name;
     std::string description;
@@ -19,7 +21,11 @@ class compile {
 
     ccc::config config;
 
-    void handle(ccc::config project_cfg);
+    void handle(const ccc::config& project_cfg);
+
+  private:
+    void compile_source_file(const ccc::config& project_cfg,
+                             std::string source_file);
 };
 } // namespace ccc
 
