@@ -16,7 +16,7 @@ LINK_FLAGS=
 # Set Source folders (Please write each folder containing source files into it. And enclosed in single quotation marks.)
 SOURCE_FOLDERS='./cccproject/src/ccc/'
 # Set Header folders (Please write each folder containing header files into it. And enclosed in single quotation marks.)
-HEADER_FOLDERS='./cccproject/inc/ ./cccproject/inc/ccc/ ./cccproject/third_party/'
+HEADER_FOLDERS='./cccproject/inc/ ./cccproject/inc/ccc/'
 # Set Library_files
 LIBRARY_FILES=
 # Set Object files path

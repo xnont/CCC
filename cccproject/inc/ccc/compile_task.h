@@ -1,10 +1,11 @@
 #ifndef __COMPILE_H__
 #define __COMPILE_H__
 
-#include "ThreadPool/ThreadPool.h"
 #include "ccc/config.h"
 #include "ccc/util.hpp"
+#include <atomic>
 #include <iostream>
+#include <mutex>
 #include <numeric>
 #include <string>
 #include <thread>
