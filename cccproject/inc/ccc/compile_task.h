@@ -25,7 +25,7 @@ class compile_task {
 
   private:
     void compile_source_file(const ccc::config& project_cfg,
-                             std::string source_file);
+                             const std::string& source_file);
 };
 } // namespace ccc
 

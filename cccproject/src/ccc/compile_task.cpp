@@ -20,26 +20,46 @@ void ccc::compile_task::handle(const ccc::config& project_cfg) {
                         : 1; // If the number of cores cannot be obtained,
                              // set the parameter to 1.
 
-    ThreadPool tp(thread_num);
+    // Create a mutex and condition variable for thread synchronization.
+    std::mutex mtx;
+    std::condition_variable cv;
+    std::vector<std::thread> threads;
+    std::atomic<size_t> active_threads(0);
 
     // Iteratively compile all source files.
-    std::vector<std::future<void>> results;
-    for (auto source_file : source_files) {
-        results.push_back(tp.enqueue([this, &project_cfg, source_file]() {
-            this->compile_source_file(project_cfg, source_file);
-        }));
+    for (const auto& source_file : source_files) {
+        // Wait until there is an available thread slot.
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [&]() { return active_threads < thread_num; });
+
+        // Increment the active thread count.
+        active_threads++;
+
+        // Launch a new thread to compile the source file.
+        threads.emplace_back(
+            [this, &project_cfg, source_file, &active_threads, &cv]() {
+                compile_source_file(project_cfg, source_file);
+
+                // Decrement the active thread count and notify the waiting
+                // threads.
+                active_threads--;
+                cv.notify_one();
+            });
     }
 
-    for (auto&& result : results) {
-        result.wait();
+    // Wait for all threads to finish.
+    for (auto& thread : threads) {
+        if (thread.joinable()) {
+            thread.join();
+        }
     }
 }
 
-static std::mutex mtx;
+void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
+                                            const std::string& source_file) {
 
-void ccc::compile_task::compile_source_file(
-    const ccc::config& project_cfg,
-    std::string source_file) { // Get the obj file path.
+    std::mutex mtx;
+    // Get the obj file path.
     std::string obj_file_path =
         this->obj_path + "/" + changeFileExtensionToO(source_file);
     // Add the obj file to the list.
