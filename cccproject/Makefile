@@ -40,7 +40,7 @@ PROJECT_ARGS=LANGUAGE=$(LANGUAGE) COMPILER=$(COMPILER) COMPILE_FLAGS='$(COMPILE_
 
 compile:
 	make $(PROJECT_ARGS)
-	mv ./build/inc/cccproject/inc/ccc ./build/inc/ccc || true
+	mv ./build/inc/cccproject/inc/ccc/*.h ./build/inc/ || true
 	rm -rf ./build/inc/cccproject
 
 info:

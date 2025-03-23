@@ -55,8 +55,25 @@ void clean(std::vector<std::string> args) {
         /* Traverse all executables.(Delete the folders corresponding to output
          * path and obj path.) */
         for (auto exe : project->exes) {
-            fs::remove_all(exe.output_path);
-            fs::remove_all(exe.obj_path);
+            try {
+                std::uintmax_t removed_count = fs::remove_all(exe.output_path);
+                std::cout << "Removed " << removed_count
+                          << " files/directories from " << exe.output_path
+                          << std::endl;
+            } catch (const std::filesystem::filesystem_error& e) {
+                std::cerr << "Error: " << e.what() << "when try to remove "
+                          << exe.output_path << std::endl;
+            }
+
+            try {
+                std::uintmax_t removed_count = fs::remove_all(exe.obj_path);
+                std::cout << "Removed " << removed_count
+                          << " files/directories from " << exe.obj_path
+                          << std::endl;
+            } catch (const std::filesystem::filesystem_error& e) {
+                std::cerr << "Error: " << e.what() << "when try to remove "
+                          << exe.obj_path << std::endl;
+            }
         }
         /* Traverse all libraries.(Delete the folders corresponding to output
          * path and obj path.) */

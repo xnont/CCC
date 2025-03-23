@@ -1,5 +1,5 @@
-#ifndef __COMPILE_H__
-#define __COMPILE_H__
+#ifndef __COMPILE_TASK_H__
+#define __COMPILE_TASK_H__
 
 #include "ccc/config.h"
 #include "ccc/util.hpp"
