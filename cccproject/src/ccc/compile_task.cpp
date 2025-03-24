@@ -55,16 +55,16 @@ void ccc::compile_task::handle(const ccc::config& project_cfg) {
     }
 }
 
+static std::mutex compile_mtx;
 void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
                                             const std::string& source_file) {
 
-    std::mutex mtx;
     // Get the obj file path.
     std::string obj_file_path =
         this->obj_path + "/" + changeFileExtensionToO(source_file);
     // Add the obj file to the list.
     {
-        std::lock_guard<std::mutex> lock(mtx);
+        std::lock_guard<std::mutex> lock(compile_mtx);
         obj_files.push_back(obj_file_path);
     }
 
@@ -97,7 +97,7 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
         joinWithSpace(this->config.compile_flags));
 
     {
-        std::lock_guard<std::mutex> lock(mtx);
+        std::lock_guard<std::mutex> lock(compile_mtx);
         std::cout << cmd << std::endl;
     }
     std::system(cmd.c_str());
