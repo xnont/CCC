@@ -2,7 +2,7 @@
 #define __COMPILE_TASK_H__
 
 #include "ccc/config.h"
-#include "ccc/util.hpp"
+#include "util/file.hpp"
 #include <atomic>
 #include <iostream>
 #include <mutex>
