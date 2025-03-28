@@ -84,3 +84,9 @@ void clean(std::vector<std::string> args) {
     }
 }
 ccc::command clean_cmd("clean", clean, "Cleans all projects");
+
+void version(std::vector<std::string> args) {
+    args.push_back("--version");
+    std::cout << "ccc version: " << "0.0.0.20250328" << std::endl;
+}
+ccc::command version_cmd("--version", version, "Prints the version");
