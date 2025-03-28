@@ -1,16 +1,17 @@
 debug:
-	make -f ./ccc/Makefile
+	make -f ./ccc/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
 	make -f ./cccmain/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
 	make -f ./cccproject/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
 	cp -r ./util ./build/inc
 
 release:
-	make -f ./ccc/Makefile
+	make -f ./ccc/Makefile COMPILE_FLAGS="-O2 -std=c++17 -W -Wall"
 	make -f ./cccmain/Makefile COMPILE_FLAGS="-O2 -std=c++17 -W -Wall"
 	make -f ./cccproject/Makefile COMPILE_FLAGS="-O2 -std=c++17 -W -Wall"
 	cp -r ./util ./build/inc
 
 clean:
+	make -f ./ccc/Makefile clean
 	make -f ./cccmain/Makefile clean
 	make -f ./cccproject/Makefile clean
 
