@@ -17,9 +17,9 @@ void ccc::project::process() {
         return;
     }
 
-    // for (auto& lib : libs) {
-    //     lib.process();
-    // }
+    for (auto& lib : libs) {
+        lib.process(this->config);
+    }
 
     for (auto& exe : exes) {
         exe.process(this->config);

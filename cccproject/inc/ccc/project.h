@@ -27,7 +27,7 @@ class project {
     /* Used to pass parameters between init_func and exit_func. */
     void* arg;
 
-    // std::vector<ccc::library> libs;
+    std::vector<ccc::library> libs;
     std::vector<ccc::execution> exes;
 
     /* The configuration of the project. */

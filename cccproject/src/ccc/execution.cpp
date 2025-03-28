@@ -17,7 +17,8 @@ void ccc::execution::process(ccc::config project_cfg) {
         // Object files
         joinWithSpace(this->obj_files) + " -o " +
         // Output file
-        this->output_path + "/" + this->name + " " +
+        (this->output_path.length() != 0 ? this->output_path : "./build/bin") +
+        "/" + this->name + " " +
         // Linker flags from project
         joinWithSpace(project_cfg.link_flags) + " " +
         // Linker flags from execution
