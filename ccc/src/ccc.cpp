@@ -23,12 +23,14 @@ int main(int argc, char** argv) {
     if (!fs::exists(project_bin_file) ||
         !compareFileModificationTime(project_config_file, project_bin_file)) {
 
+        const char* CCC_COMPILER = std::getenv("CCC_COMPILER");
         const char* CCC_INCLUDE_PATH = std::getenv("CCC_INCLUDE_PATH");
         const char* CCC_LIBRARY_PATH = std::getenv("CCC_LIBRARY_PATH");
 
-        string cmd = "g++ " + project_config_file + " " + CCC_LIBRARY_PATH +
-                     "/cccmain.a" + " " + CCC_LIBRARY_PATH + "/cccproject.a" +
-                     " -o " + project_bin_file + " -I " + CCC_INCLUDE_PATH;
+        string cmd = CCC_COMPILER + string(" ") + project_config_file + " " +
+                     CCC_LIBRARY_PATH + "/cccmain.a" + " " + CCC_LIBRARY_PATH +
+                     "/cccproject.a" + " -o " + project_bin_file + " -I " +
+                     CCC_INCLUDE_PATH;
 
         std::system(cmd.c_str());
     }
