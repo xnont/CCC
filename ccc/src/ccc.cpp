@@ -9,8 +9,22 @@ namespace fs = std::filesystem;
 
 int main(int argc, char** argv) {
 
+    /* Parse the command line arguments. */
+    string cmd;
+    for (int i = 1; i < argc; i++) {
+        cmd += " " + string(argv[i]);
+    }
+
     /* Set the default project configuration file. */
     string project_config_file = "project.cpp";
+
+    /* If there is no project.cpp file in the current directory, run the default
+     * cccpoject. */
+    if (!fs::exists(project_config_file)) {
+        cmd = "cccproject " + cmd;
+        std::system(cmd.c_str());
+        return 0;
+    }
 
     /* Set the default project binary file. */
 #ifdef _WIN32
@@ -36,10 +50,7 @@ int main(int argc, char** argv) {
     }
 
     /* Run the project binary file. */
-    string cmd = project_bin_file;
-    for (int i = 1; i < argc; i++) {
-        cmd += " " + string(argv[i]);
-    }
+    cmd = project_bin_file + " " + cmd;
     std::system(cmd.c_str());
 
     return 0;
