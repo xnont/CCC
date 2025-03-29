@@ -12,7 +12,7 @@ LINKER=g++
 # Set Source folders (Please write each folder containing source files into it. And enclosed in single quotation marks.)
 SOURCE_FOLDERS='./cccproject/src/ccc/'
 # Set Header folders (Please write each folder containing header files into it. And enclosed in single quotation marks.)
-HEADER_FOLDERS='./cccproject/inc/ ./cccproject/inc/ccc/ ./.'
+HEADER_FOLDERS='./cccproject/inc/ ./cccproject/inc/ccc/'
 # Set Object files path
 OBJ_PATH=./cccproject/build/obj/
 
@@ -32,6 +32,7 @@ compile:
 	make $(PROJECT_ARGS)
 	mv ./build/inc/cccproject/inc/ccc ./build/inc/ 2>NULL || true && rm -rf NULL || true
 	rm -rf ./build/inc/cccproject
+	cp -r ./cccproject/inc/util ./build/inc/
 
 info:
 	make info $(PROJECT_ARGS)

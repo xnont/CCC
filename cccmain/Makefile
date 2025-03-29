@@ -12,7 +12,7 @@ LINKER=g++
 # Set Source folders (Please write each folder containing source files into it. And enclosed in single quotation marks.)
 SOURCE_FOLDERS='./cccmain/src/'
 # Set Header folders (Please write each folder containing header files into it. And enclosed in single quotation marks.)
-HEADER_FOLDERS='./cccproject/inc/ ./cccproject/inc/ccc ./.'
+HEADER_FOLDERS='./cccproject/inc/ ./cccproject/inc/ccc'
 # Set Object files path
 OBJ_PATH=./cccmain/build/obj/
 
