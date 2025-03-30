@@ -17,7 +17,10 @@ class project {
     project(auto (*init_func)(project*, std::vector<std::string>)->void,
             auto (*exit_func)(project*, std::vector<std::string>)->void);
 
-    std::string name;
+    project(std::string name,
+            auto (*init_func)(project*, std::vector<std::string>)->void,
+            auto (*exit_func)(project*, std::vector<std::string>)->void,
+            std::string description);
 
     /* The init_func is executed before processing the project. */
     void (*init_func)(project*, std::vector<std::string>);

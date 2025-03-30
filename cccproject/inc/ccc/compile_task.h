@@ -2,6 +2,7 @@
 #define __COMPILE_TASK_H__
 
 #include "ccc/config.h"
+#include "ccc/description.h"
 #include "util/file.hpp"
 #include <atomic>
 #include <iostream>
@@ -13,8 +14,10 @@
 namespace ccc {
 class compile_task {
   public:
+    compile_task() {};
+    compile_task(std::string name, std::string description);
+
     std::string name;
-    std::string description;
     std::string output_path = "./build/";
     std::string obj_path = "./build/obj/";
     std::vector<std::string> source_files;

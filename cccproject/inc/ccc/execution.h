@@ -8,6 +8,10 @@
 namespace ccc {
 class execution : public ccc::compile_task {
   public:
+    execution() : ccc::compile_task() {}
+    execution(std::string name, std::string description)
+        : ccc::compile_task(name, description) {};
+
     void process(ccc::config project_cfg);
 };
 } // namespace ccc

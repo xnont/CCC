@@ -5,17 +5,13 @@
 #include <unordered_map>
 #include <vector>
 
+#include "ccc/description.h"
+
 namespace ccc {
 class command {
   public:
-    /* Name of the command  */
-    std::vector<std::string> names;
-
     /* Run the command  */
     void (*run)(std::vector<std::string> args);
-
-    /* Description of the command  */
-    std::string description;
 
     command(std::string name, auto (*run)(std::vector<std::string> args)->void,
             std::string description);

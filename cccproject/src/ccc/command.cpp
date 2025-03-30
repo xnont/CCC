@@ -7,18 +7,20 @@ std::unordered_map<std::string, ccc::command*> cmds;
 ccc::command::command(std::string name,
                       auto (*run)(std::vector<std::string> args)->void,
                       std::string description)
-    : run(run), description(description) {
-    this->names.push_back(name);
+    : run(run) {
+    // Register the command.
     cmds[name] = this;
+    ccc::descs[name] = description;
 }
 
 ccc::command::command(std::initializer_list<std::string> names,
                       auto (*run)(std::vector<std::string> args)->void,
                       std::string description)
-    : run(run), description(description) {
-    this->names = names;
+    : run(run) {
+    // Register the command.
     for (auto name : names) {
         cmds[name] = this;
+        ccc::descs[name] = description;
     }
 }
 #include "ccc/project.h"
@@ -38,10 +40,20 @@ void describe(std::vector<std::string> args) {
         return;
     }
 
-    if (ccc::cmds.find(args[2]) != ccc::cmds.end()) {
-        std::cout << args[2] << ": " << ccc::cmds[args[2]]->description
-                  << std::endl;
+    // Initialize all projects.
+    for (auto project : ccc::projects) {
+        project->init_func(project, args);
+    }
+
+    // Find the target description.
+    if (ccc::descs.find(args[2]) != ccc::descs.end()) {
+        std::cout << args[2] << ": " << ccc::descs[args[2]] << std::endl;
         return;
+    }
+
+    // Exit all projects.
+    for (auto project : ccc::projects) {
+        project->exit_func(project, args);
     }
 }
 ccc::command desc_cmd({"desc", "describe"}, describe, "Describes all projects");

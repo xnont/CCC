@@ -8,7 +8,20 @@ ccc::project::project(
     auto (*init_func)(project*, std::vector<std::string>)->void,
     auto (*exit_func)(project*, std::vector<std::string>)->void)
     : init_func(init_func), exit_func(exit_func), arg(nullptr) {
+    // Add project
     ccc::projects.push_back(this);
+}
+
+ccc::project::project(
+    std::string name,
+    auto (*init_func)(project*, std::vector<std::string>)->void,
+    auto (*exit_func)(project*, std::vector<std::string>)->void,
+    std::string description)
+    : init_func(init_func), exit_func(exit_func) {
+    // Add project
+    ccc::projects.push_back(this);
+    // Add description
+    ccc::descs[name] = description;
 }
 void ccc::project::process() {
 
@@ -27,31 +40,6 @@ void ccc::project::process() {
 }
 bool ccc::project::check() {
     bool status = true;
-
-    /* Check project name */
-    if (this->name.length() == 0) {
-        std::cout << "Warnning: No project name set." << std::endl;
-    }
-
-    /* Check compiler */
-    if (this->config.compiler.length() == 0) {
-        std::cout << "Error: No compiler set for project "
-                  << (this->name.length() != 0 ? this->name : "unnamed")
-                  << std::endl;
-        status = false;
-    }
-
-    /* Check linker(If the linker is not set, we will set it to be the same as
-     * the compiler.) */
-    if (this->config.linker.length() == 0 &&
-        this->config.compiler.length() != 0) {
-        std::cout << "Warnning: No linker set for project "
-                  << (this->name.length() != 0 ? this->name : "unnamed")
-                  << std::endl;
-        std::cout << "We will set the linker to be the same as the compiler."
-                  << std::endl;
-        this->config.linker = this->config.compiler;
-    }
 
     return status;
 }

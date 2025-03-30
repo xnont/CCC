@@ -1,5 +1,9 @@
 #include "ccc/compile_task.h"
-
+ccc::compile_task::compile_task(std::string name, std::string description) {
+    this->name = name;
+    // Add description
+    ccc::descs[name] = description;
+}
 void ccc::compile_task::handle(const ccc::config& project_cfg) {
 
     // Create a thread pool.
