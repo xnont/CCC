@@ -2,6 +2,7 @@
 #define __COMMAND_H__
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace ccc {
@@ -24,7 +25,7 @@ class command {
             std::string description);
 };
 
-extern std::vector<ccc::command*> cmds;
+extern std::unordered_map<std::string, ccc::command*> cmds;
 
 } // namespace ccc
 

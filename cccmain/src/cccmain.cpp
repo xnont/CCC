@@ -16,13 +16,9 @@ int main(int argc, char* argv[]) {
         args.push_back(argv[i]);
 
     // Run the target command
-    for (auto cmd : ccc::cmds) {
-        for (auto name : cmd->names) {
-            if (name == target_cmd) {
-                cmd->run(args);
-                return 0;
-            }
-        }
+    if (ccc::cmds.find(target_cmd) != ccc::cmds.end()) {
+        ccc::cmds[target_cmd]->run(args);
+        return 0;
     }
 
     std::cout << "Unknown command: " << target_cmd << std::endl;

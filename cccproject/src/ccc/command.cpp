@@ -1,7 +1,7 @@
 #include "ccc/command.h"
 
 namespace ccc {
-std::vector<ccc::command*> cmds;
+std::unordered_map<std::string, ccc::command*> cmds;
 }
 
 ccc::command::command(std::string name,
@@ -9,7 +9,7 @@ ccc::command::command(std::string name,
                       std::string description)
     : run(run), description(description) {
     this->names.push_back(name);
-    cmds.push_back(this);
+    cmds[name] = this;
 }
 
 ccc::command::command(std::initializer_list<std::string> names,
@@ -17,7 +17,9 @@ ccc::command::command(std::initializer_list<std::string> names,
                       std::string description)
     : run(run), description(description) {
     this->names = names;
-    cmds.push_back(this);
+    for (auto name : names) {
+        cmds[name] = this;
+    }
 }
 #include "ccc/project.h"
 void build(std::vector<std::string> args) {
@@ -36,13 +38,10 @@ void describe(std::vector<std::string> args) {
         return;
     }
 
-    for (auto cmd : ccc::cmds) {
-        for (auto name : cmd->names) {
-            if (name == args[2]) {
-                std::cout << name << ": " << cmd->description << std::endl;
-                return;
-            }
-        }
+    if (ccc::cmds.find(args[2]) != ccc::cmds.end()) {
+        std::cout << args[2] << ": " << ccc::cmds[args[2]]->description
+                  << std::endl;
+        return;
     }
 }
 ccc::command desc_cmd({"desc", "describe"}, describe, "Describes all projects");
