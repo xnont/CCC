@@ -10,15 +10,15 @@ else
 endif
 
 debug:
-	make -f ./ccc/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
-	make -f ./cccmain/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
-	make -f ./cccproject/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
-	g++ -o ./build/bin/cccproject build/lib/cccmain.a build/lib/cccproject.a
+	make build COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall" -B
 
 release:
-	make -f ./ccc/Makefile COMPILE_FLAGS="-O2 -std=c++17 -W -Wall"
-	make -f ./cccmain/Makefile COMPILE_FLAGS="-O2 -std=c++17 -W -Wall"
-	make -f ./cccproject/Makefile COMPILE_FLAGS="-O2 -std=c++17 -W -Wall"
+	make build COMPILE_FLAGS="-O2 -std=c++17 -W -Wall" -B
+
+build:
+	make -f ./ccc/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)"
+	make -f ./cccmain/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)"
+	make -f ./cccproject/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)"
 	g++ -o ./build/bin/cccproject build/lib/cccmain.a build/lib/cccproject.a
 
 clean:
