@@ -1,3 +1,14 @@
+# Obtain OS type
+ifeq ($(shell uname), Linux)
+    OS_TYPE = linux
+else ifeq ($(shell uname), Darwin)
+    OS_TYPE = macos
+else ifeq ($(OS), Windows_NT)
+    OS_TYPE = windows
+else
+    OS_TYPE = unknown
+endif
+
 debug:
 	make -f ./ccc/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
 	make -f ./cccmain/Makefile COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall"
@@ -20,3 +31,13 @@ dev:
 	export CCC_COMPILER=g++
 	export CCC_LIBRARY_PATH=$(shell pwd)/build/lib/
 	export CCC_INCLUDE_PATH=$(shell pwd)/build/inc/
+
+install:
+	mkdir -p $(shell echo $$HOME)/.ccc
+	cp -r ./build/* $(shell echo $$HOME)/.ccc/
+ifeq ($(OS_TYPE), windows)
+	python ./script/windows_installer.py
+endif
+
+uninstall:
+	rm -rf $(shell echo $$HOME)/.ccc
