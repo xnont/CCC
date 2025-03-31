@@ -5,6 +5,7 @@
 #include "ccc/description.h"
 #include "util/file.hpp"
 #include <atomic>
+#include <condition_variable>
 #include <iostream>
 #include <mutex>
 #include <numeric>
