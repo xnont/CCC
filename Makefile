@@ -10,10 +10,10 @@ else
 endif
 
 debug:
-	make build COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall" -B
+	make build COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall -Wextra -Werror" -B
 
 release:
-	make build COMPILE_FLAGS="-O2 -std=c++17 -W -Wall" -B
+	make build COMPILE_FLAGS="-O2 -std=c++17 -W -Wall -Wextra -Werror" -B
 
 build:
 	make -f ./ccc/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)"
