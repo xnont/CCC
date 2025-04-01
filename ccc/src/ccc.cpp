@@ -33,13 +33,17 @@ int main(int argc, char** argv) {
     string project_bin_file = "project";
 #endif
 
+    const char* CCC_COMPILER = std::getenv("CCC_COMPILER");
+    const char* CCC_INCLUDE_PATH = std::getenv("CCC_INCLUDE_PATH");
+    const char* CCC_LIBRARY_PATH = std::getenv("CCC_LIBRARY_PATH");
+
     /* Check if the project binary file is out of date. */
     if (!fs::exists(project_bin_file) ||
-        !compareFileModificationTime(project_config_file, project_bin_file)) {
-
-        const char* CCC_COMPILER = std::getenv("CCC_COMPILER");
-        const char* CCC_INCLUDE_PATH = std::getenv("CCC_INCLUDE_PATH");
-        const char* CCC_LIBRARY_PATH = std::getenv("CCC_LIBRARY_PATH");
+        !compareFileModificationTime(project_config_file, project_bin_file) ||
+        !compareFileModificationTime(string(CCC_LIBRARY_PATH) + "/cccmain.a",
+                                     project_bin_file) ||
+        !compareFileModificationTime(string(CCC_LIBRARY_PATH) + "/cccproject.a",
+                                     project_bin_file)) {
 
         string cmd = CCC_COMPILER + string(" ") + project_config_file + " " +
                      CCC_LIBRARY_PATH + "/cccmain.a" + " " + CCC_LIBRARY_PATH +
