@@ -19,7 +19,7 @@ build:
 	make -f ./ccc/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)"
 	make -f ./cccmain/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)"
 	make -f ./cccproject/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)"
-	g++ -o ./build/bin/cccproject build/lib/cccmain.a build/lib/cccproject.a
+	g++ -o ./build/bin/default_project build/lib/cccmain.a build/lib/cccproject.a
 
 clean:
 	make -f ./ccc/Makefile clean

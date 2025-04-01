@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     /* If there is no project.cpp file in the current directory, run the default
      * cccpoject. */
     if (!fs::exists(project_config_file)) {
-        cmd = "cccproject " + cmd;
+        cmd = "default_project " + cmd;
         std::system(cmd.c_str());
         return 0;
     }

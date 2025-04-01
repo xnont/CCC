@@ -55,6 +55,12 @@ void ccc_init(project* self, vector<string> args) {
                                "./cccproject/src/ccc/project.cpp"};
     cccproject.config.compile_flags.push_back("-I ./cccproject/inc");
     self->libs.push_back(cccproject);
+
+    execution default_project("default_project", "");
+    default_project.output_path = "./build/bin";
+    default_project.config.link_flags = {
+        "./build/lib/cccmain.a ./build/lib/cccproject.a"};
+    self->exes.push_back(default_project);
 }
 
 void ccc_exit(project* self, vector<string> args) {}
