@@ -34,6 +34,7 @@ dev:
 
 install:
 	mkdir -p $(shell echo $$HOME)/.ccc
+	cp -r ./cccproject/inc ./build
 	cp -r ./build/* $(shell echo $$HOME)/.ccc/
 ifeq ($(OS_TYPE), windows)
 	python ./script/windows_installer.py

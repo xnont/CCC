@@ -23,16 +23,13 @@ LIB_TYPE=static
 LIB_PATH=./build/lib/
 LIB_NAME=cccproject.a
 # Set the folder path for storing the header files of the library project. (Will preserve the file organization structure)
-HEADER_PATH=./build/inc/
+HEADER_PATH=./cccproject/build/inc/
 
 
 PROJECT_ARGS=LANGUAGE=$(LANGUAGE) COMPILER=$(COMPILER) COMPILE_FLAGS='$(COMPILE_FLAGS)' LINKER=$(LINKER) LINK_FLAGS=$(LINK_FLAGS) LIBRARY_FILES=$(LIBRARY_FILES) TARGET_TYPE=$(TARGET_TYPE) SOURCE_FOLDERS=$(SOURCE_FOLDERS) HEADER_FOLDERS=$(HEADER_FOLDERS) OBJ_PATH=$(OBJ_PATH) LIB_NAME=$(LIB_NAME) LIB_TYPE=$(LIB_TYPE) LIB_PATH=$(LIB_PATH) HEADER_PATH=$(HEADER_PATH) APP_PATH=$(APP_PATH) APP_NAME=$(APP_NAME) -f ./third_party/make-tmpl/Makefile
 
 compile:
 	make $(PROJECT_ARGS)
-	mv ./build/inc/cccproject/inc/ccc ./build/inc/ 2>NULL || true && rm -rf NULL || true
-	rm -rf ./build/inc/cccproject
-	cp -r ./cccproject/inc/util ./build/inc/
 
 info:
 	make info $(PROJECT_ARGS)
