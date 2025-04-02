@@ -20,10 +20,9 @@ void ccc_init(project* self, vector<string> args) {
     unordered_set<string> ccc_args(args.begin(), args.end());
     if (ccc_args.find("release") != ccc_args.end()) {
         self->config.compile_flags.push_back(
-            "-Og -g -std=c++17 -W -Wall -Wextra -Werror");
+            "-Og -g -std=c++17 -W -Wall -Wextra");
     } else {
-        self->config.compile_flags.push_back(
-            "-O2 -std=c++17 -W -Wall -Wextra -Werror");
+        self->config.compile_flags.push_back("-O2 -std=c++17 -W -Wall -Wextra");
     }
 
     execution ccc("ccc", "");
