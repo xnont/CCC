@@ -56,5 +56,6 @@ void ccc::library::process(ccc::config project_cfg) {
 
     // Link
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0)
+        return;
 }

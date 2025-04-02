@@ -104,7 +104,8 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
         std::lock_guard<std::mutex> lock(compile_mtx);
         std::cout << cmd << std::endl;
     }
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0)
+        return;
 }
 
 void ccc::compile_task::add_source_file(const std::string& file_path) {

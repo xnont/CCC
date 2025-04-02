@@ -22,7 +22,8 @@ int main(int argc, char** argv) {
      * cccpoject. */
     if (!fs::exists(project_config_file)) {
         cmd = "default_project " + cmd;
-        std::system(cmd.c_str());
+        if (std::system(cmd.c_str()) != 0)
+            return -1;
         return 0;
     }
 
@@ -50,12 +51,14 @@ int main(int argc, char** argv) {
                      "/cccproject.a" + " -o " + project_bin_file + " -I " +
                      CCC_INCLUDE_PATH;
 
-        std::system(cmd.c_str());
+        if (std::system(cmd.c_str()) != 0)
+            return -1;
     }
 
     /* Run the project binary file. */
     cmd = project_bin_file + " " + cmd;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0)
+        return -1;
 
     return 0;
 }
