@@ -118,6 +118,6 @@ void ccc::compile_task::add_source_files(
 
 void ccc::compile_task::add_source_files(
     const std::initializer_list<std::string>& dir_paths,
-    const std::initializer_list<std::string>& suffixs, bool recursive = true) {
+    const std::initializer_list<std::string>& suffixs, bool recursive) {
     return;
 }
