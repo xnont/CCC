@@ -106,3 +106,17 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
     }
     std::system(cmd.c_str());
 }
+
+void ccc::compile_task::add_source_file(const std::string& file_path) {
+    return;
+}
+
+void add_source_files(const std::initializer_list<std::string>& file_paths) {
+    return;
+}
+
+void add_source_files(const std::initializer_list<std::string>& dir_paths,
+                      const std::initializer_list<std::string>& suffixs,
+                      bool recursive = true) {
+    return;
+}

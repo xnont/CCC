@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace ccc;
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 
 void copy_directory(const fs::path& source, const fs::path& destination);
 
@@ -71,9 +71,8 @@ void copy_directory(const fs::path& source, const fs::path& destination) {
     try {
         // Check if the source path exists and is a directory
         if (!fs::exists(source) || !fs::is_directory(source)) {
-            std::cerr
-                << "Source directory does not exist or is not a directory."
-                << std::endl;
+            cerr << "Source directory does not exist or is not a directory."
+                 << endl;
             return;
         }
 
@@ -98,8 +97,13 @@ void copy_directory(const fs::path& source, const fs::path& destination) {
             }
         }
     } catch (const fs::filesystem_error& e) {
-        std::cerr << "Filesystem error: " << e.what() << std::endl;
-    } catch (const std::exception& e) {
-        std::cerr << "General error: " << e.what() << std::endl;
+        cerr << "Filesystem error: " << e.what() << endl;
+    } catch (const exception& e) {
+        cerr << "General error: " << e.what() << endl;
     }
 }
+
+void debug(vector<string> args) { system("ccc build debug"); }
+command debug_cmd("debug", debug, "Compile the ccc in debug mode.");
+void release(vector<string> args) { system("ccc build release"); }
+command release_cmd("release", release, "Compile the ccc in release mode.");
