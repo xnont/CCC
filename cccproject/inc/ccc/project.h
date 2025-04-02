@@ -39,6 +39,36 @@ class project {
     /* Process the project.  */
     void process();
 
+    /* The convenient utility functions provided by ccc. */
+
+    /**
+     * @brief Set the config object
+     *
+     * @param compiler The compiler is used to compile the librarys and the
+     *                 executions in the project.
+     * @param compile_flags The compile_flags apply globally.
+     * @param linker The linker is used to link the librarys and the executions
+     *               in the project.
+     * @param link_flags The link_flags apply globally.
+     */
+    void set_config(std::string compiler,
+                    std::vector<std::string> compile_flags, std::string linker,
+                    std::vector<std::string> link_flags);
+
+    /**
+     * @brief Add a execution need to be compile to the project.
+     *
+     * @param exe The execution need to be added to the project.
+     */
+    void add_exe(ccc::execution exe);
+
+    /**
+     * @brief Add a library need to be compile to the project.
+     *
+     * @param lib The library need to be added to the project.
+     */
+    void add_lib(ccc::library lib);
+
   private:
     bool check();
 };
