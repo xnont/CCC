@@ -26,9 +26,9 @@ ccc::command::command(std::initializer_list<std::string> names,
 #include "ccc/project.h"
 void build(std::vector<std::string> args) {
     for (auto project : ccc::projects) {
-        project->init_func(project, args);
+        project->init_func(project, "build", args);
         project->process();
-        project->exit_func(project, args);
+        project->exit_func(project, "build", args);
     }
 }
 ccc::command build_cmd({"", "build"}, build, "Builds all projects");
@@ -42,7 +42,7 @@ void describe(std::vector<std::string> args) {
 
     // Initialize all projects.
     for (auto project : ccc::projects) {
-        project->init_func(project, args);
+        project->init_func(project, "describe", args);
     }
 
     // Find the target description.
@@ -53,7 +53,7 @@ void describe(std::vector<std::string> args) {
 
     // Exit all projects.
     for (auto project : ccc::projects) {
-        project->exit_func(project, args);
+        project->exit_func(project, "describe", args);
     }
 }
 ccc::command desc_cmd({"desc", "describe"}, describe, "Describes all projects");
@@ -72,7 +72,7 @@ void remove_directories(std::string path) {
 void clean(std::vector<std::string> args) {
     /* Traverse all projects. */
     for (auto project : ccc::projects) {
-        project->init_func(project, args);
+        project->init_func(project, "clean", args);
 
         /* Traverse all executables.(Delete the folders corresponding to output
          * path and obj path.) */
@@ -91,7 +91,7 @@ void clean(std::vector<std::string> args) {
                                                           : "./build/obj");
         }
 
-        project->exit_func(project, args);
+        project->exit_func(project, "clean", args);
     }
 }
 ccc::command clean_cmd("clean", clean, "Cleans all projects");

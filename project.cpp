@@ -10,7 +10,7 @@ namespace fs = filesystem;
 
 void copy_directory(const fs::path& source, const fs::path& destination);
 
-void ccc_init(project* self, vector<string> args) {
+void ccc_init(project* self, string cmd, vector<string> args) {
     // Project settings
     self->config.compiler = "g++";
     self->config.linker = "g++";
@@ -60,9 +60,17 @@ void ccc_init(project* self, vector<string> args) {
     default_project.config.link_flags = {
         "./build/lib/cccmain.a ./build/lib/cccproject.a"};
     self->exes.push_back(default_project);
+
+    if (cmd == "build") {
+        copy_directory("./cccproject/inc", "./build/inc");
+    }
+
+    if (cmd == "clean") {
+        fs::remove_all("./build/inc");
+    }
 }
 
-void ccc_exit(project* self, vector<string> args) {}
+void ccc_exit(project* self, string cmd, vector<string> args) {}
 
 project ccc_project("CCC", ccc_init, ccc_exit, "");
 
