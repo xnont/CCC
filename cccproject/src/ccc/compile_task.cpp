@@ -136,3 +136,7 @@ int ccc::compile_task::remove_source_files(
     auto judge(const std::string&)->bool) {
     return 0;
 }
+
+bool ccc::compile_task::find_source_file(const std::string& file_path) {
+    return false;
+}

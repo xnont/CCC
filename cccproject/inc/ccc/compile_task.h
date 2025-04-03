@@ -85,6 +85,15 @@ class compile_task {
      */
     int remove_source_files(auto judge(const std::string&)->bool);
 
+    /**
+     * @brief Find whether the file_path is in the source_files variable.
+     *
+     * @param file_path The file_path need to be found in the source_files.
+     * @return true The file_path is in the source_files.
+     * @return false The file_path is not in the source_files.
+     */
+    bool find_source_file(const std::string& file_path);
+
   private:
     void compile_source_file(const ccc::config& project_cfg,
                              const std::string& source_file);
