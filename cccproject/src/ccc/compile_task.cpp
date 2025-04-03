@@ -122,3 +122,17 @@ void ccc::compile_task::add_source_files(
     const std::initializer_list<std::string>& suffixs, bool recursive) {
     return;
 }
+
+void ccc::compile_task::remove_source_file(const std::string& file_path) {
+    return;
+}
+
+void ccc::compile_task::remove_source_files(
+    const std::initializer_list<std::string>& file_paths) {
+    return;
+}
+
+int ccc::compile_task::remove_source_files(
+    auto judge(const std::string&)->bool) {
+    return 0;
+}

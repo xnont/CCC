@@ -59,6 +59,32 @@ class compile_task {
                           const std::initializer_list<std::string>& suffixs,
                           bool recursive = true);
 
+    /**
+     * @brief Remove file_path from the source_files variable.
+     *
+     * @param file_path The file_path need to be removed from the source_files
+     *        variable.
+     */
+    void remove_source_file(const std::string& file_path);
+
+    /**
+     * @brief Remove these file_paths from the source_files variable.
+     *
+     * @param file_paths The file_paths need to be removed from the source_files
+     *        variable.
+     */
+    void
+    remove_source_files(const std::initializer_list<std::string>& file_paths);
+
+    /**
+     * @brief Remove all files in the source_files variable which satisfy the
+     *        judge function.
+     *
+     * @param judge The function which decides whether to remove the file.
+     * @return int The number of files removed.
+     */
+    int remove_source_files(auto judge(const std::string&)->bool);
+
   private:
     void compile_source_file(const ccc::config& project_cfg,
                              const std::string& source_file);
