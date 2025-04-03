@@ -15,7 +15,6 @@
 namespace ccc {
 class compile_task {
   public:
-    compile_task() {};
     compile_task(std::string name, std::string description);
 
     std::string name;
@@ -26,7 +25,26 @@ class compile_task {
 
     ccc::config config;
 
-    void handle(const ccc::config& project_cfg);
+    virtual void compile(const ccc::config& project_cfg) final;
+
+    /**
+     * @brief The subclass needs to implement this function, and the linking
+     *        operation of the subclass needs to be implemented in this
+     *        function. The compile function needs to be called at the beginning
+     *        of the function.
+     *
+     * @param project_cfg
+     */
+    virtual void process(const ccc::config& project_cfg) = 0;
+
+    /**
+     * @brief Check whether the task is ready to be compiled.
+     *
+     * @param project_cfg The config of the project.
+     * @return true The task is ready to be compiled.
+     * @return false The task is not ready to be compiled.
+     */
+    virtual bool check(const ccc::config& project_cfg) = 0;
 
     /* The convenient utility functions provided by ccc. */
 

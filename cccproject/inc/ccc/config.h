@@ -8,9 +8,9 @@
 namespace ccc {
 class config {
   public:
-    std::string compiler;
+    std::string compiler = "g++";
     std::vector<std::string> compile_flags;
-    std::string linker;
+    std::string linker = "g++";
     std::vector<std::string> link_flags;
 
     uint32_t thread_num = 0;

@@ -8,13 +8,13 @@ enum library_type { static_library, shared_library, dynamic_library };
 
 class library : public ccc::compile_task {
   public:
-    library() : ccc::compile_task() {}
+    library(std::string name, ccc::library_type type, std::string description);
 
-    library(std::string name, std::string description)
-        : ccc::compile_task(name, description) {}
+    library_type type = library_type::static_library;
 
-    library_type type;
-    void process(ccc::config project_cfg);
+    void process(const ccc::config& project_cfg) override;
+
+    bool check(const ccc::config& project_cfg) override;
 };
 } // namespace ccc
 

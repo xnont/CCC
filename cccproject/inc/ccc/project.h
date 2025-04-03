@@ -74,7 +74,6 @@ class project {
     void add_lib(ccc::library lib);
 
   private:
-    bool check();
 };
 
 /* All initialized project variables will be automatically added to this

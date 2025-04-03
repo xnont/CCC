@@ -4,7 +4,7 @@ ccc::compile_task::compile_task(std::string name, std::string description) {
     // Add description
     ccc::descs[name] = description;
 }
-void ccc::compile_task::handle(const ccc::config& project_cfg) {
+void ccc::compile_task::compile(const ccc::config& project_cfg) {
 
     // Create a thread pool.
     unsigned int core_num = std::thread::hardware_concurrency();

@@ -8,11 +8,11 @@
 namespace ccc {
 class execution : public ccc::compile_task {
   public:
-    execution() : ccc::compile_task() {}
-    execution(std::string name, std::string description)
-        : ccc::compile_task(name, description) {};
+    execution(std::string name, std::string description);
 
-    void process(ccc::config project_cfg);
+    void process(const ccc::config& project_cfg) override;
+
+    bool check(const ccc::config& project_cfg) override;
 };
 } // namespace ccc
 

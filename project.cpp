@@ -11,11 +11,6 @@ namespace fs = filesystem;
 void copy_directory(const fs::path& source, const fs::path& destination);
 
 void ccc_init(project* self, string cmd, vector<string> args) {
-    // Project settings
-    self->config.compiler = "g++";
-    self->config.linker = "g++";
-    self->config.thread_num = 0; /*  0 means auto */
-
     // Set compiler flags
     unordered_set<string> ccc_args(args.begin(), args.end());
     if (ccc_args.find("release") != ccc_args.end()) {
@@ -32,18 +27,14 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     ccc.config.compile_flags.push_back("-I ./cccproject/inc -I./ccc/inc");
     self->exes.push_back(ccc);
 
-    library cccmain("cccmain.a", "");
-    cccmain.config.linker = "ar rcs";
-    cccmain.type = static_library;
+    library cccmain("cccmain.a", static_library, "");
     cccmain.obj_path = "./cccmain/build/obj";
     cccmain.output_path = "./build/lib";
     cccmain.source_files = {"./cccmain/src/cccmain.cpp"};
     cccmain.config.compile_flags.push_back("-I ./cccproject/inc");
     self->libs.push_back(cccmain);
 
-    library cccproject("cccproject.a", "");
-    cccproject.config.linker = "ar rcs";
-    cccproject.type = static_library;
+    library cccproject("cccproject.a", static_library, "");
     cccproject.obj_path = "./cccproject/build/obj";
     cccproject.output_path = "./build/lib";
     cccproject.source_files = {"./cccproject/src/ccc/command.cpp",
@@ -57,7 +48,7 @@ void ccc_init(project* self, string cmd, vector<string> args) {
 
     execution default_project("default_project", "");
     default_project.output_path = "./build/bin";
-    default_project.config.link_flags = {
+    default_project.obj_files = {
         "./build/lib/cccmain.a ./build/lib/cccproject.a"};
     self->exes.push_back(default_project);
 
