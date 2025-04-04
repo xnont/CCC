@@ -125,15 +125,23 @@ void ccc::compile_task::add_source_files(
     const std::initializer_list<std::string>& dir_paths,
     const std::initializer_list<std::string>& suffixs, bool recursive) {
     namespace fs = std::filesystem;
-    static std::mutex mtx;
+
+    // Convert suffix initializer_list to vector for easier processing
     std::vector<std::string> suffix_vector(suffixs);
+
+    // Process each directory in the input list
     for (const auto& dir : dir_paths) {
         const fs::path dir_path(dir);
+
+        // Skip invalid directories
         if (!fs::exists(dir_path))
-            continue;
+            continue; // Path doesn't exist
         if (!fs::is_directory(dir_path))
-            continue;
+            continue; // Path isn't a directory
+
         std::vector<fs::directory_entry> entries;
+
+        // Collect directory entries (recursive or non-recursive)
         if (recursive) {
             for (const auto& entry :
                  fs::recursive_directory_iterator(dir_path)) {
@@ -144,23 +152,31 @@ void ccc::compile_task::add_source_files(
                 entries.emplace_back(entry);
             }
         }
+
+        // Process collected directory entries
         for (const auto& entry : entries) {
+            // Skip non-files and symlinks
             if (!entry.is_regular_file() || entry.is_symlink())
                 continue;
+
+            // Extract file extension (includes the dot, e.g., ".cpp")
             const std::string ext = entry.path().extension().string();
+
+            // Skip files without extensions
             if (!ext.empty()) {
+                // Check if extension matches any of the target suffixes
                 for (const auto& suffix : suffix_vector) {
                     if (ext == suffix) {
-                        std::lock_guard<std::mutex> lock(mtx);
+
+                        // Add normalized path to source files list
                         source_files.emplace_back(
                             entry.path().lexically_normal().string());
-                        break;
+                        break; // No need to check other suffixes
                     }
                 }
             }
         }
     }
-    return;
 }
 
 void ccc::compile_task::add_source_files(
@@ -170,19 +186,67 @@ void ccc::compile_task::add_source_files(
 }
 
 void ccc::compile_task::remove_source_file(const std::string& file_path) {
-    return;
+    size_t index = 0;
+    for (size_t i = 0; i < source_files.size(); ++i) {
+        if (source_files[i] != file_path) {
+            // Move non-matching elements to front
+            if (index != i) {
+                source_files[index] = std::move(source_files[i]);
+            }
+            ++index;
+        }
+    }
+    // Truncate vector to new size
+    source_files.resize(index);
 }
 
 void ccc::compile_task::remove_source_files(
     const std::initializer_list<std::string>& file_paths) {
-    return;
+    // Iterate through paths to remove
+    for (const auto& path : file_paths) {
+        // Reimplement single removal logic for each path
+        size_t index = 0;
+        for (size_t i = 0; i < source_files.size(); ++i) {
+            if (source_files[i] != path) {
+                // Compact array by moving kept elements
+                if (index != i) {
+                    source_files[index] = std::move(source_files[i]);
+                }
+                ++index;
+            }
+        }
+        source_files.resize(index);
+    }
 }
 
-int ccc::compile_task::remove_source_files(
-    auto judge(const std::string&)->bool) {
-    return 0;
+int ccc::compile_task::remove_source_files(bool (*judge)(const std::string&)) {
+    int removed_count = 0;
+    size_t index = 0;
+
+    // Process all elements
+    for (size_t i = 0; i < source_files.size(); ++i) {
+        if (!judge(
+                source_files[i])) { // Keep elements that don't match condition
+            // Shift elements to maintain order
+            if (index != i) {
+                source_files[index] = std::move(source_files[i]);
+            }
+            ++index;
+        } else { // Count removed elements
+            ++removed_count;
+        }
+    }
+    // Resize container after removal
+    source_files.resize(index);
+    return removed_count;
 }
 
 bool ccc::compile_task::find_source_file(const std::string& file_path) {
-    return false;
+    // Implement linear search manually
+    for (const auto& path : source_files) {
+        if (path == file_path) {
+            return true; // Early return when found
+        }
+    }
+    return false; // Return false if not found
 }
