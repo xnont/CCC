@@ -35,13 +35,6 @@ void ccc::project::process() {
             exe.process(this->config);
 }
 
-void ccc::project::set_config(std::string compiler,
-                              std::vector<std::string> compile_flags,
-                              std::string linker,
-                              std::vector<std::string> link_flags) {
-    return;
-}
-
 void ccc::project::add_exe(ccc::execution exe) { return; }
 
 void ccc::project::add_lib(ccc::library lib) { return; }

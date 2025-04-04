@@ -13,7 +13,7 @@
 #include <thread>
 
 namespace ccc {
-class compile_task {
+class compile_task : public ccc::config_manager {
   public:
     compile_task(std::string name, std::string description);
 
@@ -22,8 +22,6 @@ class compile_task {
     std::string obj_path = "./build/obj/";
     std::vector<std::string> source_files;
     std::vector<std::string> obj_files;
-
-    ccc::config config;
 
     virtual void compile(const ccc::config& project_cfg) final;
 
