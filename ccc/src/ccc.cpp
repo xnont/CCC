@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
                      // project bin
                      " -o " + project_bin_file + " -I " + CCC_INCLUDE_PATH;
 #else
-        string cmd = CCC_COMPILER + string(" -static ") +
+        string cmd = CCC_COMPILER + string(" ") +
                      // cccmain
                      CCC_LIBRARY_PATH + "/cccmain.a" + " " +
                      // project.cpp
