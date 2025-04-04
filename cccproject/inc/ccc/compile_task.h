@@ -78,6 +78,18 @@ class compile_task {
                           bool recursive = true);
 
     /**
+     * @brief Add all files in the dir_paths which satisfy the judge function to
+     *        the the source_files variable.(Default recursion into subfolders.)
+     *
+     * @param dir_paths The dir_paths which have the files need to be added to.
+     * @param judge The function which decides whether to add the file.
+     * @param recursive Decide whether to recursively enter subfolders.
+     */
+    void add_source_files(const std::initializer_list<std::string>& dir_paths,
+                          auto judge(const std::string&)->bool,
+                          bool recursive = true);
+
+    /**
      * @brief Remove file_path from the source_files variable.
      *
      * @param file_path The file_path need to be removed from the source_files
