@@ -96,7 +96,28 @@ void copy_directory(const fs::path& source, const fs::path& destination) {
     }
 }
 
-void debug(vector<string> args) { system("ccc build debug"); }
+#ifdef _WIN32
+void debug(vector<string> args) {
+    cout << "Compile the ccc in debug mode." << endl;
+    system("ccc build debug");
+}
+#else
+void debug(vector<string> args) {
+    cout << "Compile the ccc in debug mode." << endl;
+    system("bash -c 'ccc build debug'");
+}
+#endif
 command debug_cmd("debug", debug, "Compile the ccc in debug mode.");
-void release(vector<string> args) { system("ccc build release"); }
+
+#ifdef _WIN32
+void release(vector<string> args) {
+    cout << "Compile the ccc in release mode." << endl;
+    system("ccc build release");
+}
+#else
+void release(vector<string> args) {
+    cout << "Compile the ccc in release mode." << endl;
+    system("bash -c 'ccc build release'");
+}
+#endif
 command release_cmd("release", release, "Compile the ccc in release mode.");
