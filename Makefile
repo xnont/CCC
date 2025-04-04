@@ -24,7 +24,7 @@ build:
 	make -f ./ccc/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 	make -f ./cccmain/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 	make -f ./cccproject/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
-	g++  build/lib/cccmain.a build/lib/cccproject.a -o ./build/bin/default_project
+	g++ build/lib/cccproject.a build/lib/cccmain.a -o ./build/bin/default_project
 	cp -r ./cccproject/inc ./build
 
 clean:

@@ -14,7 +14,7 @@ OBJECT_FILES = $(SOURCE_FILES:./cccproject/src/ccc/%.cpp=./cccproject/build/obj/
 
 ./build/lib/cccproject.a: $(OBJECT_FILES)
 	mkdir -p ./build/lib
-	ar rcs ./build/lib/cccproject.a  ./cccproject/build/obj/description.o ./cccproject/build/obj/project.o ./cccproject/build/obj/compile_task.o ./cccproject/build/obj/execution.o ./cccproject/build/obj/library.o ./cccproject/build/obj/command.o
+	ar rcs ./build/lib/cccproject.a $(OBJECT_FILES)
 	
 ./cccproject/build/obj/%.o: ./cccproject/src/ccc/%.cpp
 	mkdir -p ./cccproject/build/obj
