@@ -165,7 +165,7 @@ void ccc::compile_task::add_source_files(
 
 void ccc::compile_task::add_source_files(
     const std::initializer_list<std::string>& dir_paths,
-    auto judge(const std::string&)->bool, bool recursive = true) {
+    auto judge(const std::string&)->bool, bool recursive) {
     return;
 }
 
