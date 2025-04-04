@@ -39,7 +39,7 @@ ifeq ($(OS_TYPE), windows)
 	python ./script/windows_installer.py
 endif
 ifeq ($(OS_TYPE), linux)
-	python ./script/linux_installer.py
+	python ./script/linux_installer.py > /dev/null 2>&1 || python3 ./script/linux_installer.py 
 endif
 
 uninstall:
