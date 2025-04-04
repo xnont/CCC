@@ -37,12 +37,7 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     library cccproject("cccproject.a", static_library, "");
     cccproject.obj_path = "./cccproject/build/obj";
     cccproject.output_path = "./build/lib";
-    cccproject.source_files = {"./cccproject/src/ccc/command.cpp",
-                               "./cccproject/src/ccc/compile_task.cpp",
-                               "./cccproject/src/ccc/description.cpp",
-                               "./cccproject/src/ccc/execution.cpp",
-                               "./cccproject/src/ccc/library.cpp",
-                               "./cccproject/src/ccc/project.cpp"};
+    cccproject.add_source_files({"./cccproject/src/ccc"}, {".cpp"});
     cccproject.config.compile_flags.push_back("-I ./cccproject/inc");
     self->libs.push_back(cccproject);
 

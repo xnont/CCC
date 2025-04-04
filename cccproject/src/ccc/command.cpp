@@ -1,9 +1,5 @@
 #include "ccc/command.h"
 
-namespace ccc {
-std::unordered_map<std::string, ccc::command*> cmds;
-}
-
 ccc::command::command(std::string name,
                       auto (*run)(std::vector<std::string> args)->void,
                       std::string description)

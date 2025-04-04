@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 #ifdef _WIN32
     string project_bin_file = "project.exe";
 #else
-    string project_bin_file = "project";
+    string project_bin_file = "./project";
 #endif
 
     const char* CCC_COMPILER = std::getenv("CCC_COMPILER");
@@ -46,11 +46,28 @@ int main(int argc, char** argv) {
         !compareFileModificationTime(string(CCC_LIBRARY_PATH) + "/cccproject.a",
                                      project_bin_file)) {
 
-        string cmd = CCC_COMPILER + string(" ") + project_config_file + " " +
-                     CCC_LIBRARY_PATH + "/cccmain.a" + " " + CCC_LIBRARY_PATH +
-                     "/cccproject.a" + " -o " + project_bin_file + " -I " +
-                     CCC_INCLUDE_PATH;
+#ifdef _WIN32
 
+        string cmd = CCC_COMPILER + string(" ") +
+                     // project.cpp
+                     project_config_file + " " +
+                     // cccproject
+                     CCC_LIBRARY_PATH + "/cccproject.a " +
+                     // cccmain
+                     CCC_LIBRARY_PATH + "/cccmain.a " +
+                     // project bin
+                     " -o " + project_bin_file + " -I " + CCC_INCLUDE_PATH;
+#else
+        string cmd = CCC_COMPILER + string(" -static ") +
+                     // cccproject
+                     CCC_LIBRARY_PATH + "/cccproject.a " +
+                     // cccmain
+                     CCC_LIBRARY_PATH + "/cccmain.a" + " " +
+                     // project.cpp
+                     project_config_file + " " +
+                     // project bin
+                     " -o " + project_bin_file + " -I " + CCC_INCLUDE_PATH;
+#endif
         if (std::system(cmd.c_str()) != 0)
             return -1;
     }

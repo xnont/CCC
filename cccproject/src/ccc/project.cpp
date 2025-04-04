@@ -1,9 +1,5 @@
 #include "ccc/project.h"
 
-namespace ccc {
-std::vector<ccc::project*> projects;
-}
-
 ccc::project::project(
     auto (*init_func)(project*, std::string, std::vector<std::string>)->void,
     auto (*exit_func)(project*, std::string, std::vector<std::string>)->void)

@@ -3,6 +3,12 @@
 #include <string>
 #include <vector>
 
+namespace ccc {
+std::unordered_map<std::string, std::string> descs;
+std::vector<ccc::project*> projects;
+std::unordered_map<std::string, ccc::command*> cmds;
+} // namespace ccc
+
 int main(int argc, char* argv[]) {
     std::string target_cmd = "";
 
