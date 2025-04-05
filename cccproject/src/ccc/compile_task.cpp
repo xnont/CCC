@@ -209,13 +209,55 @@ void ccc::compile_task::add_source_files(
         }
     }
 }
-
 void ccc::compile_task::add_source_files(
     const std::initializer_list<std::string>& dir_paths,
     auto judge(const std::string&)->bool, bool recursive) {
-    return;
-}
+    namespace fs = std::filesystem;
 
+    // Iterate through each directory path provided in dir_paths
+    for (const auto& dir : dir_paths) {
+        const fs::path dir_path(dir);
+
+        // Skip if the directory does not exist or is not a valid directory
+        if (!fs::exists(dir_path) || !fs::is_directory(dir_path))
+            continue;
+
+        // If recursive flag is true, use recursive_directory_iterator
+        if (recursive) {
+            for (fs::recursive_directory_iterator it(dir_path);
+                 it != fs::recursive_directory_iterator(); ++it) {
+                const auto& entry = *it;
+
+                // Check if the entry is a regular file and not a symbolic link
+                if (entry.is_regular_file() && !entry.is_symlink()) {
+                    std::string path = entry.path().lexically_normal().string();
+
+                    // If the judge function returns true for this file, add it
+                    // to source_files
+                    if (judge(path))
+                        source_files.push_back(path);
+                }
+            }
+        } else { // If recursive flag is false, use directory_iterator
+            for (fs::directory_iterator it(dir_path);
+                 it != fs::directory_iterator(); ++it) {
+                const auto& entry = *it;
+
+                // Check if the entry is a regular file and not a symbolic link
+                if (entry.is_regular_file() && !entry.is_symlink()) {
+                    std::string path = entry.path()
+                                           .lexically_normal()
+                                           .string(); // Normalize the file path
+
+                    // If the judge function returns true for this file, add it
+                    // to source_files
+                    if (judge(path))
+                        source_files.push_back(path);
+                }
+            }
+        }
+    }
+}
 void ccc::compile_task::remove_source_file(const std::string& file_path) {
     size_t index = 0;
     for (size_t i = 0; i < source_files.size(); ++i) {
