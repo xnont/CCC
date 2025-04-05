@@ -43,8 +43,9 @@ void ccc_init(project* self, string cmd, vector<string> args) {
 
     execution default_project("default_project", "");
     default_project.output_path = "./build/bin";
-    default_project.obj_files = {
-        "./build/lib/cccmain.a ./build/lib/cccproject.a"};
+    default_project.add_library_dependence(&cccproject);
+    default_project.add_library_dependence(&cccmain);
+
     self->exes.push_back(default_project);
 
     if (cmd == "build" && fs::exists("./cccproject/inc") &&

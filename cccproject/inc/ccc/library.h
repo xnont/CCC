@@ -10,6 +10,11 @@ class library : public ccc::compile_task {
   public:
     library(std::string name, ccc::library_type type, std::string description);
 
+    library(const library& other)
+        : ccc::compile_task(other), type(other.type) {}
+
+    ccc::library* clone() const override { return new ccc::library(*this); }
+
     library_type type = library_type::static_library;
 
     void process(const ccc::config& project_cfg) override;

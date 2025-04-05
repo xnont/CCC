@@ -5,6 +5,25 @@ ccc::compile_task::compile_task(std::string name, std::string description) {
     ccc::descs[name] = description;
 }
 void ccc::compile_task::compile(const ccc::config& project_cfg) {
+    // Process the dependencies.
+    for (auto& [dep, dep_desc] : dependencies) {
+        // If the dependence does not exist and the is_compile is true, process
+        // it.
+        if (!fs::exists(dep->output_path + "/" + dep->name) &&
+            dep_desc.is_compile) {
+            dep->process(project_cfg);
+        }
+
+        // If the is_transmit is true, add the dependence to the obj_files list.
+        if (dep_desc.is_transmit) {
+            this->obj_files.push_back(dep->output_path + "/" + dep->name);
+        }
+
+        // Add header paths.
+        for (auto& header_folder_path : dep->config.header_folder_paths) {
+            this->config.header_folder_paths.push_back(header_folder_path);
+        }
+    }
 
     // Create a thread pool.
     unsigned int core_num = std::thread::hardware_concurrency();

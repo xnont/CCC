@@ -2,6 +2,7 @@
 #define __COMPILE_TASK_H__
 
 #include "ccc/config.h"
+#include "ccc/dependence.h"
 #include "ccc/description.h"
 #include "util/file.hpp"
 
@@ -21,6 +22,14 @@ class compile_task : public ccc::config_manager {
   public:
     compile_task(std::string name, std::string description);
 
+    compile_task(const compile_task& other)
+        : name(other.name), output_path(other.output_path),
+          obj_path(other.obj_path), source_files(other.source_files),
+          obj_files(other.obj_files), dependencies(other.dependencies),
+          config_manager(other.config) {};
+
+    virtual compile_task* clone() const = 0;
+
     /* The name of the task.(The path of the final product is output_path +
      * name) */
     std::string name;
@@ -38,6 +47,25 @@ class compile_task : public ccc::config_manager {
      * compile_task class based on the source files, or can be added by
      * oneself.) */
     std::vector<std::string> obj_files;
+
+    std::vector<
+        std::pair<std::shared_ptr<ccc::compile_task>, dependence_description>>
+        dependencies;
+
+    void add_execution_dependence(const ccc::compile_task* exe_dep,
+                                  bool is_compile = false) {
+        dependencies.push_back(
+            std::make_pair(std::shared_ptr<compile_task>(exe_dep->clone()),
+                           ccc::dependence_description(false, is_compile)));
+    }
+
+    void add_library_dependence(const ccc::compile_task* lib_dep,
+                                bool is_transmit = true,
+                                bool is_compile = false) {
+        dependencies.push_back(std::make_pair(
+            std::shared_ptr<compile_task>(lib_dep->clone()),
+            ccc::dependence_description(is_transmit, is_compile)));
+    }
 
     /**
      * @brief Compile all source files in source_files.

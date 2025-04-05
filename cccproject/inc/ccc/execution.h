@@ -10,6 +10,10 @@ class execution : public ccc::compile_task {
   public:
     execution(std::string name, std::string description);
 
+    execution(const execution& other) : ccc::compile_task(other) {}
+
+    ccc::execution* clone() const override { return new execution(*this); }
+
     void process(const ccc::config& project_cfg) override;
 
     bool check(const ccc::config& project_cfg) override;
