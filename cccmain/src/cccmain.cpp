@@ -28,6 +28,5 @@ int main(int argc, char* argv[]) {
     }
 
     std::cout << "Unknown command: " << target_cmd << std::endl;
-
-    return 0;
+    return -1;
 }
