@@ -24,21 +24,21 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     ccc.obj_path = "./ccc/build/obj";
     ccc.output_path = "./build/bin";
     ccc.source_files = {"./ccc/src/ccc.cpp"};
-    ccc.header_folder_paths = {"./cccproject/inc", "./ccc/inc"};
+    ccc.config.header_folder_paths = {"./cccproject/inc", "./ccc/inc"};
     self->exes.push_back(ccc);
 
     library cccmain("cccmain.a", static_library, "");
     cccmain.obj_path = "./cccmain/build/obj";
     cccmain.output_path = "./build/lib";
     cccmain.source_files = {"./cccmain/src/cccmain.cpp"};
-    cccmain.header_folder_paths = {"./cccproject/inc"};
+    cccmain.config.header_folder_paths = {"./cccproject/inc"};
     self->libs.push_back(cccmain);
 
     library cccproject("cccproject.a", static_library, "");
     cccproject.obj_path = "./cccproject/build/obj";
     cccproject.output_path = "./build/lib";
     cccproject.add_source_files({"./cccproject/src/ccc"}, {".cpp"});
-    cccproject.header_folder_paths = {"./cccproject/inc"};
+    cccproject.config.header_folder_paths = {"./cccproject/inc"};
     self->libs.push_back(cccproject);
 
     execution default_project("default_project", "");

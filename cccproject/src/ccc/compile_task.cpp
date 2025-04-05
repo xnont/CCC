@@ -24,8 +24,20 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
                         : 1; // If the number of cores cannot be obtained,
                              // set the parameter to 1.
 
-    for (auto header_folder_path : header_folder_paths) {
+    /* Add header paths. */
+    for (const auto& header_folder_path : project_cfg.header_folder_paths) {
         this->config.compile_flags.push_back("-I" + header_folder_path);
+    }
+    for (const auto& header_folder_path : this->config.header_folder_paths) {
+        this->config.compile_flags.push_back("-I" + header_folder_path);
+    }
+
+    /* Add macros. */
+    for (const auto& macro : project_cfg.macros) {
+        this->config.compile_flags.push_back("-D" + macro);
+    }
+    for (const auto& macro : this->config.macros) {
+        this->config.compile_flags.push_back("-D" + macro);
     }
 
     // Create a mutex and condition variable for thread synchronization.

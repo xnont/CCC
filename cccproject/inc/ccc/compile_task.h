@@ -36,9 +36,6 @@ class compile_task : public ccc::config_manager {
      * oneself.) */
     std::vector<std::string> obj_files;
 
-    /* The header folder paths of the task. */
-    std::vector<std::string> header_folder_paths;
-
     /**
      * @brief Compile all source files in source_files.
      *

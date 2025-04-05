@@ -8,10 +8,20 @@
 namespace ccc {
 class config {
   public:
+    /* The compiler */
     std::string compiler = "g++";
+    /* The compile flags */
     std::vector<std::string> compile_flags;
+    /* The linker */
     std::string linker = "g++";
+    /* The link flags */
     std::vector<std::string> link_flags;
+
+    /* The header folder paths */
+    std::vector<std::string> header_folder_paths;
+
+    /* The macros */
+    std::vector<std::string> macros;
 
     uint32_t thread_num = 0;
 };
