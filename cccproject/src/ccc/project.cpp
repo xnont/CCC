@@ -35,6 +35,8 @@ void ccc::project::process() {
             exe.process(this->config);
 }
 
-void ccc::project::add_exe(ccc::execution exe) { return; }
+void ccc::project::add_exe(ccc::execution exe) {
+    exes.push_back(std::move(exe));
+}
 
-void ccc::project::add_lib(ccc::library lib) { return; }
+void ccc::project::add_lib(ccc::library lib) { libs.push_back(std::move(lib)); }
