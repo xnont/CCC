@@ -47,7 +47,8 @@ void ccc_init(project* self, string cmd, vector<string> args) {
         "./build/lib/cccmain.a ./build/lib/cccproject.a"};
     self->exes.push_back(default_project);
 
-    if (cmd == "build") {
+    if (cmd == "build" && fs::exists("./cccproject/inc") &&
+        fs::is_directory("./cccproject/inc")) {
         copy_directory("./cccproject/inc", "./build/inc");
     }
 

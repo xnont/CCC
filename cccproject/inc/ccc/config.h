@@ -39,19 +39,6 @@ class config_manager {
     virtual void set_config(const ccc::config& cfg) final;
 
     /**
-     * @brief Set the config object
-     *
-     * @param compiler The compiler is used to compile.
-     * @param compile_flags The compile_flags is used to compile.
-     * @param linker The linker is used to link.
-     * @param link_flags The link_flags is used to link.
-     */
-    virtual void set_config(const std::string& compiler,
-                            const std::vector<std::string>& compile_flags,
-                            const std::string& linker,
-                            const std::vector<std::string>& link_flags) final;
-
-    /**
      * @brief Set the compiler object
      *
      * @param compiler The compiler is used to compile.
@@ -63,8 +50,16 @@ class config_manager {
      *
      * @param compile_flags The compile_flags is used to compile.
      */
-    virtual void
-    set_compile_flags(const std::vector<std::string>& compile_flags) final;
+    virtual void set_compile_flags(
+        const std::initializer_list<std::string>& compile_flags) final;
+
+    /**
+     * @brief Add the compile flags
+     *
+     * @param compile_flags The compile_flags is used to compile.
+     */
+    virtual void add_compile_flags(
+        const std::initializer_list<std::string>& compile_flags) final;
 
     /**
      * @brief Set the linker object
@@ -79,7 +74,15 @@ class config_manager {
      * @param link_flags The link_flags is used to link.
      */
     virtual void
-    set_link_flags(const std::vector<std::string>& link_flags) final;
+    set_link_flags(const std::initializer_list<std::string>& link_flags) final;
+
+    /**
+     * @brief Add the link flags
+     *
+     * @param link_flags The link_flags is used to link.
+     */
+    virtual void
+    add_link_flags(const std::initializer_list<std::string>& link_flags) final;
 
     /**
      * @brief Set the thread num object
@@ -87,6 +90,38 @@ class config_manager {
      * @param num The thread num when compile.
      */
     virtual void set_thread_num(uint32_t num) final;
+
+    /**
+     * @brief Set the header folder paths object.
+     *
+     * @param header_folder_paths The header folder paths need to be set.
+     */
+    virtual void set_header_folder_paths(
+        const std::initializer_list<std::string>& header_folder_paths) final;
+
+    /**
+     * @brief Add the header folder paths.
+     *
+     * @param header_folder_paths The header folder paths need to be add.
+     */
+    virtual void add_header_folder_paths(
+        const std::initializer_list<std::string>& header_folder_paths) final;
+
+    /**
+     * @brief Set the marcos object
+     *
+     * @param macros The marcos need to be set.
+     */
+    virtual void
+    set_marcos(const std::initializer_list<std::string>& macros) final;
+
+    /**
+     * @brief Add the marcos.
+     *
+     * @param macros The marcos need to be add.
+     */
+    virtual void
+    add_marcos(const std::initializer_list<std::string>& macros) final;
 };
 
 } // namespace ccc
