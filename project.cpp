@@ -85,7 +85,10 @@ void copy_directory(const fs::path& source, const fs::path& destination) {
                 // If it is a directory, recursively copy
                 copy_directory(path, dest_path);
             } else if (fs::is_regular_file(path)) {
-                // If it is a file, copy the file
+                // If it is a file, remove the existing file and copy the file
+                if (fs::exists(dest_path)) {
+                    fs::remove(dest_path);
+                }
                 fs::copy_file(path, dest_path,
                               fs::copy_options::overwrite_existing);
             }

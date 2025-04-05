@@ -114,14 +114,29 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
         // Compile flags from project
         joinWithSpace(project_cfg.compile_flags) + " " +
         // Compile flags from compile_task
-        joinWithSpace(this->config.compile_flags));
+        joinWithSpace(this->config.compile_flags) +
+        // Open color output
+        " -fdiagnostics-color=always"
+        // Merge standard error stream and standard output stream.
+        " 2>&1");
 
+    /* Open a pipe to execute the command */
+    FILE* pipe = popen(cmd.c_str(), "r");
+    if (!pipe) {
+        std::cerr << "Failed to compile " + source_file << std::endl;
+        return;
+    }
     {
+        // Lock the mutex to print the command and output.
         std::lock_guard<std::mutex> lock(compile_mtx);
         std::cout << cmd << std::endl;
+        char buffer[128];
+        while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+            std::cout << buffer;
+        }
     }
-    if (std::system(cmd.c_str()) != 0)
-        return;
+    /* Close the pipe */
+    pclose(pipe);
 }
 
 void ccc::compile_task::add_source_file(const std::string& file_path) {
