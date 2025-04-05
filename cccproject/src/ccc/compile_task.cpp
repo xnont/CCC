@@ -24,6 +24,10 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
                         : 1; // If the number of cores cannot be obtained,
                              // set the parameter to 1.
 
+    for (auto header_folder_path : header_folder_paths) {
+        this->config.compile_flags.push_back("-I" + header_folder_path);
+    }
+
     // Create a mutex and condition variable for thread synchronization.
     std::mutex mtx;
     std::condition_variable cv;
@@ -97,7 +101,7 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
         obj_file_path + " " +
         // Compile flags from project
         joinWithSpace(project_cfg.compile_flags) + " " +
-        // Compile flags from execution
+        // Compile flags from compile_task
         joinWithSpace(this->config.compile_flags));
 
     {
