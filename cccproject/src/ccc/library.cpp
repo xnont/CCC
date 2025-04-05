@@ -26,9 +26,10 @@ void ccc::library::process(const ccc::config& project_cfg) {
     this->compile(project_cfg);
 
     // If the output_path doesn't exist, create it.
-    if (!(fs::exists(this->output_path) &&
-          fs::is_directory(this->output_path))) {
-        fs::create_directories(this->output_path);
+    std::string target_folder =
+        extractPath(this->output_path + "/" + this->name);
+    if (!(fs::exists(target_folder) && fs::is_directory(target_folder))) {
+        fs::create_directories(target_folder);
     }
 
     std::string cmd;
