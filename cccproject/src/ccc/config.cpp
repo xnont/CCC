@@ -1,49 +1,65 @@
 #include "ccc/config.h"
 
-void ccc::config_manager::set_config(const ccc::config& cfg) { return; }
+void ccc::config_manager::set_config(const ccc::config& cfg) {
+    this->config = cfg;
+}
 
-void ccc::config_manager::set_compiler(const std::string& compiler) { return; }
+void ccc::config_manager::set_compiler(const std::string& compiler) {
+    this->config.compiler = compiler;
+}
 
 void ccc::config_manager::set_compile_flags(
     const std::initializer_list<std::string>& compile_flags) {
-    return;
+
+    this->config.compile_flags = compile_flags;
 }
 
 void ccc::config_manager::add_compile_flags(
     const std::initializer_list<std::string>& compile_flags) {
-    return;
+    this->config.compile_flags.insert(this->config.compile_flags.end(),
+                                      compile_flags.begin(),
+                                      compile_flags.end());
 }
 
-void ccc::config_manager::set_linker(const std::string& linker) { return; }
+void ccc::config_manager::set_linker(const std::string& linker) {
+    this->config.linker = linker;
+}
 
 void ccc::config_manager::set_link_flags(
     const std::initializer_list<std::string>& link_flags) {
-    return;
+
+    this->config.link_flags = link_flags;
 }
 
 void ccc::config_manager::add_link_flags(
     const std::initializer_list<std::string>& link_flags) {
-    return;
+    this->config.link_flags.insert(this->config.link_flags.end(),
+                                   link_flags.begin(), link_flags.end());
 }
 
-void ccc::config_manager::set_thread_num(uint32_t num) { return; }
+void ccc::config_manager::set_thread_num(uint32_t num) {
+    this->config.thread_num = num;
+}
 
 void ccc::config_manager::set_header_folder_paths(
     const std::initializer_list<std::string>& header_folder_paths) {
-    return;
+    this->config.header_folder_paths = header_folder_paths;
 }
 
 void ccc::config_manager::add_header_folder_paths(
     const std::initializer_list<std::string>& header_folder_paths) {
-    return;
+    this->config.header_folder_paths.insert(
+        this->config.header_folder_paths.end(), header_folder_paths.begin(),
+        header_folder_paths.end());
 }
 
 void ccc::config_manager::set_marcos(
     const std::initializer_list<std::string>& macros) {
-    return;
+    this->config.macros = macros;
 }
 
 void ccc::config_manager::add_marcos(
     const std::initializer_list<std::string>& macros) {
-    return;
+    this->config.macros.insert(this->config.macros.end(), macros.begin(),
+                               macros.end());
 }
