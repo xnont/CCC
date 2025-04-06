@@ -14,10 +14,10 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     // Set compiler flags
     unordered_set<string> ccc_args(args.begin(), args.end());
     if (ccc_args.find("release") != ccc_args.end()) {
+        self->config.compile_flags.push_back("-O2 -std=c++17 -W -Wall -Wextra");
+    } else {
         self->config.compile_flags.push_back(
             "-Og -g -std=c++17 -W -Wall -Wextra");
-    } else {
-        self->config.compile_flags.push_back("-O2 -std=c++17 -W -Wall -Wextra");
     }
 
     execution ccc("ccc", "");
@@ -43,8 +43,8 @@ void ccc_init(project* self, string cmd, vector<string> args) {
 
     execution default_project("default_project", "");
     default_project.output_path = "./build/bin";
-    default_project.add_library_dependence(&cccproject);
     default_project.add_library_dependence(&cccmain);
+    default_project.add_library_dependence(&cccproject);
 
     self->exes.push_back(default_project);
 

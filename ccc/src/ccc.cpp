@@ -21,7 +21,11 @@ int main(int argc, char** argv) {
     /* If there is no project.cpp file in the current directory, run the default
      * cccpoject. */
     if (!fs::exists(project_config_file)) {
+#ifdef _WIN32
         cmd = "default_project " + cmd;
+#else
+        cmd = "bash -c 'default_project " + cmd + "'";
+#endif
         if (std::system(cmd.c_str()) != 0)
             return -1;
         return 0;
@@ -62,10 +66,10 @@ int main(int argc, char** argv) {
         string compile_cmd = CCC_COMPILER + string(" ") +
                              // project.cpp
                              project_config_file + " " +
-                             // cccproject
-                             CCC_LIBRARY_PATH + "/cccproject.a " +
                              // cccmain
                              CCC_LIBRARY_PATH + "/cccmain.a " +
+                             // cccproject
+                             CCC_LIBRARY_PATH + "/cccproject.a " +
                              // project bin
                              " -o " + project_bin_file + " -I " +
                              CCC_INCLUDE_PATH;
