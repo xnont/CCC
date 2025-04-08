@@ -64,5 +64,5 @@ bool ccc::execution::check(const ccc::config& project_cfg) {
                   << this->name << std::endl;
     }
 
-    return true;
+    return status;
 }

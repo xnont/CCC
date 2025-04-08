@@ -32,6 +32,8 @@ class config {
           linker(other.linker), link_flags(other.link_flags),
           header_folder_paths(other.header_folder_paths), macros(other.macros),
           thread_num(other.thread_num) {}
+
+    config& operator=(const config& other) = default;
 };
 
 class config_manager {

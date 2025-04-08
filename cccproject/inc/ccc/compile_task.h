@@ -23,10 +23,10 @@ class compile_task : public ccc::config_manager {
     compile_task(std::string name, std::string description);
 
     compile_task(const compile_task& other)
-        : name(other.name), output_path(other.output_path),
-          obj_path(other.obj_path), source_files(other.source_files),
-          obj_files(other.obj_files), dependencies(other.dependencies),
-          config_manager(other.config) {};
+        : config_manager(other.config), name(other.name),
+          output_path(other.output_path), obj_path(other.obj_path),
+          source_files(other.source_files), obj_files(other.obj_files),
+          dependencies(other.dependencies) {};
 
     virtual compile_task* clone() const = 0;
 
