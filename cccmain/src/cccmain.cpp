@@ -14,6 +14,9 @@ void describe(std::vector<std::string> args);
 void clean(std::vector<std::string> args);
 void version(std::vector<std::string> args);
 
+#define RED "\033[31m"
+#define RESET "\033[0m"
+
 int main(int argc, char* argv[]) {
 
     ccc::command build_cmd({"", "build"}, build, "Builds all projects");
@@ -35,7 +38,13 @@ int main(int argc, char* argv[]) {
 
     // Run the target command
     if (ccc::cmds.find(target_cmd) != ccc::cmds.end()) {
-        ccc::cmds[target_cmd]->run(args);
+        try {
+            ccc::cmds[target_cmd]->run(args);
+        } catch (const std::exception& e) {
+            std::cerr << "ccc: " << RED << "error: " << RESET << e.what()
+                      << std::endl;
+            return -1;
+        }
         return 0;
     }
 
@@ -44,6 +53,12 @@ int main(int argc, char* argv[]) {
 }
 
 void build(std::vector<std::string> args) {
+    // Check if the project.cpp exists.
+    if (!fs::exists("project.cpp") || !fs::is_regular_file("project.cpp")) {
+        throw std::runtime_error(
+            "The build command cannot run in a directory without project.cpp.");
+        return;
+    }
     for (auto project : ccc::projects) {
         project->init_func(project, "build", args);
         project->process();
@@ -86,6 +101,12 @@ void remove_directories(std::string path) {
 }
 
 void clean(std::vector<std::string> args) {
+    // Check if the project.cpp exists.
+    if (!fs::exists("project.cpp") || !fs::is_regular_file("project.cpp")) {
+        throw std::runtime_error(
+            "The clean command cannot run in a directory without project.cpp.");
+        return;
+    }
     /* Traverse all projects. */
     for (auto project : ccc::projects) {
         project->init_func(project, "clean", args);
