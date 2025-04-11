@@ -23,7 +23,8 @@ int main(int argc, char** argv) {
     if (!fs::exists(project_config_file)) {
 #ifdef _WIN32
         cmd = "default_project " + cmd;
-#else
+#endif
+#ifdef __linux__
         cmd = "bash -c 'default_project " + cmd + "'";
 #endif
         if (std::system(cmd.c_str()) != 0)
@@ -34,7 +35,8 @@ int main(int argc, char** argv) {
     /* Set the default project binary file. */
 #ifdef _WIN32
     string project_bin_file = "project.exe";
-#else
+#endif
+#ifdef __linux__
     string project_bin_file = "./project";
 #endif
 
@@ -73,7 +75,8 @@ int main(int argc, char** argv) {
                              // project bin
                              " -o " + project_bin_file + " -I " +
                              CCC_INCLUDE_PATH;
-#else
+#endif
+#ifdef __linux__
         string compile_cmd = CCC_COMPILER + string(" ") +
                              // cccmain
                              CCC_LIBRARY_PATH + "/cccmain.a" + " " +
