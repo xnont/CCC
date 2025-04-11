@@ -43,8 +43,8 @@ void ccc_init(project* self, string cmd, vector<string> args) {
 
     execution default_project("default_project", "");
     default_project.output_path = "./build/bin";
-    default_project.add_library_dependence(&cccmain);
-    default_project.add_library_dependence(&cccproject);
+    default_project.add_library_dependency(&cccmain);
+    default_project.add_library_dependency(&cccproject);
 
     self->exes.push_back(default_project);
 

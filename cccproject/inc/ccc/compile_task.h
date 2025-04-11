@@ -2,7 +2,7 @@
 #define __COMPILE_TASK_H__
 
 #include "ccc/config.h"
-#include "ccc/dependence.h"
+#include "ccc/dependency.h"
 #include "ccc/description.h"
 #include "util/file.hpp"
 
@@ -49,22 +49,22 @@ class compile_task : public ccc::config_manager {
     std::vector<std::string> obj_files;
 
     std::vector<
-        std::pair<std::shared_ptr<ccc::compile_task>, dependence_description>>
+        std::pair<std::shared_ptr<ccc::compile_task>, dependency_description>>
         dependencies;
 
-    void add_execution_dependence(const ccc::compile_task* exe_dep,
+    void add_execution_dependency(const ccc::compile_task* exe_dep,
                                   bool is_compile = false) {
         dependencies.push_back(
             std::make_pair(std::shared_ptr<compile_task>(exe_dep->clone()),
-                           ccc::dependence_description(false, is_compile)));
+                           ccc::dependency_description(false, is_compile)));
     }
 
-    void add_library_dependence(const ccc::compile_task* lib_dep,
+    void add_library_dependency(const ccc::compile_task* lib_dep,
                                 bool is_transmit = true,
                                 bool is_compile = false) {
         dependencies.push_back(std::make_pair(
             std::shared_ptr<compile_task>(lib_dep->clone()),
-            ccc::dependence_description(is_transmit, is_compile)));
+            ccc::dependency_description(is_transmit, is_compile)));
     }
 
     /**
