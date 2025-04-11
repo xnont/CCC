@@ -14,8 +14,12 @@ OBJECT_FILES = $(SOURCE_FILES:./cccproject/src/ccc/%.cpp=./cccproject/build/obj/
 
 ./build/lib/cccproject.a: $(OBJECT_FILES)
 	mkdir -p ./build/lib
-	ar rcs ./build/lib/cccproject.a $(OBJECT_FILES)
-	
+ifeq ($(OS_TYPE), windows)
+	ar rcs ./build/lib/libcccproject.lib $(OBJECT_FILES)
+else ifeq ($(OS_TYPE), linux)
+	ar rcs ./build/lib/libcccproject.a $(OBJECT_FILES)
+endif
+
 ./cccproject/build/obj/%.o: ./cccproject/src/ccc/%.cpp
 	mkdir -p ./cccproject/build/obj
 	g++ -c $< -o $@  -I./cccproject/inc $(COMPILE_FLAGS)

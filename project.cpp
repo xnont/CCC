@@ -27,14 +27,14 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     ccc.add_header_folder_paths({"./cccproject/inc", "./ccc/inc"});
     self->exes.push_back(ccc);
 
-    library cccmain("cccmain.a", static_library, "");
+    library cccmain("cccmain", static_library, "");
     cccmain.obj_path = "./cccmain/build/obj";
     cccmain.output_path = "./build/lib";
     cccmain.add_source_files({"./cccmain/src/cccmain.cpp"});
     cccmain.add_header_folder_paths({"./cccproject/inc"});
     self->libs.push_back(cccmain);
 
-    library cccproject("cccproject.a", static_library, "");
+    library cccproject("cccproject", static_library, "");
     cccproject.obj_path = "./cccproject/build/obj";
     cccproject.output_path = "./build/lib";
     cccproject.add_source_files({"./cccproject/src/ccc"}, {".cpp"});

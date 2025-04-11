@@ -5,6 +5,7 @@
 
 namespace ccc {
 enum library_type { static_library, shared_library, dynamic_library };
+enum system_type { windows_os, linux_os /*, macos */ };
 
 class library : public ccc::compile_task {
   public:
@@ -16,6 +17,15 @@ class library : public ccc::compile_task {
     ccc::library* clone() const override { return new ccc::library(*this); }
 
     library_type type = library_type::static_library;
+
+    /* The operating system on which the library runs defaults to the current
+     * operating system. */
+    system_type system =
+#ifdef _WIN32
+        system_type::windows_os;
+#else
+        system_type::linux_os;
+#endif
 
     void process(const ccc::config& project_cfg) override;
 

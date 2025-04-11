@@ -24,7 +24,11 @@ build:
 	make -f ./ccc/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 	make -f ./cccmain/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 	make -f ./cccproject/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
-	g++ build/lib/cccmain.a build/lib/cccproject.a -o ./build/bin/default_project
+ifeq ($(OS_TYPE), windows)
+	g++ build/lib/libcccmain.lib build/lib/libcccproject.lib -o ./build/bin/default_project
+else ifeq ($(OS_TYPE), linux)
+	g++ build/lib/libcccmain.a build/lib/libcccproject.a -o ./build/bin/default_project
+endif
 	cp -r ./cccproject/inc ./build
 
 clean:

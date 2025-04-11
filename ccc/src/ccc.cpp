@@ -57,21 +57,34 @@ int main(int argc, char** argv) {
     }
 
     /* Check if the project binary file is out of date. */
+    std::string cccmain_path = string(CCC_LIBRARY_PATH) +
+#ifdef _WIN32
+                               "/libcccmain.lib";
+#endif
+#ifdef __linux__
+    "/libcccmain.a";
+#endif
+    std::string cccproject_path = string(CCC_LIBRARY_PATH) +
+#ifdef _WIN32
+                                  "/libcccproject.lib";
+#endif
+#ifdef __linux__
+    "/libcccproject.a";
+#endif
+
     if (!fs::exists(project_bin_file) ||
         !compareFileModificationTime(project_config_file, project_bin_file) ||
-        !compareFileModificationTime(string(CCC_LIBRARY_PATH) + "/cccmain.a",
-                                     project_bin_file) ||
-        !compareFileModificationTime(string(CCC_LIBRARY_PATH) + "/cccproject.a",
-                                     project_bin_file)) {
+        !compareFileModificationTime(cccmain_path, project_bin_file) ||
+        !compareFileModificationTime(cccproject_path, project_bin_file)) {
 
 #ifdef _WIN32
         string compile_cmd = CCC_COMPILER + string(" ") +
                              // project.cpp
                              project_config_file + " " +
                              // cccmain
-                             CCC_LIBRARY_PATH + "/cccmain.a " +
+                             cccmain_path + " " +
                              // cccproject
-                             CCC_LIBRARY_PATH + "/cccproject.a " +
+                             cccproject_path + " " +
                              // project bin
                              " -o " + project_bin_file + " -I " +
                              CCC_INCLUDE_PATH;
@@ -79,11 +92,11 @@ int main(int argc, char** argv) {
 #ifdef __linux__
         string compile_cmd = CCC_COMPILER + string(" ") +
                              // cccmain
-                             CCC_LIBRARY_PATH + "/cccmain.a" + " " +
+                             cccmain_path + " " +
                              // project.cpp
                              project_config_file + " " +
                              // cccproject
-                             CCC_LIBRARY_PATH + "/cccproject.a " +
+                             cccproject_path + " " +
                              // project bin
                              " -o " + project_bin_file + " -I " +
                              CCC_INCLUDE_PATH;
