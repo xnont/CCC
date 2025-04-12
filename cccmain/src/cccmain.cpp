@@ -4,11 +4,17 @@
 #include <vector>
 
 namespace ccc {
+/* Descriptions for projects, executions and libraries. */
 std::unordered_map<std::string, std::string> descs;
+/* Store all projects (automatically added to the global variable when the
+ * project is initialized) */
 std::vector<ccc::project*> projects;
+/* Store all commands (automatically added to the global variable when the
+ * command is initialized)*/
 std::unordered_map<std::string, ccc::command*> cmds;
 } // namespace ccc
 
+/* Declarations of the working function of commands built into ccc. */
 void build(std::vector<std::string> args);
 void describe(std::vector<std::string> args);
 void clean(std::vector<std::string> args);
@@ -18,7 +24,7 @@ void version(std::vector<std::string> args);
 #define RESET "\033[0m"
 
 int main(int argc, char* argv[]) {
-
+    /* The definition of commands built into ccc. */
     ccc::command build_cmd({"", "build"}, build, "Builds all projects");
     ccc::command desc_cmd({"desc", "describe"}, describe,
                           "Describes all projects");
@@ -40,7 +46,9 @@ int main(int argc, char* argv[]) {
     if (ccc::cmds.find(target_cmd) != ccc::cmds.end()) {
         try {
             ccc::cmds[target_cmd]->run(args);
-        } catch (const std::exception& e) {
+        }
+        // Catch the exception and print the error message.
+        catch (const std::exception& e) {
             std::cerr << "ccc: " << RED << "error: " << RESET << e.what()
                       << std::endl;
             return -1;
@@ -48,7 +56,9 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    std::cout << "Unknown command: " << target_cmd << std::endl;
+    // If the target command is not found, print an error message.
+    std::cerr << "ccc: " << RED << "error: " << RESET << "Unknown command "
+              << target_cmd << "." << std::endl;
     return -1;
 }
 
@@ -59,6 +69,8 @@ void build(std::vector<std::string> args) {
             "The build command cannot run in a directory without project.cpp.");
         return;
     }
+
+    // Traverse and process all projects.
     for (auto project : ccc::projects) {
         project->init_func(project, "build", args);
         project->process();
