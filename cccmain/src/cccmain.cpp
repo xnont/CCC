@@ -80,12 +80,21 @@ void describe(std::vector<std::string> args) {
     // Find the target description.
     if (ccc::descs.find(args[2]) != ccc::descs.end()) {
         std::cout << args[2] << ": " << ccc::descs[args[2]] << std::endl;
+        // Exit all projects.
+        for (auto project : ccc::projects) {
+            project->exit_func(project, "describe", args);
+        }
         return;
     }
 
-    // Exit all projects.
-    for (auto project : ccc::projects) {
-        project->exit_func(project, "describe", args);
+    // If the target description is not found, throw an error.
+    else {
+        // Exit all projects.
+        for (auto project : ccc::projects) {
+            project->exit_func(project, "describe", args);
+        }
+        throw std::runtime_error("Not find description for " + args[2] + ".");
+        return;
     }
 }
 
