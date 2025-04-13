@@ -9,25 +9,27 @@ else
     OS_TYPE = unknown
 endif
 
+COMPILER=g++
+
 test:
 	make clean
 	make debug
 	make install
 
 debug:
-	make build COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall -Wextra" -B
+	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall -Wextra" -B
 
 release:
-	make build COMPILE_FLAGS="-O2 -std=c++17 -W -Wall -Wextra" -B
+	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-O2 -std=c++17 -W -Wall -Wextra" -B
 
 build:
-	make -f ./ccc/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
-	make -f ./cccmain/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
-	make -f ./cccproject/Makefile COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
+	make -f ./ccc/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
+	make -f ./cccmain/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
+	make -f ./cccproject/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 ifeq ($(OS_TYPE), windows)
-	g++ build/lib/libcccmain.lib build/lib/libcccproject.lib -o ./build/bin/default_project
+	$(COMPILER) build/lib/libcccmain.lib build/lib/libcccproject.lib -o ./build/bin/default_project
 else ifeq ($(OS_TYPE), linux)
-	g++ build/lib/libcccmain.a build/lib/libcccproject.a -o ./build/bin/default_project
+	$(COMPILER) build/lib/libcccmain.a build/lib/libcccproject.a -o ./build/bin/default_project
 endif
 	cp -r ./cccproject/inc ./build
 

@@ -12,9 +12,9 @@ endif
 ./build/lib/cccmain.a: ./cccmain/src/cccmain.cpp
 	mkdir -p ./build/lib
 ifeq ($(OS_TYPE), windows)
-	g++ ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.lib -c -I./cccproject/inc $(COMPILE_FLAGS)
+	$(COMPILER) ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.lib -c -I./cccproject/inc $(COMPILE_FLAGS)
 else ifeq ($(OS_TYPE), linux)
-	g++ ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.a -c -I./cccproject/inc $(COMPILE_FLAGS)
+	$(COMPILER) ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.a -c -I./cccproject/inc $(COMPILE_FLAGS)
 endif
 
 clean:

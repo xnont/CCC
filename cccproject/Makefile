@@ -22,7 +22,7 @@ endif
 
 ./cccproject/build/obj/%.o: ./cccproject/src/ccc/%.cpp
 	mkdir -p ./cccproject/build/obj
-	g++ -c $< -o $@  -I./cccproject/inc $(COMPILE_FLAGS)
+	$(COMPILER) -c $< -o $@  -I./cccproject/inc $(COMPILE_FLAGS)
 
 clean:
 	rm -rf ./build/lib/cccproject.a
