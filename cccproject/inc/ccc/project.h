@@ -9,16 +9,26 @@
 #include <vector>
 
 namespace ccc {
-
-enum func_status {};
-
 class project : public ccc::config_manager {
   public:
+    /**
+     * @brief Construct a new project object.
+     *
+     * @param init_func The init_func is executed before processing the project.
+     * @param exit_func The exit_func is executed after processing the project.
+     */
     project(auto (*init_func)(project*, std::string, std::vector<std::string>)
                 ->void,
             auto (*exit_func)(project*, std::string, std::vector<std::string>)
                 ->void);
-
+    /**
+     * @brief Construct a new project object.
+     *
+     * @param name The name of the project.
+     * @param init_func The init_func is executed before processing the project.
+     * @param exit_func The exit_func is executed after processing the project.
+     * @param description The description of the project.
+     */
     project(std::string name,
             auto (*init_func)(project*, std::string, std::vector<std::string>)
                 ->void,
@@ -62,9 +72,6 @@ class project : public ccc::config_manager {
 /* All initialized project variables will be automatically added to this
  * variable and handed over to cccmain for unified processing. */
 extern std::vector<ccc::project*> projects;
-
-#define CCC_PROJECT(project_name, init_func, exit_func)                        \
-    ccc::project project_name(init_func, exit_func)
 
 } // namespace ccc
 

@@ -17,7 +17,7 @@ ccc::library::library(std::string name, ccc::library_type type,
     // Set the library name prefix and suffix according to the target operating
     // system.
     // Windows
-    if (this->system == ccc::system_type::windows_os) {
+    if (this->target_os == ccc::system_type::windows_os) {
         if (this->type == library_type::static_library) {
             this->name = "lib" + this->name + ".lib";
         } else if (this->type == library_type::dynamic_library ||
@@ -26,7 +26,7 @@ ccc::library::library(std::string name, ccc::library_type type,
         }
     }
     // Linux
-    else if (this->system == ccc::system_type::linux_os) {
+    else if (this->target_os == ccc::system_type::linux_os) {
         if (this->type == library_type::static_library) {
             this->name = "lib" + this->name + ".a";
         } else if (this->type == library_type::dynamic_library ||

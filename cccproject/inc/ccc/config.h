@@ -23,10 +23,16 @@ class config {
     /* The macros */
     std::vector<std::string> macros;
 
+    /* The thread num */
     uint32_t thread_num = 0;
 
     config() = default;
 
+    /**
+     * @brief Construct a new config object by another config object.
+     *
+     * @param other The config object need to be copy.
+     */
     config(const config& other)
         : compiler(other.compiler), compile_flags(other.compile_flags),
           linker(other.linker), link_flags(other.link_flags),
@@ -43,6 +49,11 @@ class config_manager {
 
     config_manager() = default;
 
+    /**
+     * @brief Construct a new config manager object by another config object.
+     *
+     * @param other The config object need to be copy.
+     */
     config_manager(const ccc::config& other) : config(other) {}
 
     /**

@@ -48,4 +48,12 @@ inline bool compareFileModificationTime(const std::string& first,
     return firstTime < secondTime;
 }
 
+// AI generated.
+inline std::string changeFileExtension(const std::string& filePath,
+                                       const std::string& newExtension) {
+    fs::path path(filePath);
+    path.replace_extension(newExtension);
+    return path.string();
+}
+
 #endif

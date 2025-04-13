@@ -100,7 +100,11 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
 
     // Get the obj file path.
     std::string obj_file_path =
-        this->obj_path + "/" + changeFileExtensionToO(source_file);
+        this->obj_path + "/" +
+        ((target_os == windows_os) ? changeFileExtension(source_file, ".obj")
+         : (target_os == linux_os) ? changeFileExtension(source_file, ".o")
+                                   : changeFileExtension(source_file, ".o"));
+
     // Add the obj file to the list.
     {
         std::lock_guard<std::mutex> lock(compile_mtx);

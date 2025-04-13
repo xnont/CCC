@@ -14,10 +14,11 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     // Set compiler flags
     unordered_set<string> ccc_args(args.begin(), args.end());
     if (ccc_args.find("release") != ccc_args.end()) {
-        self->config.compile_flags.push_back("-O2 -std=c++17 -W -Wall -Wextra");
+        self->add_compile_flags(
+            {"-O2", "-std=c++17", "-W", "-Wall", "-Wextra"});
     } else {
-        self->config.compile_flags.push_back(
-            "-Og -g -std=c++17 -W -Wall -Wextra");
+        self->add_compile_flags(
+            {"-Og", "-g", "-std=c++17", "-W", "-Wall", "-Wextra"});
     }
 
     /* Describe the executable program ccc. */
@@ -61,8 +62,8 @@ void ccc_init(project* self, string cmd, vector<string> args) {
         "not include project.cpp. When there is no project.cpp in the "
         "directory where ccc is executed, the program will be called by ccc.");
     default_project.output_path = "./build/bin";
-    default_project.add_library_dependency(&cccmain);
-    default_project.add_library_dependency(&cccproject);
+    default_project.add_dependency(&cccmain, true);
+    default_project.add_dependency(&cccproject, true);
     self->add_exe(default_project);
 
     // Copy the cccproject/inc directory to the build/inc directory when running

@@ -25,11 +25,13 @@ void version(std::vector<std::string> args);
 
 int main(int argc, char* argv[]) {
     /* The definition of commands built into ccc. */
-    ccc::command build_cmd({"", "build"}, build, "Builds all projects");
+    ccc::command build_cmd({"", "build"}, build,
+                           "Build the projects based on project.cpp.");
     ccc::command desc_cmd({"desc", "describe"}, describe,
-                          "Describes all projects");
-    ccc::command clean_cmd("clean", clean, "Cleans all projects");
-    ccc::command version_cmd("--version", version, "Prints the version");
+                          "Get a description of what you want to know.");
+    ccc::command clean_cmd("clean", clean,
+                           "Remove products from the projects.");
+    ccc::command version_cmd("--version", version, "Print the version.");
 
     std::string target_cmd = "";
 
