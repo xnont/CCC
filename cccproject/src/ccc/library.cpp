@@ -14,24 +14,27 @@ ccc::library::library(std::string name, ccc::library_type type,
         this->config.linker = "g++";
     }
 
-    // Set the library name prefix and suffix according to the target operating
-    // system.
-    // Windows
-    if (this->target_os == ccc::system_type::windows_os) {
-        if (this->type == library_type::static_library) {
-            this->name = "lib" + this->name + ".lib";
-        } else if (this->type == library_type::dynamic_library ||
-                   this->type == library_type::shared_library) {
-            this->name = this->name + ".dll";
+    // If the given library name does not have a suffix, add the prefix and
+    // suffix according to the operating system.
+    if (this->name.find(".") == std::string::npos) {
+        // Set the library name prefix and suffix according to the target
+        // operating system. Windows
+        if (this->target_os == ccc::system_type::windows_os) {
+            if (this->type == library_type::static_library) {
+                this->name = "lib" + this->name + ".lib";
+            } else if (this->type == library_type::dynamic_library ||
+                       this->type == library_type::shared_library) {
+                this->name = this->name + ".dll";
+            }
         }
-    }
-    // Linux
-    else if (this->target_os == ccc::system_type::linux_os) {
-        if (this->type == library_type::static_library) {
-            this->name = "lib" + this->name + ".a";
-        } else if (this->type == library_type::dynamic_library ||
-                   this->type == library_type::shared_library) {
-            this->name = "lib" + this->name + ".so";
+        // Linux
+        else if (this->target_os == ccc::system_type::linux_os) {
+            if (this->type == library_type::static_library) {
+                this->name = "lib" + this->name + ".a";
+            } else if (this->type == library_type::dynamic_library ||
+                       this->type == library_type::shared_library) {
+                this->name = "lib" + this->name + ".so";
+            }
         }
     }
 }
