@@ -17,5 +17,5 @@ void init_project(project* self, string cmd, vector<string> args) {
 void exit_project(project* self, string cmd, vector<string> args) {}
 
 /* Register a project and specify its initialization and exit functions. */
-project hello_world("hello_world", init_project, exit_project,
-                    "Say hello world!");
+project my_project("hello_world", init_project, exit_project,
+                   "Say hello world!");
