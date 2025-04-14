@@ -7,8 +7,9 @@ using namespace std;
 /* In the init_project function, we can describe and add the libraries and
  * applications that make up the project. */
 void init_project(project* self, string cmd, vector<string> args) {
-    execution exe("hello_world", "Say hello world!"); // Create an application
-    exe.add_source_files({"./src"}, {".cpp"});        // Add source files
+    // Create an application, hello_world is the name of the application.
+    execution exe("hello_world", "Say hello world!");
+    exe.add_source_files({"./src"}, {".cpp"}); // Add source files
     self->add_exe(exe); // Add the application to the project
 }
 

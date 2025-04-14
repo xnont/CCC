@@ -14,11 +14,6 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
             dep->process(project_cfg);
         }
 
-        // If the is_transmit is true, add the dependency to the obj_files list.
-        if (dep_desc.is_transmit) {
-            this->obj_files.push_back(dep->output_path + "/" + dep->name);
-        }
-
         // Add header paths.
         for (auto& header_folder_path : dep->config.header_folder_paths) {
             this->config.header_folder_paths.push_back(header_folder_path);
@@ -90,6 +85,13 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
     for (auto& thread : threads) {
         if (thread.joinable()) {
             thread.join();
+        }
+    }
+
+    for (auto& [dep, dep_desc] : dependencies) {
+        // If the is_transmit is true, add the dependency to the obj_files list.
+        if (dep_desc.is_transmit) {
+            this->obj_files.push_back(dep->output_path + "/" + dep->name);
         }
     }
 }

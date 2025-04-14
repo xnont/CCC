@@ -5,7 +5,10 @@ using namespace std;
 using namespace ccc;
 
 void init_project(project* self, string cmd, vector<string> args) {
-    /* Create a library */
+    /* Create a library, When the suffix of 'name' is not written, ccc will
+     * automatically add the prefix and suffix of the library based on the
+     * platform. For example, under the Windows operating system, the name of a
+     * static library will be changed to lib<name>.lib */
     library mathlib("mymath", library_type::static_library, "My Math Library");
 
     /* Change to shared library(Default is static library). */

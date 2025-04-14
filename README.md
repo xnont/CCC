@@ -10,6 +10,7 @@
 ccc
 
 ## Project Introduction
+The ccc is a cross platform (currently only supported on Windows and Linux) build tool for C/C++ projects, using C++ as the configuration language for the project.
 
 ## Install and Uninstall
 #### 1. Download the ccc
@@ -59,8 +60,9 @@ using namespace std;
 /* In the init_project function, we can describe and add the libraries and
  * applications that make up the project. */
 void init_project(project* self, string cmd, vector<string> args) {
-    execution exe("hello_world", "Say hello world!"); // Create an application
-    exe.add_source_files({"./src"}, {".cpp"});        // Add source files
+    // Create an application, hello_world is the name of the application.
+    execution exe("hello_world", "Say hello world!");
+    exe.add_source_files({"./src"}, {".cpp"}); // Add source files
     self->add_exe(exe); // Add the application to the project
 }
 
@@ -103,7 +105,10 @@ using namespace std;
 using namespace ccc;
 
 void init_project(project* self, string cmd, vector<string> args) {
-    /* Create a library */
+    /* Create a library, When the suffix of 'name' is not written, ccc will
+     * automatically add the prefix and suffix of the library based on the
+     * platform. For example, under the Windows operating system, the name of a
+     * static library will be changed to lib<name>.lib */
     library mathlib("mymath", library_type::static_library, "My Math Library");
 
     /* Change to shared library(Default is static library). */
@@ -133,7 +138,57 @@ g++ -c ./src/my_math.cpp -o ./build/obj//./src/my_math.obj  -I./inc/ -fdiagnosti
 ar rcs ./build//libmymath.lib ./build/obj//./src/my_math.obj
 ```
 
-#### 3. Dependency
+#### 3. Dependency([My Math](./example/my_math/))
+##### You can consider library and execution as dependencies that can be added to library or execution.
+##### We implement the library in math_lib and write the main function in math_exe to verify it.
+##### Now I will show you how to describe the dependency relationships involved.
+```cpp
+#include "ccc/project.h"
+#include <string>
+#include <vector>
+using namespace std;
+using namespace ccc;
+
+void init_project(project* self, string cmd, vector<string> args) {
+    // Describe the library
+    library mathlib("mymath", library_type::static_library, "My Math Library");
+    mathlib.add_source_files({"./math_lib/src/my_math.cpp"}); // Add source file
+    mathlib.add_header_folder_paths({
+        "./math_lib/inc/", // Add header folder path
+    });
+
+    // Describe the executable
+    execution myexe("myexe", "My Executable to test my math library.");
+    myexe.add_source_files({"./math_exe/src/main.cpp"});
+
+    // Add dependency
+    // The first true indicates adding the dependency directly to the target,
+    // and the second true indicates compiling it if the dependency does not
+    // exist.
+    myexe.add_dependency(&mathlib, true, true);
+    self->add_exe(myexe);
+}
+
+void exit_project(project* self, string cmd, vector<string> args) {}
+
+project my_project("Math", init_project, exit_project, "My Math Project");
+```
+
+##### We can run the following command to compile and run the project.
+```shell
+ccc && ./build/myexe
+```
+
+##### The phenomenon of executing commands is as follows
+```shell
+$ ccc && ./build/myexe
+g++ -c ./math_lib/src/my_math.cpp -o ./build/obj//./math_lib/src/my_math.obj  -I./math_lib/inc/ -fdiagnostics-color=always 2>&1
+ar rcs ./build//libmymath.lib ./build/obj//./math_lib/src/my_math.obj
+g++ -c ./math_exe/src/main.cpp -o ./build/obj//./math_exe/src/main.obj  -I./math_lib/inc/ -fdiagnostics-color=always 2>&1
+g++ ./build/obj//./math_exe/src/main.obj ./build//libmymath.lib -o ./build//myexe  
+1 + 2 = 3
+1 - 2 = -1
+```
 
 #### 4. Command
 ##### build
@@ -142,6 +197,6 @@ ar rcs ./build//libmymath.lib ./build/obj//./src/my_math.obj
 ##### --version
 ##### Custom Command
 
-#### 5. Compile Logic of ccc
+#### 5. Working principle of CCC
 
 #### 6. The classes and commonly used methods provided by ccc
