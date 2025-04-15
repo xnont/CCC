@@ -82,7 +82,7 @@ void build(std::vector<std::string> args) {
 
 void describe(std::vector<std::string> args) {
     if (args.size() != 3) {
-        std::cout << "Usage: ccc desc <command name>" << std::endl;
+        std::cout << "Usage: ccc desc <name>" << std::endl;
         return;
     }
 

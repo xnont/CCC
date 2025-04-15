@@ -191,10 +191,32 @@ g++ ./build/obj//./math_exe/src/main.obj ./build//libmymath.lib -o ./build//myex
 ```
 
 #### 4. Command
-##### build
-##### clean
-##### desc
-##### --version
+##### The commands built into ccc.
+- build
+    ##### The 'build' command is used to compile the project and its delcaration is as follows.
+    ```cpp
+    ccc::command build_cmd({"", "build"}, build,
+                           "Build the projects based on project.cpp.");
+    ```
+    ##### This means that the 'ccc' is equal to 'ccc build'.
+    ##### This command can not be used in the directory without project.cpp file.
+- clean
+    ##### The 'clean' command is used to clean the project products and its delcaration is as follows.
+    ```cpp
+    ccc::command clean_cmd("clean", clean,
+                           "Remove products from the projects.");
+    ```
+    ##### This command can not be used in the directory without project.cpp file.
+- describe
+    ##### The 'describe' command is used to get the description about something and its delcaration is as follows.
+    ```cpp
+    ccc::command desc_cmd({"desc", "describe"}, describe,
+                          "Get a description of what you want to know.");
+    ```
+    ##### This means that the 'ccc desc \<name>' is equal to 'ccc describe \<name>'.
+    ##### You can get the description of the built-in commands, and get the description of the project, library, execution and custom commands from the project.cpp in the project directory.
+- --version
+    ##### Use the 'ccc --version' to get the version of ccc.
 ##### Custom Command
 
 #### 5. Working principle of CCC
