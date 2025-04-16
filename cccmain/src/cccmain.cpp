@@ -157,5 +157,5 @@ void clean(std::vector<std::string> args) {
 
 void version(std::vector<std::string> args) {
     args.push_back("--version");
-    std::cout << "ccc version: " << "0.0.0.20250328" << std::endl;
+    std::cout << "ccc version: " << "0.0.1" << std::endl;
 }
