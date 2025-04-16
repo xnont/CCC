@@ -218,7 +218,16 @@ g++ ./build/obj//./math_exe/src/main.obj ./build//libmymath.lib -o ./build//myex
 - --version
     ##### Use the 'ccc --version' to get the version of ccc.
 ##### Custom Command
+###### You can add your own command to ccc by declaring the command variable in project.cpp.
+###### For example, We use 'ccc release' instead of 'ccc build release' by defining the 'release' command in this project.
+```cpp
+void release(vector<string> args) {
+    cout << "Compile the ccc in release mode." << endl;
+    system("ccc build release");
+}
+command release_cmd("release", release, "Compile the ccc in release mode.");
+```
 
-#### 5. Working principle of CCC
+<!--#### 5. Working principle of CCC
 
-#### 6. The classes and commonly used methods provided by ccc
+#### 6. The classes and commonly used methods provided by ccc-->
