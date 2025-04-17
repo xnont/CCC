@@ -6,14 +6,6 @@ ccc::library::library(std::string name, ccc::library_type type,
     // Set the type
     this->type = type;
 
-    // Set the linker according to the type
-    if (this->type == library_type::static_library) {
-        this->config.linker = "ar rcs";
-    } else if (this->type == library_type::dynamic_library ||
-               this->type == library_type::shared_library) {
-        this->config.linker = "g++";
-    }
-
     // If the given library name does not have a suffix, add the prefix and
     // suffix according to the operating system.
     if (this->name.find(".") == std::string::npos) {
