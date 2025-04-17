@@ -9,11 +9,11 @@ namespace ccc {
 class config {
   public:
     /* The compiler */
-    std::string compiler = "g++";
+    std::string compiler;
     /* The compile flags */
     std::vector<std::string> compile_flags;
     /* The linker */
-    std::string linker = "g++";
+    std::string linker;
     /* The link flags */
     std::vector<std::string> link_flags;
 

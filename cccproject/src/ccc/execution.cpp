@@ -15,8 +15,9 @@ void ccc::execution::process(const ccc::config& project_cfg) {
 
     std::string cmd = (
         // linker
-        (this->config.linker.length() != 0 ? this->config.linker
-                                           : project_cfg.linker) +
+        (this->config.linker.length() != 0  ? this->config.linker
+         : project_cfg.linker.length() != 0 ? project_cfg.linker
+                                            : "g++") +
         " " +
         // Object files
         joinWithSpace(this->obj_files) + " -o " +

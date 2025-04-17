@@ -128,8 +128,9 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
 
     std::string cmd = (
         // Compiler
-        (this->config.compiler.length() != 0 ? this->config.compiler
-                                             : project_cfg.compiler) +
+        (this->config.compiler.length() != 0  ? this->config.compiler
+         : project_cfg.compiler.length() != 0 ? project_cfg.compiler
+                                              : "g++") +
         // Only compile without linking
         " -c " +
         // Source file
