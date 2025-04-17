@@ -63,9 +63,7 @@ void ccc::library::process(const ccc::config& project_cfg) {
     if (this->type == library_type::static_library) {
         cmd = (
             // linker
-            (this->config.linker.length() != 0 ? this->config.linker
-                                               : project_cfg.linker) +
-            " " +
+            ("ar rcs") + std::string(" ") +
             // Output file
             (this->output_path.length() != 0 ? this->output_path
                                              : "./build/lib") +
