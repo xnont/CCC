@@ -46,6 +46,3 @@ endif
 
 uninstall:
 	rm -rf $(shell echo $$HOME)/.ccc
-
-line:
-	find ./ccc ./cccmain ./cccproject -name "*.cpp" -o -name "*.h" -o -name "*.c" | xargs wc -l

@@ -1,5 +1,7 @@
 #include "ccc/project.h"
+#include <algorithm>
 #include <filesystem>
+#include <fstream>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -83,6 +85,7 @@ void ccc_exit(project* self, string cmd, vector<string> args) {}
 
 project ccc_project("CCC", ccc_init, ccc_exit, "");
 
+// AI generated
 void copy_directory(const fs::path& source, const fs::path& destination) {
     try {
         // Check if the source path exists and is a directory
@@ -122,38 +125,77 @@ void copy_directory(const fs::path& source, const fs::path& destination) {
     }
 }
 
+command debug_cmd(
+    "debug",
+    [](vector<string> args) {
+        cout << "Compile the ccc in debug mode." << endl;
 #ifdef _WIN32
-void debug(vector<string> args) {
-    cout << "Compile the ccc in debug mode." << endl;
-    system("ccc build debug");
-}
+        system("ccc build debug");
 #endif
 #ifdef __linux__
-void debug(vector<string> args) {
-    cout << "Compile the ccc in debug mode." << endl;
-    system("bash -c 'ccc build debug'");
-}
+        system("bash -c 'ccc build debug'");
 #endif
-command debug_cmd("debug", debug, "Compile the ccc in debug mode.");
+    },
+    "Compile the ccc in debug mode.");
 
+command release_cmd(
+    "release",
+    [](vector<string> args) {
+        cout << "Compile the ccc in release mode." << endl;
 #ifdef _WIN32
-void release(vector<string> args) {
-    cout << "Compile the ccc in release mode." << endl;
-    system("ccc build release");
-}
+        system("ccc build release");
 #endif
 #ifdef __linux__
-void release(vector<string> args) {
-    cout << "Compile the ccc in release mode." << endl;
-    system("bash -c 'ccc build release'");
-}
+        system("bash -c 'ccc build release'");
 #endif
-command release_cmd("release", release, "Compile the ccc in release mode.");
+    },
+    "Compile the ccc in release mode.");
 
 command line_cmd(
     "line",
+    // AI generated
     [](vector<string> args) {
-        system("find ./ccc ./cccmain ./cccproject -name \"*.cpp\" -o -name "
-               "\"*.h\" -o -name \"*.c\" | xargs wc -l");
+        int total_lines = 0;
+        vector<string> directories = {"./ccc", "./cccmain", "./cccproject"};
+        unordered_set<string> valid_ext = {".cpp", ".h", ".hpp", ".c"};
+
+        auto count_lines = [&](const fs::path& path) {
+            ifstream file(path);
+            if (!file.is_open())
+                return 0;
+
+            int count = 0;
+            string line;
+            while (getline(file, line)) {
+                line.erase(remove_if(line.begin(), line.end(), ::isspace),
+                           line.end());
+                if (!line.empty()) {
+                    count++;
+                }
+            }
+            return count;
+        };
+
+        for (const auto& dir : directories) {
+            int dir_lines = 0;
+            cout << "Counting lines in: " << dir << endl;
+
+            for (const auto& entry : fs::recursive_directory_iterator(dir)) {
+                if (entry.is_regular_file() &&
+                    valid_ext.count(entry.path().extension().string())) {
+                    int lines = count_lines(entry.path());
+                    dir_lines += lines;
+                    cout << "  " << entry.path().filename() << ": " << lines
+                         << endl;
+                }
+            }
+
+            cout << "Total for " << fs::path(dir).filename() << ": "
+                 << dir_lines << "\n\n";
+            total_lines += dir_lines;
+        }
+
+        cout << "================================\n";
+        cout << "Grand total lines of code: " << total_lines << endl;
     },
     "Print the number of lines of code for the ccc project.");
