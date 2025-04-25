@@ -149,3 +149,11 @@ void release(vector<string> args) {
 }
 #endif
 command release_cmd("release", release, "Compile the ccc in release mode.");
+
+command line_cmd(
+    "line",
+    [](vector<string> args) {
+        system("find ./ccc ./cccmain ./cccproject -name \"*.cpp\" -o -name "
+               "\"*.h\" -o -name \"*.c\" | xargs wc -l");
+    },
+    "Print the number of lines of code for the ccc project.");
