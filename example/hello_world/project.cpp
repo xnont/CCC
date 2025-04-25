@@ -10,7 +10,7 @@ void init_project(project* self, string cmd, vector<string> args) {
     // Create an application, hello_world is the name of the application.
     execution exe("hello_world", "Say hello world!");
     exe.add_source_files({"./src"}, {".cpp"}); // Add source files
-    self->add_exe(exe); // Add the application to the project
+    self->add_task(&exe); // Add the application to the project
 }
 
 /* We did not request any resources that need to be manually processed in

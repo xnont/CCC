@@ -134,21 +134,11 @@ void clean(std::vector<std::string> args) {
     for (auto project : ccc::projects) {
         project->init_func(project, "clean", args);
 
-        /* Traverse all executables.(Delete the folders corresponding to output
-         * path and obj path.) */
-        for (auto exe : project->exes) {
-            remove_directories(exe.output_path.length() != 0 ? exe.output_path
-                                                             : "./build/bin");
-            remove_directories(exe.obj_path.length() != 0 ? exe.obj_path
-                                                          : "./build/obj");
-        }
-        /* Traverse all libraries.(Delete the folders corresponding to output
-         * path and obj path.) */
-        for (auto lib : project->libs) {
-            remove_directories(lib.output_path.length() != 0 ? lib.output_path
-                                                             : "./build/lib");
-            remove_directories(lib.obj_path.length() != 0 ? lib.obj_path
-                                                          : "./build/obj");
+        /* Traverse all tasks.(Delete the folders corresponding to output path
+         * and obj path.) */
+        for (auto& task : project->tasks) {
+            remove_directories(task->output_path);
+            remove_directories(task->obj_path);
         }
 
         project->exit_func(project, "clean", args);

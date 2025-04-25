@@ -21,7 +21,7 @@ void init_project(project* self, string cmd, vector<string> args) {
     // and the second true indicates compiling it if the dependency does not
     // exist.
     myexe.add_dependency(&mathlib, true, true);
-    self->add_exe(myexe);
+    self->add_task(&myexe);
 }
 
 void exit_project(project* self, string cmd, vector<string> args) {}

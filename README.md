@@ -63,7 +63,7 @@ void init_project(project* self, string cmd, vector<string> args) {
     // Create an application, hello_world is the name of the application.
     execution exe("hello_world", "Say hello world!");
     exe.add_source_files({"./src"}, {".cpp"}); // Add source files
-    self->add_exe(exe); // Add the application to the project
+    self->add_task(&exe); // Add the application to the project
 }
 
 /* We did not request any resources that need to be manually processed in
@@ -118,7 +118,7 @@ void init_project(project* self, string cmd, vector<string> args) {
     mathlib.add_header_folder_paths({
         "./inc/", // Add header folder path
     });
-    self->add_lib(mathlib); // Add library to project
+    self->add_task(&mathlib); // Add library to project
 }
 
 void exit_project(project* self, string cmd, vector<string> args) {}
@@ -166,7 +166,7 @@ void init_project(project* self, string cmd, vector<string> args) {
     // and the second true indicates compiling it if the dependency does not
     // exist.
     myexe.add_dependency(&mathlib, true, true);
-    self->add_exe(myexe);
+    self->add_task(&myexe);
 }
 
 void exit_project(project* self, string cmd, vector<string> args) {}

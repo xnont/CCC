@@ -44,8 +44,7 @@ class project : public ccc::config_manager {
     /* Used to pass parameters between init_func and exit_func. */
     void* arg;
 
-    std::vector<ccc::library> libs;
-    std::vector<ccc::execution> exes;
+    std::vector<std::shared_ptr<ccc::compile_task>> tasks;
 
     /* Process the project.  */
     void process();
@@ -53,18 +52,11 @@ class project : public ccc::config_manager {
     /* The convenient utility functions provided by ccc. */
 
     /**
-     * @brief Add a execution need to be compile to the project.
+     * @brief Add a task need to be compile to the project.
      *
-     * @param exe The execution need to be added to the project.
+     * @param task The task need to be added to the project.
      */
-    void add_exe(ccc::execution exe);
-
-    /**
-     * @brief Add a library need to be compile to the project.
-     *
-     * @param lib The library need to be added to the project.
-     */
-    void add_lib(ccc::library lib);
+    void add_task(ccc::compile_task* task);
 
   private:
 };

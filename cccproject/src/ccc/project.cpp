@@ -26,17 +26,12 @@ ccc::project::project(
     ccc::descs[name] = description;
 }
 void ccc::project::process() {
-    for (auto& lib : libs)
-        if (lib.check(this->config))
-            lib.process(this->config);
-
-    for (auto& exe : exes)
-        if (exe.check(this->config))
-            exe.process(this->config);
+    for (const auto& task : tasks) {
+        if (task->check(this->config))
+            task->process(this->config);
+    }
 }
 
-void ccc::project::add_exe(ccc::execution exe) {
-    exes.push_back(std::move(exe));
+void ccc::project::add_task(ccc::compile_task* task) {
+    tasks.push_back(std::shared_ptr<compile_task>(task->clone()));
 }
-
-void ccc::project::add_lib(ccc::library lib) { libs.push_back(std::move(lib)); }

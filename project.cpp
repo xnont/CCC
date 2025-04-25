@@ -32,7 +32,7 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     ccc.output_path = "./build/bin";
     ccc.add_source_files({"./ccc/src/ccc.cpp"});
     ccc.add_header_folder_paths({"./cccproject/inc", "./ccc/inc"});
-    self->add_exe(ccc);
+    self->add_task(&ccc);
 
     /* Describe the library file cccmain. */
     library cccmain(
@@ -43,7 +43,7 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     cccmain.output_path = "./build/lib";
     cccmain.add_source_files({"./cccmain/src/cccmain.cpp"});
     cccmain.add_header_folder_paths({"./cccproject/inc"});
-    self->add_lib(cccmain);
+    self->add_task(&cccmain);
 
     /* Describe the library file cccproject. */
     library cccproject("cccproject", static_library,
@@ -53,7 +53,7 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     cccproject.output_path = "./build/lib";
     cccproject.add_source_files({"./cccproject/src/ccc"}, {".cpp"});
     cccproject.add_header_folder_paths({"./cccproject/inc"});
-    self->add_lib(cccproject);
+    self->add_task(&cccproject);
 
     /* Describe the executable program default_project. */
     execution default_project(
@@ -64,7 +64,7 @@ void ccc_init(project* self, string cmd, vector<string> args) {
     default_project.output_path = "./build/bin";
     default_project.add_dependency(&cccmain, true);
     default_project.add_dependency(&cccproject, true);
-    self->add_exe(default_project);
+    self->add_task(&default_project);
 
     // Copy the cccproject/inc directory to the build/inc directory when running
     // the build command.

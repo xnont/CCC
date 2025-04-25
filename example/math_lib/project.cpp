@@ -18,7 +18,7 @@ void init_project(project* self, string cmd, vector<string> args) {
     mathlib.add_header_folder_paths({
         "./inc/", // Add header folder path
     });
-    self->add_lib(mathlib); // Add library to project
+    self->add_task(&mathlib); // Add library to project
 }
 
 void exit_project(project* self, string cmd, vector<string> args) {}
