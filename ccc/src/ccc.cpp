@@ -4,19 +4,18 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
 namespace fs = std::filesystem;
 
 int main(int argc, char** argv) {
 
     /* Parse the command line arguments. */
-    string cmd;
+    std::string cmd;
     for (int i = 1; i < argc; i++) {
-        cmd += " " + string(argv[i]);
+        cmd += " " + std::string(argv[i]);
     }
 
     /* Set the default project configuration file. */
-    string project_config_file = "project.cpp";
+    std::string project_config_file = "project.cpp";
 
     /* If there is no project.cpp file in the current directory, run the default
      * cccpoject. */
@@ -34,10 +33,10 @@ int main(int argc, char** argv) {
 
     /* Set the default project binary file. */
 #ifdef _WIN32
-    string project_bin_file = "project.exe";
+    std::string project_bin_file = "project.exe";
 #endif
 #ifdef __linux__
-    string project_bin_file = "./project";
+    std::string project_bin_file = "./project";
 #endif
 
     // Check if the required environment variables are set.
@@ -46,25 +45,25 @@ int main(int argc, char** argv) {
     const char* CCC_LIBRARY_PATH = std::getenv("CCC_LIBRARY_PATH");
     if (CCC_COMPILER == nullptr || CCC_INCLUDE_PATH == nullptr ||
         CCC_LIBRARY_PATH == nullptr) {
-        cerr << "The required environment variables("
-             << (CCC_COMPILER == nullptr ? "CCC_COMPILER " : "")
-             << (CCC_INCLUDE_PATH == nullptr ? "CCC_INCLUDE_PATH " : "")
-             << (CCC_LIBRARY_PATH == nullptr ? "CCC_LIBRARY_PATH" : "")
-             << ") for ccc are missing. "
-                "Please try reinstalling ccc."
-             << endl;
+        std::cerr << "The required environment variables("
+                  << (CCC_COMPILER == nullptr ? "CCC_COMPILER " : "")
+                  << (CCC_INCLUDE_PATH == nullptr ? "CCC_INCLUDE_PATH " : "")
+                  << (CCC_LIBRARY_PATH == nullptr ? "CCC_LIBRARY_PATH" : "")
+                  << ") for ccc are missing. "
+                     "Please try reinstalling ccc."
+                  << std::endl;
         return -1;
     }
 
     /* Check if the project binary file is out of date. */
-    std::string cccmain_path = string(CCC_LIBRARY_PATH) +
+    std::string cccmain_path = std::string(CCC_LIBRARY_PATH) +
 #ifdef _WIN32
                                "/libcccmain.lib";
 #endif
 #ifdef __linux__
     "/libcccmain.a";
 #endif
-    std::string cccproject_path = string(CCC_LIBRARY_PATH) +
+    std::string cccproject_path = std::string(CCC_LIBRARY_PATH) +
 #ifdef _WIN32
                                   "/libcccproject.lib";
 #endif
@@ -78,28 +77,28 @@ int main(int argc, char** argv) {
         !compareFileModificationTime(cccproject_path, project_bin_file)) {
 
 #ifdef _WIN32
-        string compile_cmd = CCC_COMPILER + string(" ") +
-                             // project.cpp
-                             project_config_file + " " +
-                             // cccmain
-                             cccmain_path + " " +
-                             // cccproject
-                             cccproject_path + " " +
-                             // project bin
-                             " -o " + project_bin_file + " -I " +
-                             CCC_INCLUDE_PATH;
+        std::string compile_cmd = CCC_COMPILER + std::string(" ") +
+                                  // project.cpp
+                                  project_config_file + " " +
+                                  // cccmain
+                                  cccmain_path + " " +
+                                  // cccproject
+                                  cccproject_path + " " +
+                                  // project bin
+                                  " -o " + project_bin_file + " -I " +
+                                  CCC_INCLUDE_PATH;
 #endif
 #ifdef __linux__
-        string compile_cmd = CCC_COMPILER + string(" ") +
-                             // cccmain
-                             cccmain_path + " " +
-                             // project.cpp
-                             project_config_file + " " +
-                             // cccproject
-                             cccproject_path + " " +
-                             // project bin
-                             " -o " + project_bin_file + " -I " +
-                             CCC_INCLUDE_PATH;
+        std::string compile_cmd = CCC_COMPILER + std::string(" ") +
+                                  // cccmain
+                                  cccmain_path + " " +
+                                  // project.cpp
+                                  project_config_file + " " +
+                                  // cccproject
+                                  cccproject_path + " " +
+                                  // project bin
+                                  " -o " + project_bin_file + " -I " +
+                                  CCC_INCLUDE_PATH;
 #endif
         /* Compile the project binary file. */
         if (std::system(compile_cmd.c_str()) != 0)
