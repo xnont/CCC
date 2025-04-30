@@ -1,3 +1,4 @@
+#include "ccc/command.h"
 #include "ccc/project.h"
 #include <iostream>
 #include <string>

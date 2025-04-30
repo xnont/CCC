@@ -26,6 +26,9 @@ class config {
     /* The thread num */
     uint32_t thread_num = 0;
 
+    /* Whether to print the information during compile. */
+    bool is_print = true;
+
     config() = default;
 
     /**
@@ -37,7 +40,7 @@ class config {
         : compiler(other.compiler), compile_flags(other.compile_flags),
           linker(other.linker), link_flags(other.link_flags),
           header_folder_paths(other.header_folder_paths), macros(other.macros),
-          thread_num(other.thread_num) {}
+          thread_num(other.thread_num), is_print(other.is_print) {}
 
     config& operator=(const config& other) = default;
 };

@@ -1,4 +1,6 @@
 #include "ccc/compile_task.h"
+#include "util/io.h"
+
 ccc::compile_task::compile_task(std::string name, std::string description) {
     this->name = name;
     // Add description
@@ -146,23 +148,9 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
         // Merge standard error stream and standard output stream.
         " 2>&1");
 
-    /* Open a pipe to execute the command */
-    FILE* pipe = popen(cmd.c_str(), "r");
-    if (!pipe) {
-        std::cerr << "Failed to compile " + source_file << std::endl;
-        return;
-    }
-    {
-        // Lock the mutex to print the command and output.
-        std::lock_guard<std::mutex> lock(compile_mtx);
-        std::cout << cmd << std::endl;
-        char buffer[128];
-        while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
-            std::cout << buffer;
-        }
-    }
-    /* Close the pipe */
-    pclose(pipe);
+    // Execute the command.
+    ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
+                          project_cfg.is_print && this->config.is_print);
 }
 
 void ccc::compile_task::add_source_file(const std::string& file_path) {

@@ -1,4 +1,5 @@
 #include "ccc/execution.h"
+#include "util/io.h"
 
 ccc::execution::execution(std::string name, std::string description)
     : ccc::compile_task(name, description) {};
@@ -30,9 +31,8 @@ void ccc::execution::process(const ccc::config& project_cfg) {
         joinWithSpace(this->config.link_flags));
 
     // Link
-    std::cout << cmd << std::endl;
-    if (std::system(cmd.c_str()) != 0)
-        return;
+    ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
+                          project_cfg.is_print && this->config.is_print);
 }
 
 #define RED "\033[31m"

@@ -1,4 +1,5 @@
 #include "ccc/project.h"
+#include "ccc/command.h"
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
@@ -22,6 +23,10 @@ project ccc_project(
         } else {
             self->add_compile_flags(
                 {"-Og", "-g", "-std=c++17", "-W", "-Wall", "-Wextra"});
+        }
+
+        if (ccc_args.count("--noprint")) {
+            self->config.is_print = false;
         }
 
         /* Describe the executable program ccc. */
@@ -55,7 +60,7 @@ project ccc_project(
             "defining how to describe the project when using ccc.");
         cccproject.obj_path = "./cccproject/build/obj";
         cccproject.output_path = "./build/lib";
-        cccproject.add_source_files({"./cccproject/src/ccc"}, {".cpp"});
+        cccproject.add_source_files({"./cccproject/src/"}, {".cpp"});
         cccproject.add_header_folder_paths({"./cccproject/inc"});
         self->add_task(&cccproject);
 
@@ -134,11 +139,15 @@ command debug_cmd(
     "debug",
     [](vector<string> args) {
         cout << "Compile the ccc in debug mode." << endl;
+        std::string cmd = "ccc build debug";
+        for (int i = 2; i < args.size(); i++) {
+            cmd += " " + args[i];
+        }
 #ifdef _WIN32
-        system("ccc build debug");
+        system(cmd.c_str());
 #endif
 #ifdef __linux__
-        system("bash -c 'ccc build debug'");
+        system(("bash -c '" + cmd + "'").c_str());
 #endif
     },
     "Compile the ccc in debug mode.");
@@ -147,11 +156,15 @@ command release_cmd(
     "release",
     [](vector<string> args) {
         cout << "Compile the ccc in release mode." << endl;
+        std::string cmd = "ccc build release";
+        for (int i = 2; i < args.size(); i++) {
+            cmd += " " + args[i];
+        }
 #ifdef _WIN32
-        system("ccc build release");
+        system(cmd.c_str());
 #endif
 #ifdef __linux__
-        system("bash -c 'ccc build release'");
+        system(("bash -c '" + cmd + "'").c_str());
 #endif
     },
     "Compile the ccc in release mode.");

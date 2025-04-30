@@ -9,7 +9,12 @@ else
     OS_TYPE = unknown
 endif
 
-./build/lib/cccmain.a: ./cccmain/src/cccmain.cpp
+# Compile
+ifeq ($(OS_TYPE), windows)
+./build/lib/libcccmain.lib: ./cccmain/src/cccmain.cpp
+else ifeq ($(OS_TYPE), linux)
+./build/lib/libcccmain.a: ./cccmain/src/cccmain.cpp
+endif
 	mkdir -p ./build/lib
 ifeq ($(OS_TYPE), windows)
 	$(COMPILER) ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.lib -c -I./cccproject/inc $(COMPILE_FLAGS)

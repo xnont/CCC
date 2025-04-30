@@ -1,4 +1,5 @@
 #include "ccc/library.h"
+#include "util/io.h"
 
 ccc::library::library(std::string name, ccc::library_type type,
                       std::string description)
@@ -86,9 +87,8 @@ void ccc::library::process(const ccc::config& project_cfg) {
     }
 
     // Link
-    std::cout << cmd << std::endl;
-    if (std::system(cmd.c_str()) != 0)
-        return;
+    ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
+                          project_cfg.is_print && this->config.is_print);
 }
 
 #define RED "\033[31m"
