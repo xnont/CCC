@@ -13,7 +13,8 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
         // it.
         if (!fs::exists(dep->output_path + "/" + dep->name) &&
             dep_desc.is_compile) {
-            dep->process(project_cfg);
+            dep->compile(project_cfg);
+            dep->link(project_cfg);
         }
 
         // Add header paths.

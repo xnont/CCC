@@ -35,12 +35,12 @@ class library : public ccc::compile_task {
     library_type type = library_type::static_library;
 
     /**
-     * @brief Rewrite the process method of the compile_task class, call the
+     * @brief Rewrite the link method of the compile_task class, call the
      *        compile method in it, and link the intermediate products.
      *
      * @param project_cfg The configuration of the project.
      */
-    void process(const ccc::config& project_cfg) override;
+    void link(const ccc::config& project_cfg) override;
 
     /**
      * @brief Check if the library task is valid.

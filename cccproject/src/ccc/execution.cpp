@@ -4,9 +4,7 @@
 ccc::execution::execution(std::string name, std::string description)
     : ccc::compile_task(name, description) {};
 
-void ccc::execution::process(const ccc::config& project_cfg) {
-    this->compile(project_cfg);
-
+void ccc::execution::link(const ccc::config& project_cfg) {
     // If the output_path doesn't exist, create it.
     std::string target_folder =
         extractPath(this->output_path + "/" + this->name);

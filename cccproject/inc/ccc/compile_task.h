@@ -107,12 +107,11 @@ class compile_task : public ccc::config_manager {
     /**
      * @brief The subclass needs to implement this function, and the linking
      *        operation of the subclass needs to be implemented in this
-     *        function. The compile function needs to be called at the beginning
-     *        of the function.
+     *        function.
      *
      * @param project_cfg The config of the father project.
      */
-    virtual void process(const ccc::config& project_cfg) = 0;
+    virtual void link(const ccc::config& project_cfg) = 0;
 
     /**
      * @brief Check whether the task is ready to be compiled.

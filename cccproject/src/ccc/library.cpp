@@ -32,7 +32,7 @@ ccc::library::library(std::string name, ccc::library_type type,
     }
 }
 
-void ccc::library::process(const ccc::config& project_cfg) {
+void ccc::library::link(const ccc::config& project_cfg) {
 
     // If the library is a shared library or a dynamic library, add -fPIC to the
     // compile flags and add -shared to the link flags.
@@ -41,8 +41,6 @@ void ccc::library::process(const ccc::config& project_cfg) {
         this->config.compile_flags.push_back("-fPIC");
         this->config.link_flags.push_back("-shared");
     }
-
-    this->compile(project_cfg);
 
     // If the output_path doesn't exist, create it.
     std::string target_folder =
