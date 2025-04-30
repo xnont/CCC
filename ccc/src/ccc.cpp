@@ -71,6 +71,13 @@ int main(int argc, char** argv) {
     "/libcccproject.a";
 #endif
 
+    // For the 'project' command, delete the 'project_bin_file' file to update
+    // it.
+    if (argc >= 2 && std::string(argv[1]) == "project" &&
+        fs::exists(project_bin_file)) {
+        fs::remove(project_bin_file);
+    }
+
     if (!fs::exists(project_bin_file) ||
         !compareFileModificationTime(project_config_file, project_bin_file) ||
         !compareFileModificationTime(cccmain_path, project_bin_file) ||
@@ -100,6 +107,27 @@ int main(int argc, char** argv) {
                                   " -o " + project_bin_file + " -I " +
                                   CCC_INCLUDE_PATH;
 #endif
+        // Determine whether additional operations are required for the
+        // generated project.
+        for (int i = 0; i < argc; i++) {
+            std::string arg = argv[i];
+            if (arg == "-g") {
+                compile_cmd += " -g";
+            }
+            if (arg == "-O0") {
+                compile_cmd += " -O0";
+            }
+            if (arg == "-O1") {
+                compile_cmd += " -O1";
+            }
+            if (arg == "-O2") {
+                compile_cmd += " -O2";
+            }
+            if (arg == "-O3") {
+                compile_cmd += " -O3";
+            }
+        }
+
         /* Compile the project binary file. */
         if (std::system(compile_cmd.c_str()) != 0)
             return -1;

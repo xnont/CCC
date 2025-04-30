@@ -13,7 +13,7 @@ COMPILER=g++
 
 
 debug:
-	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-Og -g -std=c++17 -W -Wall -Wextra" -B
+	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-g -std=c++17 -W -Wall -Wextra" -B
 
 release:
 	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-O2 -std=c++17 -W -Wall -Wextra" -B

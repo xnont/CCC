@@ -33,6 +33,14 @@ int main(int argc, char* argv[]) {
     ccc::command clean_cmd("clean", clean,
                            "Remove products from the projects.");
     ccc::command version_cmd("--version", version, "Print the version.");
+    ccc::command project_cmd(
+        "project",
+        [](std::vector<std::string> args) {
+            if (args.size() == 0)
+                return;
+        },
+        "Only generate the executable project file without performing any "
+        "other operations.");
 
     std::string target_cmd = "";
 
