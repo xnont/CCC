@@ -133,7 +133,13 @@ project ccc_project(
             fs::remove_all("./build/inc");
         }
     },
-    [](project* self, string cmd, vector<string> args) {}, "");
+    [](project* self, string cmd, vector<string> args) {},
+    "It includes three parts: ccc, cccmain, and cccpject.\n"
+    "Usage:\n"
+    "    make/make debug/ccc/ccc debug: Compile the ccc in debug mode.\n"
+    "    make release/ccc release: Compile the ccc in release mode.\n"
+    "    make clean/ccc clean: Clean the product during the build process.\n"
+    "    ccc line: Print the line number of the ccc project.");
 
 command debug_cmd(
     "debug",
