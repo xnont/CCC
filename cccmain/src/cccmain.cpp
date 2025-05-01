@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
                           "Get a description of what you want to know.");
     ccc::command clean_cmd("clean", clean,
                            "Remove products from the projects.");
-    ccc::command version_cmd("--version", version, "Print the version.");
+    ccc::command version_cmd("cccver", version, "Print the version of ccc.");
     ccc::command project_cmd(
         "project",
         [](std::vector<std::string> args) {
@@ -146,5 +146,5 @@ void clean(std::vector<std::string> args) {
 
 void version(std::vector<std::string> args) {
     args.push_back("--version");
-    std::cout << "ccc version: " << "0.0.1" << std::endl;
+    std::cout << "ccc version: " << "0.0.1.20250501" << std::endl;
 }

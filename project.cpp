@@ -144,6 +144,7 @@ project ccc_project(
     "    build                Compile the project.\n"
     "    desc                 Get a description of what you want to know.\n"
     "    clean                Clean the product during the build process.\n"
+    "    cccver               Get the version of ccc.\n"
     "Built-in options:\n"
     "    -g                   Generate debug information in the executable "
     "project file.\n"
@@ -156,6 +157,7 @@ project ccc_project(
     "Extended commands:\n"
     "    debug                Compile the ccc in debug mode.\n"
     "    release              Compile the ccc in release mode.\n"
+    "    help                 Print the help message for the ccc.\n"
     "    line                 Print the number of lines of code for the ccc "
     "project.\n"
     "Extended ptions:\n"
@@ -194,6 +196,22 @@ command release_cmd(
 #endif
     },
     "Compile the ccc in release mode.");
+
+command help_cmd(
+    "help",
+    [](vector<string> args) {
+        std::string cmd = "ccc desc CCC";
+        for (int i = 2; i < args.size(); i++) {
+            cmd += " " + args[i];
+        }
+#ifdef _WIN32
+        system(cmd.c_str());
+#endif
+#ifdef __linux__
+        system(("bash -c '" + cmd + "'").c_str());
+#endif
+    },
+    "Print the help message for the ccc");
 
 command line_cmd(
     "line",
