@@ -30,6 +30,13 @@ ccc::library::library(std::string name, ccc::library_type type,
             }
         }
     }
+
+    // If the library is a shared library or a dynamic library, add -fPIC to the
+    // compile flags.
+    if (this->type == library_type::shared_library ||
+        this->type == library_type::dynamic_library) {
+        this->config.compile_flags.push_back("-fPIC");
+    }
 }
 
 void ccc::library::link(const ccc::config& project_cfg) {
@@ -38,7 +45,6 @@ void ccc::library::link(const ccc::config& project_cfg) {
     // compile flags and add -shared to the link flags.
     if (this->type == library_type::shared_library ||
         this->type == library_type::dynamic_library) {
-        this->config.compile_flags.push_back("-fPIC");
         this->config.link_flags.push_back("-shared");
     }
 

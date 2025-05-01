@@ -38,8 +38,6 @@ class command {
             std::string description);
 };
 
-extern std::unordered_map<std::string, ccc::command*> cmds;
-
 } // namespace ccc
 
 #endif

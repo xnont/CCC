@@ -23,9 +23,9 @@ build:
 	make -f ./cccmain/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 	make -f ./cccproject/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 ifeq ($(OS_TYPE), windows)
-	$(COMPILER) build/lib/libcccmain.lib build/lib/libcccproject.lib -o ./build/bin/default_project
+	$(COMPILER) build/lib/libcccmain.lib build/lib/cccproject.dll -o ./build/bin/default_project
 else ifeq ($(OS_TYPE), linux)
-	$(COMPILER) build/lib/libcccmain.a build/lib/libcccproject.a -o ./build/bin/default_project
+	$(COMPILER) build/lib/libcccmain.a build/lib/libcccproject.so -o ./build/bin/default_project
 endif
 	cp -r ./cccproject/inc ./build
 

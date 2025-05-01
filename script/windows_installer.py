@@ -31,5 +31,7 @@ if __name__ == '__main__':
     Path_Value = get_user_environment_variable('Path')
     if r"%USERPROFILE%\.ccc\bin" not in Path_Value.split(';'):
         set_user_environment_variable('Path', Path_Value + r";%USERPROFILE%\.ccc\bin")
+    if r"%USERPROFILE%\.ccc\lib" not in Path_Value.split(';'):
+        set_user_environment_variable('Path', Path_Value + r";%USERPROFILE%\.ccc\lib")
 
     pass

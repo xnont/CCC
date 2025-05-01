@@ -60,10 +60,6 @@ class project : public ccc::config_manager {
   private:
 };
 
-/* All initialized project variables will be automatically added to this
- * variable and handed over to cccmain for unified processing. */
-extern std::vector<ccc::project*> projects;
-
 } // namespace ccc
 
 #endif

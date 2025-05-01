@@ -23,15 +23,15 @@ endif
 
 # Link
 ifeq ($(OS_TYPE), windows)
-./build/lib/libcccproject.lib: $(OBJECT_FILES)
+./build/lib/cccproject.dll: $(OBJECT_FILES)
 else ifeq ($(OS_TYPE), linux)
-./build/lib/libcccproject.a: $(OBJECT_FILES)
+./build/lib/libcccproject.so: $(OBJECT_FILES)
 endif
 	mkdir -p ./build/lib
 ifeq ($(OS_TYPE), windows)
-	ar rcs ./build/lib/libcccproject.lib $(OBJECT_FILES)
+	g++ -shared -o ./build/lib/cccproject.dll $(OBJECT_FILES)
 else ifeq ($(OS_TYPE), linux)
-	ar rcs ./build/lib/libcccproject.a $(OBJECT_FILES)
+	g++ -shared -o ./build/lib/libcccproject.so $(OBJECT_FILES)
 endif
 
 # Compile
@@ -41,7 +41,7 @@ else ifeq ($(OS_TYPE), linux)
 ./cccproject/build/obj/%.o: ./cccproject/src/%.cpp
 endif
 	mkdir -p $(dir $@)
-	$(COMPILER) -c $< -o $@  -I./cccproject/inc $(COMPILE_FLAGS)
+	$(COMPILER) -c $< -o $@  -I./cccproject/inc $(COMPILE_FLAGS) -fPIC
 
 clean:
 	rm -rf ./build/lib/cccproject.a

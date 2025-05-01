@@ -55,7 +55,7 @@ project ccc_project(
 
         /* Describe the library file cccproject. */
         library cccproject(
-            "cccproject", static_library,
+            "cccproject", shared_library,
             "The ccc project is the main component of the project, "
             "defining how to describe the project when using ccc.");
         cccproject.obj_path = "./cccproject/build/obj";

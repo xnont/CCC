@@ -1,4 +1,5 @@
 #include "ccc/command.h"
+#include "ccc/global.h"
 
 ccc::command::command(std::string name,
                       auto (*run)(std::vector<std::string> args)->void,

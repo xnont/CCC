@@ -4,8 +4,6 @@
 #include <string>
 #include <unordered_map>
 
-namespace ccc {
-extern std::unordered_map<std::string, std::string> descs;
-}
+namespace ccc {}
 
 #endif

@@ -1,4 +1,5 @@
 #include "ccc/project.h"
+#include "ccc/global.h"
 
 ccc::project::project(
     auto (*init_func)(project*, std::string, std::vector<std::string>)->void,

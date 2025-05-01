@@ -55,7 +55,6 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    /* Check if the project binary file is out of date. */
     std::string cccmain_path = std::string(CCC_LIBRARY_PATH) +
 #ifdef _WIN32
                                "/libcccmain.lib";
@@ -63,12 +62,13 @@ int main(int argc, char** argv) {
 #ifdef __linux__
     "/libcccmain.a";
 #endif
+
     std::string cccproject_path = std::string(CCC_LIBRARY_PATH) +
 #ifdef _WIN32
-                                  "/libcccproject.lib";
+                                  "/cccproject.dll";
 #endif
 #ifdef __linux__
-    "/libcccproject.a";
+    "/libcccproject.so";
 #endif
 
     // For the 'project' command, delete the 'project_bin_file' file to update
@@ -78,6 +78,7 @@ int main(int argc, char** argv) {
         fs::remove(project_bin_file);
     }
 
+    /* Check if the project binary file is out of date. */
     if (!fs::exists(project_bin_file) ||
         !compareFileModificationTime(project_config_file, project_bin_file) ||
         !compareFileModificationTime(cccmain_path, project_bin_file) ||

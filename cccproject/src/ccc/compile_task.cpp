@@ -1,4 +1,5 @@
 #include "ccc/compile_task.h"
+#include "ccc/global.h"
 #include "util/io.h"
 
 ccc::compile_task::compile_task(std::string name, std::string description) {
