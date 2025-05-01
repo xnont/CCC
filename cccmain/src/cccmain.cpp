@@ -1,6 +1,8 @@
 #include "ccc/command.h"
 #include "ccc/global.h"
+#include "ccc/info.hpp"
 #include "ccc/project.h"
+#include "util/io.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,6 +25,14 @@ int main(int argc, char* argv[]) {
     ccc::command clean_cmd("clean", clean,
                            "Remove products from the projects.");
     ccc::command version_cmd("cccver", version, "Print the version of ccc.");
+    ccc::command help_cmd(
+        "ccchelp",
+        [](std::vector<std::string> args) {
+            if (args.size() == 0)
+                return;
+            ccc::io::print(ccc::info::help_msg);
+        },
+        "Print the help message about ccc.");
     ccc::command project_cmd(
         "project",
         [](std::vector<std::string> args) {

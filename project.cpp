@@ -1,5 +1,6 @@
 #include "ccc/project.h"
 #include "ccc/command.h"
+#include "ccc/info.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
@@ -135,33 +136,22 @@ project ccc_project(
     },
     [](project* self, string cmd, vector<string> args) {},
     "\nFor the built-in commands and options, you can use them directly in any "
-    "project.\n"
-    "Built-in commands:\n"
-    "    project              Only generate/update the executable project file "
-    "without performing any other operations.(You can use this command with "
-    "the '-g' option to generate the executable project file that can be "
-    "debugged.)\n"
-    "    build                Compile the project.\n"
-    "    desc                 Get a description of what you want to know.\n"
-    "    clean                Clean the product during the build process.\n"
-    "    cccver               Get the version of ccc.\n"
-    "Built-in options:\n"
-    "    -g                   Generate debug information in the executable "
-    "project file.\n"
-    "    -O0/-O1/-O2/-O3/-Og  Select the optimized equivalent of the "
-    "executable project file.\n"
-
-    "\nFor the extended commands and options, you can use them in the this "
-    "project. But if you want to use them in other projects, you need to "
-    "achieve them by yourself.\n"
-    "Extended commands:\n"
-    "    debug                Compile the ccc in debug mode.\n"
-    "    release              Compile the ccc in release mode.\n"
-    "    help                 Print the help message for the ccc.\n"
-    "    line                 Print the number of lines of code for the ccc "
-    "project.\n"
-    "Extended ptions:\n"
-    "    --noprint            Don't generate any output when compile the ccc.");
+    "project.\n" +
+        info::help_msg +
+        "\nFor the extended commands and options, you can use them in the this "
+        "project. But if you want to use them in other projects, you need to "
+        "achieve them by yourself.\n"
+        "Extended commands:\n"
+        "    debug                Compile the ccc in debug mode.\n"
+        "    release              Compile the ccc in release mode.\n"
+        "    help                 Print the help message about this "
+        "project(ccc).\n"
+        "    line                 Print the number of lines of code for the "
+        "ccc project.\n"
+        "Extended ptions:\n"
+        "    --noprint            Don't generate any output when "
+        "compile the "
+        "ccc.");
 
 command debug_cmd(
     "debug",
@@ -211,7 +201,7 @@ command help_cmd(
         system(("bash -c '" + cmd + "'").c_str());
 #endif
     },
-    "Print the help message for the ccc");
+    "Print the help message about this project(ccc).");
 
 command line_cmd(
     "line",

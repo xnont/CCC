@@ -39,7 +39,7 @@ make uninstall
 ## Tutorial
 #### 0. Get Help about ccc.
 ```shell
-ccc desc CCC
+ccc ccchelp
 ```
 
 #### 1. Execution([Hello world](./example/hello_world/))
