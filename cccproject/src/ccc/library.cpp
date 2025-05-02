@@ -40,6 +40,10 @@ ccc::library::library(std::string name, ccc::library_type type,
 }
 
 void ccc::library::link(const ccc::config& project_cfg) {
+    // Merge the project's link flags with the library's link flags.
+    this->config.link_flags.insert(this->config.link_flags.begin(),
+                                   project_cfg.link_flags.begin(),
+                                   project_cfg.link_flags.end());
 
     // If the library is a shared library or a dynamic library, add -fPIC to the
     // compile flags and add -shared to the link flags.
@@ -72,24 +76,20 @@ void ccc::library::link(const ccc::config& project_cfg) {
     else if (this->type == library_type::dynamic_library ||
              this->type == library_type::shared_library) {
 
-        cmd = (
-            // linker
-            (this->config.linker.length() != 0  ? this->config.linker
-             : project_cfg.linker.length() != 0 ? project_cfg.linker
-                                                : "g++") +
-            " " +
-            // Object files
-            joinWithSpace(this->obj_files) + " -o " +
-            // Output file
-            (this->output_path.length() != 0 ? this->output_path
-                                             : "./build/lib") +
-            "/" + this->name + " " +
-            // Linker flags from project
-            joinWithSpace(project_cfg.link_flags) + " " +
-            // Linker flags from execution
-            joinWithSpace(this->config.link_flags));
+        auto replacements = std::unordered_map<std::string,
+                                               std::vector<std::string>>{
+            {"LINKER",
+             {!this->config.linker.empty()  ? this->config.linker
+              : !project_cfg.linker.empty() ? project_cfg.linker
+                                            : "g++"}},
+            {"OBJECT_FILES", {this->obj_files.begin(), this->obj_files.end()}},
+            {"OUTPUT_FILE",
+             {(this->output_path.empty() ? "./build/lib" : this->output_path) +
+              "/" + this->name}},
+            {"LINK_FLAGS",
+             {this->config.link_flags.begin(), this->config.link_flags.end()}}};
+        cmd = this->link_format.replace(replacements);
     }
-
     // Link
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
                           project_cfg.is_print && this->config.is_print);

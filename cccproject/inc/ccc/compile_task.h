@@ -4,6 +4,7 @@
 #include "ccc/config.h"
 #include "ccc/dependency.h"
 #include "ccc/description.h"
+#include "ccc/format.h"
 #include "util/file.hpp"
 
 #include <array>
@@ -40,7 +41,8 @@ class compile_task : public ccc::config_manager {
      */
     compile_task(const compile_task& other)
         : config_manager(other.config), target_os(other.target_os),
-          name(other.name), output_path(other.output_path),
+          name(other.name), compile_format(other.compile_format),
+          link_format(other.link_format), output_path(other.output_path),
           obj_path(other.obj_path), source_files(other.source_files),
           obj_files(other.obj_files), dependencies(other.dependencies) {};
 
@@ -62,6 +64,12 @@ class compile_task : public ccc::config_manager {
     /* The name of the task.(The path of the final product is output_path +
      * name) */
     std::string name;
+
+    ccc::Format compile_format = ccc::built_in_format::gnu_compile_format;
+
+    /* Only used when compiling dynamic/shared library. */
+    ccc::Format link_format = ccc::built_in_format::gnu_link_format;
+
     /* The output path of the task.(The path of the final product is output_path
      * + name) */
     std::string output_path = "./build/";

@@ -1,4 +1,5 @@
 #include "ccc/compile_task.h"
+#include "ccc/format.h"
 #include "ccc/global.h"
 #include "util/io.h"
 
@@ -42,21 +43,17 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
                         : 1; // If the number of cores cannot be obtained,
                              // set the parameter to 1.
 
-    /* Add header paths. */
-    for (const auto& header_folder_path : project_cfg.header_folder_paths) {
-        this->config.compile_flags.push_back("-I" + header_folder_path);
-    }
-    for (const auto& header_folder_path : this->config.header_folder_paths) {
-        this->config.compile_flags.push_back("-I" + header_folder_path);
-    }
-
-    /* Add macros. */
-    for (const auto& macro : project_cfg.macros) {
-        this->config.compile_flags.push_back("-D" + macro);
-    }
-    for (const auto& macro : this->config.macros) {
-        this->config.compile_flags.push_back("-D" + macro);
-    }
+    // Merge the project and task configurations.
+    this->config.compile_flags.insert(this->config.compile_flags.end(),
+                                      project_cfg.compile_flags.begin(),
+                                      project_cfg.compile_flags.end());
+    this->config.header_folder_paths.insert(
+        this->config.header_folder_paths.end(),
+        project_cfg.header_folder_paths.begin(),
+        project_cfg.header_folder_paths.end());
+    this->config.macros.insert(this->config.macros.end(),
+                               project_cfg.macros.begin(),
+                               project_cfg.macros.end());
 
     // Create a mutex and condition variable for thread synchronization.
     std::mutex mtx;
@@ -130,25 +127,29 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
         fs::create_directories(target_folder);
     }
 
-    std::string cmd = (
-        // Compiler
-        (this->config.compiler.length() != 0  ? this->config.compiler
-         : project_cfg.compiler.length() != 0 ? project_cfg.compiler
-                                              : "g++") +
-        // Only compile without linking
-        " -c " +
-        // Source file
-        source_file + " -o " +
-        // Output file
-        obj_file_path + " " +
-        // Compile flags from project
-        joinWithSpace(project_cfg.compile_flags) + " " +
-        // Compile flags from compile_task
-        joinWithSpace(this->config.compile_flags) +
-        // Open color output
-        " -fdiagnostics-color=always"
-        // Merge standard error stream and standard output stream.
-        " 2>&1");
+    // Replace the placeholders in the format string.
+    auto replacements =
+        std::unordered_map<std::string, std::vector<std::string>>{
+            {"COMPILER",
+             {this->config.compiler.length() != 0  ? this->config.compiler
+              : project_cfg.compiler.length() != 0 ? project_cfg.compiler
+                                                   : "g++"}},
+            {"SOURCE_FILE", {source_file}},
+            {"OBJECT_FILE", {obj_file_path}},
+            {"COMPILER_FLAGS",
+             {this->config.compile_flags.begin(),
+              this->config.compile_flags.end()}},
+            {"HEADER_FOLDER",
+             {this->config.header_folder_paths.begin(),
+              this->config.header_folder_paths.end()}},
+            {"MACRO", {this->config.macros.begin(), this->config.macros.end()}},
+
+            {"HEADER_FOLDERS",
+             {this->config.header_folder_paths.begin(),
+              this->config.header_folder_paths.end()}},
+            {"MACROS",
+             {this->config.macros.begin(), this->config.macros.end()}}};
+    std::string cmd = this->compile_format.replace(replacements);
 
     // Execute the command.
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
