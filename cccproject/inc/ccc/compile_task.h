@@ -41,10 +41,9 @@ class compile_task : public ccc::config_manager {
      */
     compile_task(const compile_task& other)
         : config_manager(other.config), target_os(other.target_os),
-          name(other.name), toolchain(other.toolchain),
-          output_path(other.output_path), obj_path(other.obj_path),
-          source_files(other.source_files), obj_files(other.obj_files),
-          dependencies(other.dependencies) {};
+          name(other.name), output_path(other.output_path),
+          obj_path(other.obj_path), source_files(other.source_files),
+          obj_files(other.obj_files), dependencies(other.dependencies) {};
 
     /**
      * @brief The subclass of compile_task must implement a clone constructor.
@@ -64,8 +63,6 @@ class compile_task : public ccc::config_manager {
     /* The name of the task.(The path of the final product is output_path +
      * name) */
     std::string name;
-
-    ccc::toolchain toolchain = ccc::built_in_toolchain::gnu_toolchain;
 
     /* The output path of the task.(The path of the final product is output_path
      * + name) */
@@ -108,6 +105,13 @@ class compile_task : public ccc::config_manager {
      * @param project_cfg The config of the father project.
      */
     virtual void compile(const ccc::config& project_cfg) final;
+
+    /**
+     * @brief Set the toolchain object.
+     *
+     * @param project_cfg The config of the father project.
+     */
+    virtual void set_toolchain(const ccc::config& project_cfg) = 0;
 
     /**
      * @brief The subclass needs to implement this function, and the linking

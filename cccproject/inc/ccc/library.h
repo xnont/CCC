@@ -35,6 +35,13 @@ class library : public ccc::compile_task {
     library_type type = library_type::static_library;
 
     /**
+     * @brief Set the toolchain object.
+     *
+     * @param project_cfg The configuration of the project.
+     */
+    void set_toolchain(const ccc::config& project_cfg) override;
+
+    /**
      * @brief Rewrite the link method of the compile_task class, call the
      *        compile method in it, and link the intermediate products.
      *

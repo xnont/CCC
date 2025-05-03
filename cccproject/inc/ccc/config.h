@@ -1,6 +1,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+#include "ccc/toolchain.h"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -8,12 +9,11 @@
 namespace ccc {
 class config {
   public:
-    /* The compiler */
-    std::string compiler;
+    ccc::toolchain toolchain;
+
     /* The compile flags */
     std::vector<std::string> compile_flags;
-    /* The linker */
-    std::string linker;
+
     /* The link flags */
     std::vector<std::string> link_flags;
 
@@ -37,8 +37,8 @@ class config {
      * @param other The config object need to be copy.
      */
     config(const config& other)
-        : compiler(other.compiler), compile_flags(other.compile_flags),
-          linker(other.linker), link_flags(other.link_flags),
+        : toolchain(other.toolchain), compile_flags(other.compile_flags),
+          link_flags(other.link_flags),
           header_folder_paths(other.header_folder_paths), macros(other.macros),
           thread_num(other.thread_num), is_print(other.is_print) {}
 

@@ -5,9 +5,6 @@ ccc::project::project(
     auto (*init_func)(project*, std::string, std::vector<std::string>)->void,
     auto (*exit_func)(project*, std::string, std::vector<std::string>)->void)
     : init_func(init_func), exit_func(exit_func) {
-    // Default config
-    this->config.compiler = "g++";
-    this->config.linker = "g++";
     // Add project
     ccc::projects.push_back(this);
 }
@@ -18,9 +15,6 @@ ccc::project::project(
     auto (*exit_func)(project*, std::string, std::vector<std::string>)->void,
     std::string description)
     : init_func(init_func), exit_func(exit_func) {
-    // Default config
-    this->config.compiler = "g++";
-    this->config.linker = "g++";
     // Add project
     ccc::projects.push_back(this);
     // Add description
@@ -29,6 +23,7 @@ ccc::project::project(
 void ccc::project::process() {
     for (const auto& task : tasks) {
         if (task->check(this->config)) {
+            task->set_toolchain(this->config);
             task->compile(this->config);
             task->link(this->config);
         }

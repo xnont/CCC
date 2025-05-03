@@ -131,9 +131,11 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
     auto replacements =
         std::unordered_map<std::string, std::vector<std::string>>{
             {"COMPILER",
-             {this->config.compiler.length() != 0  ? this->config.compiler
-              : project_cfg.compiler.length() != 0 ? project_cfg.compiler
-                                                   : "g++"}},
+             {this->config.toolchain.compiler.length() != 0
+                  ? this->config.toolchain.compiler
+              : project_cfg.toolchain.compiler.length() != 0
+                  ? project_cfg.toolchain.compiler
+                  : "g++"}},
             {"SOURCE_FILE", {source_file}},
             {"OBJECT_FILE", {obj_file_path}},
             {"COMPILER_FLAGS",
@@ -149,7 +151,8 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
               this->config.header_folder_paths.end()}},
             {"MACROS",
              {this->config.macros.begin(), this->config.macros.end()}}};
-    std::string cmd = this->toolchain.compile_format.replace(replacements);
+    std::string cmd =
+        this->config.toolchain.compile_format.replace(replacements);
 
     // Execute the command.
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,

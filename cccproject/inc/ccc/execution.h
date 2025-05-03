@@ -31,6 +31,13 @@ class execution : public ccc::compile_task {
     ccc::execution* clone() const override { return new execution(*this); }
 
     /**
+     * @brief Set the toolchain object.
+     *
+     * @param project_cfg The project configuration.
+     */
+    void set_toolchain(const ccc::config& project_cfg) override;
+
+    /**
      * @brief Rewrite the link method of the compile_task class, call the
      *        compile method in it, and link the intermediate products.
      *

@@ -74,6 +74,11 @@ class Format {
 
 class toolchain {
   public:
+    /* The compiler */
+    std::string compiler;
+    /* The linker */
+    std::string linker;
+
     ccc::Format compile_format;
     ccc::Format execution_compile_format;
     ccc::Format static_library_compile_format;
@@ -86,7 +91,8 @@ class toolchain {
 
     toolchain() = default;
 
-    toolchain(const ccc::Format& compile_format,
+    toolchain(const std::string& compiler, const std::string& linker,
+              const ccc::Format& compile_format,
               const ccc::Format& execution_compile_format,
               const ccc::Format& static_library_compile_format,
               const ccc::Format& shared_library_compile_format,
@@ -95,7 +101,7 @@ class toolchain {
               const ccc::Format& execution_link_format,
               const ccc::Format& static_library_link_format,
               const ccc::Format& shared_library_link_format)
-        : compile_format(compile_format),
+        : compiler(compiler), linker(linker), compile_format(compile_format),
           execution_compile_format(execution_compile_format),
           static_library_compile_format(static_library_compile_format),
           shared_library_compile_format(shared_library_compile_format),
@@ -106,11 +112,24 @@ class toolchain {
           shared_library_link_format(shared_library_link_format) {}
 
     toolchain(const toolchain& other) = default;
+
+    bool is_empty() const {
+        return compiler.empty() && linker.empty() &&
+               compile_format.format.empty() &&
+               execution_compile_format.format.empty() &&
+               static_library_compile_format.format.empty() &&
+               shared_library_compile_format.format.empty() &&
+
+               link_format.format.empty() &&
+               execution_link_format.format.empty() &&
+               static_library_link_format.format.empty() &&
+               shared_library_link_format.format.empty();
+    }
 };
 
 namespace built_in_toolchain {
 inline auto gnu_toolchain = ccc::toolchain(
-    ccc::Format(""),
+    "g++", "g++", ccc::Format(""),
     ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
                 "$(OBJECT_FILE) $(COMPILER_FLAGS) {-I$(HEADER_FOLDER)} "
                 "{-D$(MACRO)} -fdiagnostics-color=always 2>&1"),

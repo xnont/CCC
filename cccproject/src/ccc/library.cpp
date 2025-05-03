@@ -30,18 +30,33 @@ ccc::library::library(std::string name, ccc::library_type type,
             }
         }
     }
+}
 
+void ccc::library::set_toolchain(const ccc::config& project_cfg) {
+    // Set toolchain
+    this->config.toolchain =
+        // If the toolchain of the library is not empty, use it.
+        !this->config.toolchain.is_empty() ? this->config.toolchain
+
+        // If the toolchain of the project is not empty, use it.
+        : !project_cfg.toolchain.is_empty()
+            ? project_cfg.toolchain
+
+            // Use the built-in toolchain.
+            : ccc::built_in_toolchain::gnu_toolchain;
+
+    // Set the compile foramt and the link format
     if (this->type == library_type::static_library) {
-        this->toolchain.compile_format =
-            this->toolchain.static_library_compile_format;
-        this->toolchain.link_format =
-            this->toolchain.static_library_link_format;
+        this->config.toolchain.compile_format =
+            this->config.toolchain.static_library_compile_format;
+        this->config.toolchain.link_format =
+            this->config.toolchain.static_library_link_format;
     } else if (this->type == library_type::shared_library ||
                this->type == library_type::dynamic_library) {
-        this->toolchain.compile_format =
-            this->toolchain.shared_library_compile_format;
-        this->toolchain.link_format =
-            this->toolchain.shared_library_link_format;
+        this->config.toolchain.compile_format =
+            this->config.toolchain.shared_library_compile_format;
+        this->config.toolchain.link_format =
+            this->config.toolchain.shared_library_link_format;
     }
 }
 
@@ -61,9 +76,11 @@ void ccc::library::link(const ccc::config& project_cfg) {
     auto replacements =
         std::unordered_map<std::string, std::vector<std::string>>{
             {"LINKER",
-             {!this->config.linker.empty()  ? this->config.linker
-              : !project_cfg.linker.empty() ? project_cfg.linker
-                                            : "g++"}},
+             {!this->config.toolchain.linker.empty()
+                  ? this->config.toolchain.linker
+              : !project_cfg.toolchain.linker.empty()
+                  ? project_cfg.toolchain.linker
+                  : "g++"}},
             {"OBJECT_FILES", {this->obj_files.begin(), this->obj_files.end()}},
             {"OUTPUT_FILE",
              {(this->output_path.empty() ? "./build/lib" : this->output_path) +
@@ -71,7 +88,7 @@ void ccc::library::link(const ccc::config& project_cfg) {
             {"LINK_FLAGS",
              {this->config.link_flags.begin(), this->config.link_flags.end()}}};
 
-    std::string cmd = this->toolchain.link_format.replace(replacements);
+    std::string cmd = this->config.toolchain.link_format.replace(replacements);
     // Link
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
                           project_cfg.is_print && this->config.is_print);
@@ -81,31 +98,7 @@ void ccc::library::link(const ccc::config& project_cfg) {
 #define ORANGE "\033[38;5;202m"
 #define RESET "\033[0m"
 bool ccc::library::check(const ccc::config& project_cfg) {
-    bool status = true;
-
-    // Check if compiler is specified
-    if (this->config.compiler.length() == 0 &&
-        project_cfg.compiler.length() == 0) {
-        std::cout << RED << "Error" << RESET
-                  << ": No compiler specified for library " << this->name
-                  << std::endl;
-        status = false;
-    }
-
-    // Check if linker is specified
-    if (this->config.linker.length() == 0 && project_cfg.linker.length() == 0) {
-        std::cout << RED << "Error" << RESET
-                  << ": No linker specified for library " << this->name
-                  << std::endl;
-        status = false;
-    }
-
-    // Check if there is any source file
-    if (this->source_files.size() == 0) {
-        std::cout << ORANGE << "Warning" << RESET
-                  << ": There isn't any source file in the library "
-                  << this->name << std::endl;
-    }
-
-    return status;
+    if (project_cfg.toolchain.is_empty())
+        return true;
+    return true;
 }
