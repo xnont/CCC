@@ -1,10 +1,15 @@
 #include "ccc/config.h"
+#include "ccc/toolchain.h"
 
 void ccc::config_manager::set_config(const ccc::config& cfg) {
     this->config = cfg;
 }
 
 void ccc::config_manager::set_compiler(const std::string& compiler) {
+    this->config.toolchain = !this->config.toolchain.is_empty()
+                                 ? this->config.toolchain
+                                 : built_in_toolchain::gnu_toolchain;
+
     this->config.toolchain.compiler = compiler;
 }
 
@@ -22,6 +27,9 @@ void ccc::config_manager::add_compile_flags(
 }
 
 void ccc::config_manager::set_linker(const std::string& linker) {
+    this->config.toolchain = !this->config.toolchain.is_empty()
+                                 ? this->config.toolchain
+                                 : built_in_toolchain::gnu_toolchain;
     this->config.toolchain.linker = linker;
 }
 
