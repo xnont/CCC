@@ -6,6 +6,7 @@
 namespace ccc {
 namespace info {
 inline std::string help_msg =
+    "Usage: ccc <command> [option]...\n"
     "Built-in commands:\n"
     "    project              Only generate/update the executable project file "
     "without performing any other operations.(You can use this command with "

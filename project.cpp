@@ -135,13 +135,11 @@ project ccc_project(
         }
     },
     [](project* self, string cmd, vector<string> args) {},
-    "\nFor the built-in commands and options, you can use them directly in any "
-    "project.\n" +
-        info::help_msg +
-        "\nFor the extended commands and options, you can use them in the this "
-        "project. But if you want to use them in other projects, you need to "
-        "achieve them by yourself.\n"
-        "Extended commands:\n"
+    "\n" + info::help_msg +
+        "Note: For the built-in commands and options provided above, you can "
+        "use them directly in any project.\n" +
+
+        "\nExtended commands:\n"
         "    debug                Compile the ccc in debug mode.\n"
         "    release              Compile the ccc in release mode.\n"
         "    help                 Print the help message about this "
@@ -149,9 +147,11 @@ project ccc_project(
         "    line                 Print the number of lines of code for the "
         "ccc project.\n"
         "Extended ptions:\n"
-        "    --noprint            Don't generate any output when "
-        "compile the "
-        "ccc.");
+        "    --noprint            Don't generate any output when compile the "
+        "ccc.\n"
+        "Note: For the extended commands and options, you can use them in the "
+        "this project. But if you want to use them in other projects, you need "
+        "to achieve them by yourself.\n");
 
 command debug_cmd(
     "debug",
