@@ -147,6 +147,15 @@ inline auto gnu_toolchain = ccc::toolchain(
     ccc::Format(
         "$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) {$(LINK_FLAGS)} -shared "
         "-fdiagnostics-color=always 2>&1"));
+
+#ifdef __linux__
+inline auto clang_toolchain = []() {
+    auto tc = built_in_toolchain::gnu_toolchain;
+    tc.compiler = "clang++";
+    tc.linker = "clang++";
+    return tc;
+}();
+#endif
 } // namespace built_in_toolchain
 
 } // namespace ccc
