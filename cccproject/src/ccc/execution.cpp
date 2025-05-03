@@ -2,7 +2,11 @@
 #include "util/io.h"
 
 ccc::execution::execution(std::string name, std::string description)
-    : ccc::compile_task(name, description) {};
+    : ccc::compile_task(name, description) {
+
+    this->toolchain.compile_format = this->toolchain.execution_compile_format;
+    this->toolchain.link_format = this->toolchain.execution_link_format;
+};
 
 void ccc::execution::link(const ccc::config& project_cfg) {
     // If the output_path doesn't exist, create it.
@@ -12,21 +16,20 @@ void ccc::execution::link(const ccc::config& project_cfg) {
         fs::create_directories(target_folder);
     }
 
-    std::string cmd = (
-        // linker
-        (this->config.linker.length() != 0  ? this->config.linker
-         : project_cfg.linker.length() != 0 ? project_cfg.linker
-                                            : "g++") +
-        " " +
-        // Object files
-        joinWithSpace(this->obj_files) + " -o " +
-        // Output file
-        (this->output_path.length() != 0 ? this->output_path : "./build/bin") +
-        "/" + this->name + " " +
-        // Linker flags from project
-        joinWithSpace(project_cfg.link_flags) + " " +
-        // Linker flags from execution
-        joinWithSpace(this->config.link_flags));
+    auto replacements =
+        std::unordered_map<std::string, std::vector<std::string>>{
+            {"LINKER",
+             {!this->config.linker.empty()  ? this->config.linker
+              : !project_cfg.linker.empty() ? project_cfg.linker
+                                            : "g++"}},
+            {"OBJECT_FILES", {this->obj_files.begin(), this->obj_files.end()}},
+            {"OUTPUT_FILE",
+             {(this->output_path.empty() ? "./build/bin" : this->output_path) +
+              "/" + this->name}},
+            {"LINK_FLAGS",
+             {this->config.link_flags.begin(), this->config.link_flags.end()}}};
+
+    std::string cmd = this->toolchain.link_format.replace(replacements);
 
     // Link
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,

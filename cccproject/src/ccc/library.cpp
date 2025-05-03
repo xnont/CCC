@@ -31,11 +31,17 @@ ccc::library::library(std::string name, ccc::library_type type,
         }
     }
 
-    // If the library is a shared library or a dynamic library, add -fPIC to the
-    // compile flags.
-    if (this->type == library_type::shared_library ||
-        this->type == library_type::dynamic_library) {
-        this->config.compile_flags.push_back("-fPIC");
+    if (this->type == library_type::static_library) {
+        this->toolchain.compile_format =
+            this->toolchain.static_library_compile_format;
+        this->toolchain.link_format =
+            this->toolchain.static_library_link_format;
+    } else if (this->type == library_type::shared_library ||
+               this->type == library_type::dynamic_library) {
+        this->toolchain.compile_format =
+            this->toolchain.shared_library_compile_format;
+        this->toolchain.link_format =
+            this->toolchain.shared_library_link_format;
     }
 }
 
@@ -45,13 +51,6 @@ void ccc::library::link(const ccc::config& project_cfg) {
                                    project_cfg.link_flags.begin(),
                                    project_cfg.link_flags.end());
 
-    // If the library is a shared library or a dynamic library, add -fPIC to the
-    // compile flags and add -shared to the link flags.
-    if (this->type == library_type::shared_library ||
-        this->type == library_type::dynamic_library) {
-        this->config.link_flags.push_back("-shared");
-    }
-
     // If the output_path doesn't exist, create it.
     std::string target_folder =
         extractPath(this->output_path + "/" + this->name);
@@ -59,25 +58,8 @@ void ccc::library::link(const ccc::config& project_cfg) {
         fs::create_directories(target_folder);
     }
 
-    std::string cmd;
-
-    if (this->type == library_type::static_library) {
-        cmd = (
-            // linker
-            ("ar rcs") + std::string(" ") +
-            // Output file
-            (this->output_path.length() != 0 ? this->output_path
-                                             : "./build/lib") +
-            "/" + this->name + " " +
-            // Object files
-            joinWithSpace(this->obj_files));
-    }
-
-    else if (this->type == library_type::dynamic_library ||
-             this->type == library_type::shared_library) {
-
-        auto replacements = std::unordered_map<std::string,
-                                               std::vector<std::string>>{
+    auto replacements =
+        std::unordered_map<std::string, std::vector<std::string>>{
             {"LINKER",
              {!this->config.linker.empty()  ? this->config.linker
               : !project_cfg.linker.empty() ? project_cfg.linker
@@ -88,8 +70,8 @@ void ccc::library::link(const ccc::config& project_cfg) {
               "/" + this->name}},
             {"LINK_FLAGS",
              {this->config.link_flags.begin(), this->config.link_flags.end()}}};
-        cmd = this->link_format.replace(replacements);
-    }
+
+    std::string cmd = this->toolchain.link_format.replace(replacements);
     // Link
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
                           project_cfg.is_print && this->config.is_print);

@@ -1,6 +1,6 @@
 #include "ccc/compile_task.h"
-#include "ccc/format.h"
 #include "ccc/global.h"
+#include "ccc/toolchain.h"
 #include "util/io.h"
 
 ccc::compile_task::compile_task(std::string name, std::string description) {
@@ -149,7 +149,7 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
               this->config.header_folder_paths.end()}},
             {"MACROS",
              {this->config.macros.begin(), this->config.macros.end()}}};
-    std::string cmd = this->compile_format.replace(replacements);
+    std::string cmd = this->toolchain.compile_format.replace(replacements);
 
     // Execute the command.
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
