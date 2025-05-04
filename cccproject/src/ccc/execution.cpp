@@ -32,6 +32,17 @@ void ccc::execution::link(const ccc::config& project_cfg) {
         fs::create_directories(target_folder);
     }
 
+    // For using clang++ on Windows, the dynamic library suffix needs to be
+    // changed to '. lib'.
+    if (this->target_os == windows_os &&
+        this->config.toolchain == built_in_toolchain::clang_toolchain) {
+        for (auto& file : this->obj_files) {
+            if (file.size() >= 4 && file.substr(file.size() - 4) == ".dll") {
+                file = file.substr(0, file.size() - 4) + ".lib";
+            }
+        }
+    }
+
     auto replacements =
         std::unordered_map<std::string, std::vector<std::string>>{
             {"LINKER",

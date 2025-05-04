@@ -175,7 +175,21 @@ inline auto clang_toolchain = []() {
         ccc::Format("llvm-ar rcs $(OUTPUT_FILE) $(OBJECT_FILES)");
 
 #ifdef _WIN32
-    tc.shared_library_link_format = tc.static_library_compile_format;
+    // Clang on Windows does not support the - fPIC option.
+    tc.shared_library_compile_format = tc.static_library_compile_format;
+
+    // #ifdef _MSC_VER
+    // #define CCC_DLL_EXPORT __declspec(dllexport)
+    // #else
+    // #define CCC_DLL_EXPORT
+    // #endif
+
+    // #ifdef _MSC_VER
+    // #define CCC_DLL_IMPORT __declspec(dllimport)
+    // #else
+    // #define CCC_DLL_IMPORT
+    // #endif
+
 #endif
 
     return tc;
