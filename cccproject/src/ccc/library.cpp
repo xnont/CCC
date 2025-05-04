@@ -6,30 +6,6 @@ ccc::library::library(std::string name, ccc::library_type type,
     : ccc::compile_task(name, description) {
     // Set the type
     this->type = type;
-
-    // If the given library name does not have a suffix, add the prefix and
-    // suffix according to the operating system.
-    if (this->name.find(".") == std::string::npos) {
-        // Set the library name prefix and suffix according to the target
-        // operating system. Windows
-        if (this->target_os == ccc::system_type::windows_os) {
-            if (this->type == library_type::static_library) {
-                this->name = "lib" + this->name + ".lib";
-            } else if (this->type == library_type::dynamic_library ||
-                       this->type == library_type::shared_library) {
-                this->name = this->name + ".dll";
-            }
-        }
-        // Linux
-        else if (this->target_os == ccc::system_type::linux_os) {
-            if (this->type == library_type::static_library) {
-                this->name = "lib" + this->name + ".a";
-            } else if (this->type == library_type::dynamic_library ||
-                       this->type == library_type::shared_library) {
-                this->name = "lib" + this->name + ".so";
-            }
-        }
-    }
 }
 
 void ccc::library::set_toolchain(const ccc::config& project_cfg) {
@@ -43,7 +19,7 @@ void ccc::library::set_toolchain(const ccc::config& project_cfg) {
             ? project_cfg.toolchain
 
             // Use the built-in toolchain.
-            : ccc::built_in_toolchain::gnu_toolchain;
+            : ccc::built_in_toolchain::gnu_toolchain();
 
     // Set the compile foramt and the link format
     if (this->type == library_type::static_library) {
@@ -57,6 +33,31 @@ void ccc::library::set_toolchain(const ccc::config& project_cfg) {
             this->config.toolchain.shared_library_compile_format;
         this->config.toolchain.link_format =
             this->config.toolchain.shared_library_link_format;
+    }
+
+    // If the given library name does not have a suffix, add the prefix and
+    // suffix according to the operating system.
+    if (this->name.find(".") == std::string::npos) {
+        // Set the library name prefix and suffix according to the target
+        // operating system. Windows
+        if (this->config.toolchain.target_os == ccc::system_type::windows_os) {
+            if (this->type == library_type::static_library) {
+                this->name = "lib" + this->name + ".lib";
+            } else if (this->type == library_type::dynamic_library ||
+                       this->type == library_type::shared_library) {
+                this->name = this->name + ".dll";
+            }
+        }
+        // Linux
+        else if (this->config.toolchain.target_os ==
+                 ccc::system_type::linux_os) {
+            if (this->type == library_type::static_library) {
+                this->name = "lib" + this->name + ".a";
+            } else if (this->type == library_type::dynamic_library ||
+                       this->type == library_type::shared_library) {
+                this->name = "lib" + this->name + ".so";
+            }
+        }
     }
 }
 

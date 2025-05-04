@@ -19,8 +19,6 @@
 #include <thread>
 
 namespace ccc {
-/* The operating systems currently supported by ccc. */
-enum system_type { windows_os, linux_os /*, macos */ };
 
 /* The base class of all compile tasks.  */
 class compile_task : public ccc::config_manager {
@@ -40,10 +38,10 @@ class compile_task : public ccc::config_manager {
      * @param other The compile task object to be copied.
      */
     compile_task(const compile_task& other)
-        : config_manager(other.config), target_os(other.target_os),
-          name(other.name), output_path(other.output_path),
-          obj_path(other.obj_path), source_files(other.source_files),
-          obj_files(other.obj_files), dependencies(other.dependencies) {};
+        : config_manager(other.config), name(other.name),
+          output_path(other.output_path), obj_path(other.obj_path),
+          source_files(other.source_files), obj_files(other.obj_files),
+          dependencies(other.dependencies) {};
 
     /**
      * @brief The subclass of compile_task must implement a clone constructor.
@@ -51,14 +49,6 @@ class compile_task : public ccc::config_manager {
      * @return compile_task* The clone of the compile_task object.
      */
     virtual compile_task* clone() const = 0;
-
-    /* The target operating system of the compiled product. */
-    system_type target_os =
-#ifdef _WIN32
-        system_type::windows_os;
-#else
-        system_type::linux_os;
-#endif
 
     /* The name of the task.(The path of the final product is output_path +
      * name) */

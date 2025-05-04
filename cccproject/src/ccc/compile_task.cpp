@@ -93,6 +93,7 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
     for (auto& [dep, dep_desc] : dependencies) {
         // If the is_transmit is true, add the dependency to the obj_files list.
         if (dep_desc.is_transmit) {
+            dep->set_toolchain(project_cfg);
             this->obj_files.push_back(dep->output_path + "/" + dep->name);
         }
     }
@@ -105,9 +106,11 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
     // Get the obj file path.
     std::string obj_file_path =
         this->obj_path + "/" +
-        ((target_os == windows_os) ? changeFileExtension(source_file, ".obj")
-         : (target_os == linux_os) ? changeFileExtension(source_file, ".o")
-                                   : changeFileExtension(source_file, ".o"));
+        ((this->config.toolchain.target_os == windows_os)
+             ? changeFileExtension(source_file, ".obj")
+         : (this->config.toolchain.target_os == linux_os)
+             ? changeFileExtension(source_file, ".o")
+             : changeFileExtension(source_file, ".o"));
 
     // Add the obj file to the list.
     {

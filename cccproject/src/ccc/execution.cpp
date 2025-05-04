@@ -15,7 +15,7 @@ void ccc::execution::set_toolchain(const ccc::config& project_cfg) {
             ? project_cfg.toolchain
 
             // Use the built-in toolchain.
-            : ccc::built_in_toolchain::gnu_toolchain;
+            : ccc::built_in_toolchain::gnu_toolchain();
 
     // Set the compile foramt and the link format
     this->config.toolchain.compile_format =
@@ -34,8 +34,8 @@ void ccc::execution::link(const ccc::config& project_cfg) {
 
     // For using clang++ on Windows, the dynamic library suffix needs to be
     // changed to '. lib'.
-    if (this->target_os == windows_os &&
-        this->config.toolchain == built_in_toolchain::clang_toolchain) {
+    if (this->config.toolchain ==
+        built_in_toolchain::clang_toolchain(ccc::system_type::windows_os)) {
         for (auto& file : this->obj_files) {
             if (file.size() >= 4 && file.substr(file.size() - 4) == ".dll") {
                 file = file.substr(0, file.size() - 4) + ".lib";

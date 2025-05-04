@@ -1,12 +1,23 @@
 #ifndef __CCC_FORMAT_H__
 #define __CCC_FORMAT_H__
 
+#include <iostream>
 #include <regex>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 namespace ccc {
+/* The operating systems currently supported by ccc. */
+enum system_type { windows_os, linux_os /*, macos */ };
+
+inline ccc::system_type current_os =
+#ifdef _WIN32
+    system_type::windows_os;
+#else
+    system_type::linux_os;
+#endif
+
 class Format {
   public:
     std::string format;
@@ -78,6 +89,9 @@ class Format {
 
 class toolchain {
   public:
+    /* The target operating system of the compiled product. */
+    ccc::system_type target_os;
+
     std::string name;
 
     /* The compiler */
@@ -97,8 +111,9 @@ class toolchain {
 
     toolchain() = default;
 
-    toolchain(const std::string& name, const std::string& compiler,
-              const std::string& linker,
+    toolchain(const ccc::system_type& target_os, const std::string& name,
+
+              const std::string& compiler, const std::string& linker,
 
               const ccc::Format& compile_format,
               const ccc::Format& execution_compile_format,
@@ -109,7 +124,9 @@ class toolchain {
               const ccc::Format& execution_link_format,
               const ccc::Format& static_library_link_format,
               const ccc::Format& shared_library_link_format)
-        : name(name), compiler(compiler), linker(linker),
+        : target_os(target_os), name(name),
+
+          compiler(compiler), linker(linker),
 
           compile_format(compile_format),
           execution_compile_format(execution_compile_format),
@@ -124,7 +141,7 @@ class toolchain {
     toolchain(const toolchain& other) = default;
 
     bool operator==(const toolchain& other) const {
-        return this->name == other.name;
+        return this->target_os == other.target_os && this->name == other.name;
     }
 
     bool operator!=(const toolchain& other) const { return !(*this == other); }
@@ -144,56 +161,65 @@ class toolchain {
 };
 
 namespace built_in_toolchain {
-inline auto gnu_toolchain = ccc::toolchain(
-    "gnu", "g++", "g++",
+inline ccc::toolchain gnu_toolchain(ccc::system_type target_os = current_os) {
+    // Check target OS
+    if (target_os != system_type::windows_os &&
+        target_os != system_type::linux_os) {
+        std::cerr << "Error: Unsupported target OS for gnu toolchain."
+                  << std::endl;
+        exit(1);
+    }
 
-    ccc::Format(""),
-    ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
-                "$(OBJECT_FILE) $(COMPILE_FLAGS) {-I$(HEADER_FOLDERS)} "
-                "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
-    ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
-                "$(OBJECT_FILE) $(COMPILE_FLAGS) {-I$(HEADER_FOLDERS)} "
-                "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
-    ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
-                "$(OBJECT_FILE) $(COMPILE_FLAGS) -fPIC {-I$(HEADER_FOLDERS)} "
-                "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
+    return ccc::toolchain(
+        target_os, "gnu",
 
-    ccc::Format(""),
-    ccc::Format("$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) {$(LINK_FLAGS)} "
-                "-fdiagnostics-color=always 2>&1"),
-    ccc::Format("ar rcs $(OUTPUT_FILE) $(OBJECT_FILES)"),
-    ccc::Format(
-        "$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) {$(LINK_FLAGS)} -shared "
-        "-fdiagnostics-color=always 2>&1"));
+        "g++", "g++",
 
-inline auto clang_toolchain = []() {
-    auto tc = built_in_toolchain::gnu_toolchain;
+        ccc::Format(""),
+        ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
+                    "$(OBJECT_FILE) $(COMPILE_FLAGS) {-I$(HEADER_FOLDERS)} "
+                    "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
+        ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
+                    "$(OBJECT_FILE) $(COMPILE_FLAGS) {-I$(HEADER_FOLDERS)} "
+                    "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
+        ccc::Format(
+            "$(COMPILER) -c $(SOURCE_FILE) -o "
+            "$(OBJECT_FILE) $(COMPILE_FLAGS) -fPIC {-I$(HEADER_FOLDERS)} "
+            "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
+
+        ccc::Format(""),
+        ccc::Format(
+            "$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) {$(LINK_FLAGS)} "
+            "-fdiagnostics-color=always 2>&1"),
+        ccc::Format("ar rcs $(OUTPUT_FILE) $(OBJECT_FILES)"),
+        ccc::Format("$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) "
+                    "{$(LINK_FLAGS)} -shared "
+                    "-fdiagnostics-color=always 2>&1"));
+}
+
+inline ccc::toolchain clang_toolchain(ccc::system_type target_os = current_os) {
+    // Check target OS
+    if (target_os != system_type::windows_os &&
+        target_os != system_type::linux_os) {
+        std::cerr << "Error: Unsupported target OS for gnu toolchain."
+                  << std::endl;
+        exit(1);
+    }
+
+    auto tc = built_in_toolchain::gnu_toolchain(target_os);
     tc.name = "clang";
     tc.compiler = "clang++";
     tc.linker = "clang++";
     tc.static_library_link_format =
         ccc::Format("llvm-ar rcs $(OUTPUT_FILE) $(OBJECT_FILES)");
 
-#ifdef _WIN32
-    // Clang on Windows does not support the - fPIC option.
-    tc.shared_library_compile_format = tc.static_library_compile_format;
-
-    // #ifdef _MSC_VER
-    // #define CCC_DLL_EXPORT __declspec(dllexport)
-    // #else
-    // #define CCC_DLL_EXPORT
-    // #endif
-
-    // #ifdef _MSC_VER
-    // #define CCC_DLL_IMPORT __declspec(dllimport)
-    // #else
-    // #define CCC_DLL_IMPORT
-    // #endif
-
-#endif
+    if (target_os == ccc::windows_os) {
+        // Clang on Windows does not support the - fPIC option.
+        tc.shared_library_compile_format = tc.static_library_compile_format;
+    }
 
     return tc;
-}();
+};
 } // namespace built_in_toolchain
 
 } // namespace ccc
