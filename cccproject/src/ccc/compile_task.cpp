@@ -15,6 +15,7 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
         // it.
         if (!fs::exists(dep->output_path + "/" + dep->name) &&
             dep_desc.is_compile) {
+            dep->set_toolchain(project_cfg);
             dep->compile(project_cfg);
             dep->link(project_cfg);
         }
@@ -138,19 +139,15 @@ void ccc::compile_task::compile_source_file(const ccc::config& project_cfg,
                   : "g++"}},
             {"SOURCE_FILE", {source_file}},
             {"OBJECT_FILE", {obj_file_path}},
-            {"COMPILER_FLAGS",
+            {"COMPILE_FLAGS",
              {this->config.compile_flags.begin(),
               this->config.compile_flags.end()}},
-            {"HEADER_FOLDER",
-             {this->config.header_folder_paths.begin(),
-              this->config.header_folder_paths.end()}},
-            {"MACRO", {this->config.macros.begin(), this->config.macros.end()}},
-
             {"HEADER_FOLDERS",
              {this->config.header_folder_paths.begin(),
               this->config.header_folder_paths.end()}},
             {"MACROS",
-             {this->config.macros.begin(), this->config.macros.end()}}};
+             {this->config.macros.begin(), this->config.macros.end()}},
+        };
     std::string cmd =
         this->config.toolchain.compile_format.replace(replacements);
 

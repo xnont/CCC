@@ -19,6 +19,10 @@ class Format {
 
     Format& operator=(const Format&) = default;
 
+    bool operator==(const Format& other) const {
+        return format == other.format;
+    }
+
     std::string
     replace(std::unordered_map<std::string, std::vector<std::string>>& mp) {
         std::string ret = format;
@@ -56,16 +60,16 @@ class Format {
 
         // Handling ordinary variable replacement
         for (auto& [key, values] : mp) {
+            std::string replacement = "";
             if (!values.empty()) {
-                std::string replacement;
                 for (const auto& val : values) {
                     if (!replacement.empty())
                         replacement += " ";
                     replacement += val;
                 }
-                ret = std::regex_replace(
-                    ret, std::regex(R"(\$\(()" + key + R"()\))"), replacement);
             }
+            ret = std::regex_replace(
+                ret, std::regex(R"(\$\(()" + key + R"()\))"), replacement);
         }
 
         return ret;
@@ -113,6 +117,22 @@ class toolchain {
 
     toolchain(const toolchain& other) = default;
 
+    bool operator==(const toolchain& other) const {
+        return compiler == other.compiler && linker == other.linker &&
+
+               execution_compile_format == other.execution_compile_format &&
+               static_library_compile_format ==
+                   other.static_library_compile_format &&
+               shared_library_compile_format ==
+                   other.shared_library_compile_format &&
+
+               execution_link_format == other.execution_link_format &&
+               static_library_link_format == other.static_library_link_format &&
+               shared_library_link_format == other.shared_library_link_format;
+    }
+
+    bool operator!=(const toolchain& other) const { return !(*this == other); }
+
     bool is_empty() const {
         return compiler.empty() && linker.empty() &&
                compile_format.format.empty() &&
@@ -131,14 +151,14 @@ namespace built_in_toolchain {
 inline auto gnu_toolchain = ccc::toolchain(
     "g++", "g++", ccc::Format(""),
     ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
-                "$(OBJECT_FILE) $(COMPILER_FLAGS) {-I$(HEADER_FOLDER)} "
-                "{-D$(MACRO)} -fdiagnostics-color=always 2>&1"),
+                "$(OBJECT_FILE) $(COMPILE_FLAGS) {-I$(HEADER_FOLDERS)} "
+                "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
     ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
-                "$(OBJECT_FILE) $(COMPILER_FLAGS) {-I$(HEADER_FOLDER)} "
-                "{-D$(MACRO)} -fdiagnostics-color=always 2>&1"),
+                "$(OBJECT_FILE) $(COMPILE_FLAGS) {-I$(HEADER_FOLDERS)} "
+                "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
     ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
-                "$(OBJECT_FILE) $(COMPILER_FLAGS) -fPIC {-I$(HEADER_FOLDER)} "
-                "{-D$(MACRO)} -fdiagnostics-color=always 2>&1"),
+                "$(OBJECT_FILE) $(COMPILE_FLAGS) -fPIC {-I$(HEADER_FOLDERS)} "
+                "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
 
     ccc::Format(""),
     ccc::Format("$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) {$(LINK_FLAGS)} "
@@ -153,6 +173,8 @@ inline auto clang_toolchain = []() {
     auto tc = built_in_toolchain::gnu_toolchain;
     tc.compiler = "clang++";
     tc.linker = "clang++";
+    tc.static_library_link_format =
+        ccc::Format("llvm-ar rcs $(OUTPUT_FILE) $(OBJECT_FILES)");
     return tc;
 }();
 #endif
