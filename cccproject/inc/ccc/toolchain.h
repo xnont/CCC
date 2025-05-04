@@ -78,6 +78,8 @@ class Format {
 
 class toolchain {
   public:
+    std::string name;
+
     /* The compiler */
     std::string compiler;
     /* The linker */
@@ -95,7 +97,9 @@ class toolchain {
 
     toolchain() = default;
 
-    toolchain(const std::string& compiler, const std::string& linker,
+    toolchain(const std::string& name, const std::string& compiler,
+              const std::string& linker,
+
               const ccc::Format& compile_format,
               const ccc::Format& execution_compile_format,
               const ccc::Format& static_library_compile_format,
@@ -105,7 +109,9 @@ class toolchain {
               const ccc::Format& execution_link_format,
               const ccc::Format& static_library_link_format,
               const ccc::Format& shared_library_link_format)
-        : compiler(compiler), linker(linker), compile_format(compile_format),
+        : name(name), compiler(compiler), linker(linker),
+
+          compile_format(compile_format),
           execution_compile_format(execution_compile_format),
           static_library_compile_format(static_library_compile_format),
           shared_library_compile_format(shared_library_compile_format),
@@ -118,17 +124,7 @@ class toolchain {
     toolchain(const toolchain& other) = default;
 
     bool operator==(const toolchain& other) const {
-        return compiler == other.compiler && linker == other.linker &&
-
-               execution_compile_format == other.execution_compile_format &&
-               static_library_compile_format ==
-                   other.static_library_compile_format &&
-               shared_library_compile_format ==
-                   other.shared_library_compile_format &&
-
-               execution_link_format == other.execution_link_format &&
-               static_library_link_format == other.static_library_link_format &&
-               shared_library_link_format == other.shared_library_link_format;
+        return this->name == other.name;
     }
 
     bool operator!=(const toolchain& other) const { return !(*this == other); }
@@ -149,7 +145,9 @@ class toolchain {
 
 namespace built_in_toolchain {
 inline auto gnu_toolchain = ccc::toolchain(
-    "g++", "g++", ccc::Format(""),
+    "gnu", "g++", "g++",
+
+    ccc::Format(""),
     ccc::Format("$(COMPILER) -c $(SOURCE_FILE) -o "
                 "$(OBJECT_FILE) $(COMPILE_FLAGS) {-I$(HEADER_FOLDERS)} "
                 "{-D$(MACROS)} -fdiagnostics-color=always 2>&1"),
@@ -168,16 +166,20 @@ inline auto gnu_toolchain = ccc::toolchain(
         "$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) {$(LINK_FLAGS)} -shared "
         "-fdiagnostics-color=always 2>&1"));
 
-#ifdef __linux__
 inline auto clang_toolchain = []() {
     auto tc = built_in_toolchain::gnu_toolchain;
+    tc.name = "clang";
     tc.compiler = "clang++";
     tc.linker = "clang++";
     tc.static_library_link_format =
         ccc::Format("llvm-ar rcs $(OUTPUT_FILE) $(OBJECT_FILES)");
+
+#ifdef _WIN32
+    tc.shared_library_link_format = tc.static_library_compile_format;
+#endif
+
     return tc;
 }();
-#endif
 } // namespace built_in_toolchain
 
 } // namespace ccc
