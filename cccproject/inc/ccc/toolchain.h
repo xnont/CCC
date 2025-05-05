@@ -220,6 +220,41 @@ inline ccc::toolchain clang_toolchain(ccc::system_type target_os = current_os) {
 
     return tc;
 };
+
+inline ccc::toolchain msvc_toolchain(ccc::system_type target_os = current_os) {
+    // Check target OS
+    if (target_os != system_type::windows_os) {
+        std::cerr << "Error: The MSVC toolchain only supports use under the "
+                     "Windows operating system."
+                  << std::endl;
+        exit(1);
+    }
+
+    return ccc::toolchain(
+        target_os, "msvc",
+
+        "", "",
+
+        ccc::Format(""), // compile_format
+        ccc::Format("cl /c $(SOURCE_FILE) /Fo$(OBJECT_FILE) "
+                    "$(COMPILE_FLAGS) {/I$(HEADER_FOLDERS)} "
+                    "{/D{MACROS}"), // execution_compile_format
+        ccc::Format("cl /c $(SOURCE_FILE) /Fo$(OBJECT_FILE) "
+                    "$(COMPILE_FLAGS) {/I$(HEADER_FOLDERS)} "
+                    "{/D{MACROS}"), // static_library_compile_format
+        ccc::Format("cl /c $(SOURCE_FILE) /Fo$(OBJECT_FILE) "
+                    "$(COMPILE_FLAGS) {/I$(HEADER_FOLDERS)} "
+                    "{/D{MACROS}"), // shared_library_compile_format
+
+        ccc::Format(""), // link_format
+        ccc::Format("cl /Fe$(OUTPUT_FILE) $(OBJECT_FILES) "
+                    "$(LINK_FLAGS)"), // execution_link_format
+        ccc::Format("lib /OUT:$(OUTPUT_FILE) $(OBJECT_FILES) "
+                    "$(LINK_FLAGS)"), // static_library_link_format
+        ccc::Format("link /DLL /OUT:$(OUTPUT_FILE) {$(OBJECT_FILES)} "
+                    "$(LINK_FLAGS)") // shared_library_link_format
+    );
+}
 } // namespace built_in_toolchain
 
 } // namespace ccc

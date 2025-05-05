@@ -32,10 +32,12 @@ void ccc::execution::link(const ccc::config& project_cfg) {
         fs::create_directories(target_folder);
     }
 
-    // For using clang++ on Windows, the dynamic library suffix needs to be
-    // changed to '. lib'.
+    // For using clang or msvc on Windows, the dynamic library suffix needs to
+    // be changed to '. lib'.
     if (this->config.toolchain ==
-        built_in_toolchain::clang_toolchain(ccc::system_type::windows_os)) {
+            built_in_toolchain::clang_toolchain(ccc::system_type::windows_os) ||
+        this->config.toolchain ==
+            built_in_toolchain::msvc_toolchain(ccc::system_type::windows_os)) {
         for (auto& file : this->obj_files) {
             if (file.size() >= 4 && file.substr(file.size() - 4) == ".dll") {
                 file = file.substr(0, file.size() - 4) + ".lib";
