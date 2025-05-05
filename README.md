@@ -3,6 +3,7 @@
 ## <div align="center">Directory</div>
 - [Project Name](#project-name)
 - [Project Introduction](#project-introduction)
+- [Dependency](#dependency)
 - [Install and Uninstall](#install-and-uninstall)
 - [Tutorial](#tutorial)
 
@@ -11,6 +12,13 @@ ccc
 
 ## Project Introduction
 The ccc is a cross platform (currently only supported on Windows and Linux) build tool for C/C++ projects, using C++ as the configuration language for the project.
+
+## Dependency
+#### Dependency when compiling ccc
+- gnu toolchain
+#### Dependency when installing ccc
+- gnu toolchain
+- python
 
 ## Install and Uninstall
 #### 1. Download the ccc
