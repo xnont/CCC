@@ -45,6 +45,12 @@ void ccc::execution::link(const ccc::config& project_cfg) {
         }
     }
 
+    // Add the suffix '.exe' when the target os is windows.
+    if (this->config.toolchain.target_os == system_type::windows_os &&
+        this->name.find(".exe") == std::string::npos) {
+        this->name += ".exe";
+    }
+
     auto replacements =
         std::unordered_map<std::string, std::vector<std::string>>{
             {"LINKER",
