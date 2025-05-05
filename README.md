@@ -19,6 +19,8 @@ The ccc is a cross platform (currently only supported on Windows and Linux) buil
 #### Dependency when installing ccc
 - gnu toolchain
 - python
+#### Dependency when using ccc
+- gnu toolchain
 
 ## Install and Uninstall
 #### 1. Download the ccc
