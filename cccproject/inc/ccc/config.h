@@ -67,13 +67,6 @@ class config_manager {
     virtual void set_config(const ccc::config& cfg) final;
 
     /**
-     * @brief Set the compiler object
-     *
-     * @param compiler The compiler is used to compile.
-     */
-    virtual void set_compiler(const std::string& compiler) final;
-
-    /**
      * @brief Set the compile flags object
      *
      * @param compile_flags The compile_flags is used to compile.
@@ -88,13 +81,6 @@ class config_manager {
      */
     virtual void add_compile_flags(
         const std::initializer_list<std::string>& compile_flags) final;
-
-    /**
-     * @brief Set the linker object
-     *
-     * @param linker The linker is used to link.
-     */
-    virtual void set_linker(const std::string& linker) final;
 
     /**
      * @brief Set the link flags object

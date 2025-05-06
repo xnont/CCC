@@ -22,7 +22,10 @@ inline std::string help_msg =
     "project file.\n"
     "    -O0/-O1/-O2/-O3/-Og  Select the optimized equivalent of the "
     "executable project file.\n";
-}
+
+inline std::string version = "0.0.1.20250506";
+
+} // namespace info
 } // namespace ccc
 
 #endif

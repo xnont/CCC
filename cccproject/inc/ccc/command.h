@@ -5,8 +5,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ccc/description.h"
-
 namespace ccc {
 /* This class defines how to register a command. */
 class command {

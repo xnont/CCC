@@ -3,7 +3,6 @@
 
 #include "ccc/config.h"
 #include "ccc/dependency.h"
-#include "ccc/description.h"
 #include "ccc/toolchain.h"
 #include "util/file.hpp"
 
