@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
 
     // Get the arguments
     std::vector<std::string> args;
-    for (int i = 0; i < argc; i++)
+    for (int i = 2; i < argc; i++)
         args.push_back(argv[i]);
 
     // Run the target command
