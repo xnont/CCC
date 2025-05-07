@@ -1,3 +1,5 @@
+#include "ccc/global.h"
+
 #include "ccc/command.h"
 #include "ccc/project.h"
 #include <string>

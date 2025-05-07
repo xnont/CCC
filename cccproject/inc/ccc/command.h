@@ -2,7 +2,6 @@
 #define __COMMAND_H__
 
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace ccc {

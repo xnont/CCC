@@ -1,0 +1,6 @@
+clang++
+-W
+-Wall 
+-Wextra 
+-std=c++17
+-I../cccproject/inc

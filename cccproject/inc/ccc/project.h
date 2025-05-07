@@ -1,10 +1,11 @@
 #ifndef __CCC_PROJECT_H__
 #define __CCC_PROJECT_H__
 
+#include "ccc/compile_task.h"
 #include "ccc/config.h"
 #include "ccc/execution.h"
 #include "ccc/library.h"
-#include <iostream>
+
 #include <vector>
 
 namespace ccc {

@@ -1,7 +1,16 @@
 #include "ccc/compile_task.h"
+
 #include "ccc/global.h"
 #include "ccc/toolchain.h"
+#include "util/file.hpp"
 #include "util/io.h"
+
+#include <array>
+#include <atomic>
+#include <condition_variable>
+#include <cstdio>
+#include <mutex>
+#include <thread>
 
 ccc::compile_task::compile_task(std::string name, std::string description) {
     this->name = name;

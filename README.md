@@ -92,12 +92,12 @@ project my_project("hello_world", init_project, exit_project,
 
 ##### Finally, run the following command to compile and run the project.
 ```shell
-ccc && ./build/hello_world
+ccc build && ./build/hello_world
 ```
 
 ##### The phenomenon of executing commands is as follows
 ```shell
-$ ccc && ./build/hello_world
+$ ccc build && ./build/hello_world
 g++ -c src\main.cpp -o ./build/obj//src\main.obj   -fdiagnostics-color=always 2>&1
 g++ ./build/obj//src\main.obj -o ./build//hello_world  
 Hello, World!
@@ -143,12 +143,12 @@ project my_project("Math_Lib", init_project, exit_project, "My Math Project");
 
 ##### We can run the following command to compile the project.
 ```shell
-ccc
+ccc build
 ```
 
 ##### The phenomenon of executing commands is as follows
 ```shell
-$ ccc
+$ ccc build
 g++ -c ./src/my_math.cpp -o ./build/obj//./src/my_math.obj  -I./inc/ -fdiagnostics-color=always 2>&1
 ar rcs ./build//libmymath.lib ./build/obj//./src/my_math.obj
 ```
@@ -191,12 +191,12 @@ project my_project("Math", init_project, exit_project, "My Math Project");
 
 ##### We can run the following command to compile and run the project.
 ```shell
-ccc && ./build/myexe
+ccc build && ./build/myexe
 ```
 
 ##### The phenomenon of executing commands is as follows
 ```shell
-$ ccc && ./build/myexe
+$ ccc build && ./build/myexe
 g++ -c ./math_lib/src/my_math.cpp -o ./build/obj//./math_lib/src/my_math.obj  -I./math_lib/inc/ -fdiagnostics-color=always 2>&1
 ar rcs ./build//libmymath.lib ./build/obj//./math_lib/src/my_math.obj
 g++ -c ./math_exe/src/main.cpp -o ./build/obj//./math_exe/src/main.obj  -I./math_lib/inc/ -fdiagnostics-color=always 2>&1
@@ -210,10 +210,9 @@ g++ ./build/obj//./math_exe/src/main.obj ./build//libmymath.lib -o ./build//myex
 - build
     ##### The 'build' command is used to compile the project and its delcaration is as follows.
     ```cpp
-    ccc::command build_cmd({"", "build"}, build,
+    ccc::command build_cmd("build", build,
                            "Build the projects based on project.cpp.");
     ```
-    ##### This means that the 'ccc' is equal to 'ccc build'.
     ##### This command can not be used in the directory without project.cpp file.
 - clean
     ##### The 'clean' command is used to clean the project products and its delcaration is as follows.
@@ -230,8 +229,8 @@ g++ ./build/obj//./math_exe/src/main.obj ./build//libmymath.lib -o ./build//myex
     ```
     ##### This means that the 'ccc desc \<name>' is equal to 'ccc describe \<name>'.
     ##### You can get the description of the built-in commands, and get the description of the project, library, execution and custom commands from the project.cpp in the project directory.
-- --version
-    ##### Use the 'ccc --version' to get the version of ccc.
+- cccver
+    ##### Use the 'ccc cccver' to get the version of ccc.
 ##### Custom Command
 ###### You can add your own command to ccc by declaring the command variable in project.cpp.
 ###### For example, We use 'ccc release' instead of 'ccc build release' by defining the 'release' command in this project.

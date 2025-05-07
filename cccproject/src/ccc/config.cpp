@@ -1,5 +1,4 @@
 #include "ccc/config.h"
-#include "ccc/toolchain.h"
 
 void ccc::config_manager::set_config(const ccc::config& cfg) {
     this->config = cfg;

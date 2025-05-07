@@ -3,19 +3,9 @@
 
 #include "ccc/config.h"
 #include "ccc/dependency.h"
-#include "ccc/toolchain.h"
-#include "util/file.hpp"
 
-#include <array>
-#include <atomic>
-#include <condition_variable>
-#include <cstdio>
-#include <iostream>
 #include <memory>
-#include <mutex>
-#include <numeric>
 #include <string>
-#include <thread>
 
 namespace ccc {
 

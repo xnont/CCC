@@ -3,9 +3,13 @@
 #include "ccc/info.hpp"
 #include "ccc/project.h"
 #include "util/io.h"
+
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <vector>
+
+namespace fs = std::filesystem;
 
 /* Declarations of the working function of commands built into ccc. */
 void build(std::vector<std::string> args);
@@ -17,8 +21,14 @@ void version(std::vector<std::string> args);
 #define RESET "\033[0m"
 
 int main(int argc, char* argv[]) {
+    // If there is no argument, print the help message.
+    if (argc == 1) {
+        ccc::io::print(ccc::info::help_msg);
+        return -1;
+    }
+
     /* The definition of commands built into ccc. */
-    ccc::command build_cmd({"", "build"}, build,
+    ccc::command build_cmd("build", build,
                            "Build the projects based on project.cpp.");
     ccc::command desc_cmd({"desc", "describe"}, describe,
                           "Get a description of what you want to know.");

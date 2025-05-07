@@ -1,4 +1,6 @@
 #include "ccc/library.h"
+
+#include "util/file.hpp"
 #include "util/io.h"
 
 ccc::library::library(std::string name, ccc::library_type type,
