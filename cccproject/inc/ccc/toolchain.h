@@ -1,7 +1,6 @@
 #ifndef __CCC_FORMAT_H__
 #define __CCC_FORMAT_H__
 
-#include <regex>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -16,6 +15,9 @@ inline ccc::system_type current_os =
 #else
     system_type::linux_os;
 #endif
+
+/* The language currently supported by ccc. */
+enum language_type { c, cpp };
 
 class Format {
   public:
@@ -34,62 +36,14 @@ class Format {
     }
 
     std::string
-    replace(std::unordered_map<std::string, std::vector<std::string>>& mp) {
-        std::string ret = format;
-
-        // First, match all templates that are wrapped by {}
-        std::regex brace_pattern(R"(\{(.*?)\})");
-        std::smatch brace_match;
-
-        while (std::regex_search(ret, brace_match, brace_pattern)) {
-            std::string segment = brace_match[1];
-            std::string replacement;
-
-            // Separate prefixe, variable name, and suffixe
-            std::regex var_pattern(R"((.*?)\$\((\w+)\)(.*))");
-            std::smatch var_match;
-
-            if (std::regex_match(segment, var_match, var_pattern)) {
-                std::string prefix = var_match[1];
-                std::string key = var_match[2];
-                std::string suffix = var_match[3];
-
-                if (mp.count(key)) {
-                    for (const auto& val : mp[key]) {
-                        if (!replacement.empty())
-                            replacement += " "; // Maintain space separation
-                                                // between parameters
-                        replacement += prefix + val + suffix;
-                    }
-                }
-            }
-
-            ret.replace(brace_match.position(), brace_match.length(),
-                        replacement);
-        }
-
-        // Handling ordinary variable replacement
-        for (auto& [key, values] : mp) {
-            std::string replacement = "";
-            if (!values.empty()) {
-                for (const auto& val : values) {
-                    if (!replacement.empty())
-                        replacement += " ";
-                    replacement += val;
-                }
-            }
-            ret = std::regex_replace(
-                ret, std::regex(R"(\$\(()" + key + R"()\))"), replacement);
-        }
-
-        return ret;
-    }
+    replace(std::unordered_map<std::string, std::vector<std::string>>& mp);
 };
 
 class toolchain {
   public:
     /* The target operating system of the compiled product. */
     ccc::system_type target_os;
+    ccc::language_type language;
 
     std::string name;
 
@@ -110,7 +64,8 @@ class toolchain {
 
     toolchain() = default;
 
-    toolchain(const ccc::system_type& target_os, const std::string& name,
+    toolchain(const ccc::system_type& target_os,
+              const ccc::language_type& language, const std::string& name,
 
               const std::string& compiler, const std::string& linker,
 
@@ -123,7 +78,7 @@ class toolchain {
               const ccc::Format& execution_link_format,
               const ccc::Format& static_library_link_format,
               const ccc::Format& shared_library_link_format)
-        : target_os(target_os), name(name),
+        : target_os(target_os), language(language), name(name),
 
           compiler(compiler), linker(linker),
 
@@ -139,8 +94,11 @@ class toolchain {
 
     toolchain(const toolchain& other) = default;
 
+    toolchain& operator=(const toolchain& other) = default;
+
     bool operator==(const toolchain& other) const {
-        return this->target_os == other.target_os && this->name == other.name;
+        return this->target_os == other.target_os &&
+               this->language == other.language && this->name == other.name;
     }
 
     bool operator!=(const toolchain& other) const { return !(*this == other); }
@@ -161,11 +119,35 @@ class toolchain {
 
 namespace built_in_toolchain {
 
-ccc::toolchain gnu_toolchain(ccc::system_type target_os = current_os);
+/**
+ * @brief Get the gnu toolchain object.
+ *
+ * @param target_os The target os.
+ * @param language The language.
+ * @return ccc::toolchain TThe toolchain object.
+ */
+ccc::toolchain
+gnu_toolchain(ccc::system_type target_os = current_os,
+              ccc::language_type language = ccc::language_type::cpp);
 
-ccc::toolchain clang_toolchain(ccc::system_type target_os = current_os);
+inline ccc::toolchain gnu_toolchain(ccc::language_type language) {
+    return built_in_toolchain::gnu_toolchain(current_os, language);
+}
 
-ccc::toolchain msvc_toolchain(ccc::system_type target_os = current_os);
+ccc::toolchain
+clang_toolchain(ccc::system_type target_os = current_os,
+                ccc::language_type language = ccc::language_type::cpp);
+inline ccc::toolchain clang_toolchain(ccc::language_type language) {
+    return built_in_toolchain::clang_toolchain(current_os, language);
+}
+
+ccc::toolchain
+msvc_toolchain(ccc::system_type target_os = current_os,
+               ccc::language_type language = ccc::language_type::cpp);
+inline ccc::toolchain msvc_toolchain(ccc::language_type language) {
+    return built_in_toolchain::msvc_toolchain(current_os, language);
+}
+
 } // namespace built_in_toolchain
 
 } // namespace ccc
