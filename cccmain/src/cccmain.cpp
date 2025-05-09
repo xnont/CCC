@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     ccc::command help_cmd(
         "ccchelp",
         [](std::vector<std::string> args) {
-            if (args.size() == 0)
+            if (args.size() == 0 && args.size() != 0)
                 return;
             ccc::io::print(ccc::info::help_msg);
         },
