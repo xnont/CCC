@@ -104,7 +104,8 @@ class toolchain {
     bool operator!=(const toolchain& other) const { return !(*this == other); }
 
     bool is_empty() const {
-        return compiler.empty() && linker.empty() &&
+        return name.empty() && compiler.empty() && linker.empty() &&
+
                compile_format.format.empty() &&
                execution_compile_format.format.empty() &&
                static_library_compile_format.format.empty() &&

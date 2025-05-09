@@ -55,8 +55,7 @@ int main(int argc, char* argv[]) {
     std::string target_cmd = "";
 
     // Determine the target command
-    if (argc > 1)
-        target_cmd = argv[1];
+    target_cmd = argv[1];
 
     // Get the arguments
     std::vector<std::string> args;
@@ -100,8 +99,8 @@ void build(std::vector<std::string> args) {
 }
 
 void describe(std::vector<std::string> args) {
-    if (args.size() != 3) {
-        std::cout << "Usage: ccc desc <name>" << std::endl;
+    if (args.size() != 1) {
+        throw std::runtime_error("Usage: ccc desc <name>");
         return;
     }
 
@@ -111,8 +110,8 @@ void describe(std::vector<std::string> args) {
     }
 
     // Find the target description.
-    if (ccc::descs.find(args[2]) != ccc::descs.end()) {
-        std::cout << args[2] << ": " << ccc::descs[args[2]] << std::endl;
+    if (ccc::descs.find(args[0]) != ccc::descs.end()) {
+        std::cout << args[0] << ": " << ccc::descs[args[0]] << std::endl;
         // Exit all projects.
         for (auto project : ccc::projects) {
             project->exit_func(project, "describe", args);
@@ -126,7 +125,7 @@ void describe(std::vector<std::string> args) {
         for (auto project : ccc::projects) {
             project->exit_func(project, "describe", args);
         }
-        throw std::runtime_error("Not find description for " + args[2] + ".");
+        throw std::runtime_error("Not find description for " + args[0] + ".");
         return;
     }
 }

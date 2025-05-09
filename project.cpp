@@ -160,7 +160,7 @@ command debug_cmd(
     [](vector<string> args) {
         cout << "Compile the ccc in debug mode." << endl;
         std::string cmd = "ccc build debug";
-        for (int i = 2; i < args.size(); i++) {
+        for (int i = 0; i < args.size(); i++) {
             cmd += " " + args[i];
         }
 #ifdef _WIN32
@@ -177,7 +177,7 @@ command release_cmd(
     [](vector<string> args) {
         cout << "Compile the ccc in release mode." << endl;
         std::string cmd = "ccc build release";
-        for (int i = 2; i < args.size(); i++) {
+        for (int i = 0; i < args.size(); i++) {
             cmd += " " + args[i];
         }
 #ifdef _WIN32
@@ -193,7 +193,7 @@ command help_cmd(
     "help",
     [](vector<string> args) {
         std::string cmd = "ccc desc CCC";
-        for (int i = 2; i < args.size(); i++) {
+        for (int i = 0; i < args.size(); i++) {
             cmd += " " + args[i];
         }
 #ifdef _WIN32
