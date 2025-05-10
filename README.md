@@ -104,9 +104,9 @@ Hello, World!
 ```
 
 #### 2. Library([Math library](./example/math_lib/))
-##### There are two types of libraries in ccc: static library and dynamic library(or shared_library, which is the same as dynamic library). The type of library is defined as follows(The static library is the default type).
+##### There are two types of libraries in ccc: static library and shared library. The type of library is defined as follows(The static library is the default type).
 ```cpp
-enum library_type { static_library, shared_library, dynamic_library };
+enum library_type { static_library, shared_library };
 ```
 
 ##### Now we put the source file in the 'src' directory and the header file in the 'inc' directory.

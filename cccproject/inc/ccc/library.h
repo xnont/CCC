@@ -4,7 +4,7 @@
 #include "ccc/compile_task.h"
 
 namespace ccc {
-enum library_type { static_library, shared_library, dynamic_library };
+enum library_type { static_library, shared_library };
 
 class library : public ccc::compile_task {
   public:

@@ -29,8 +29,7 @@ void ccc::library::set_toolchain(const ccc::config& project_cfg) {
             this->config.toolchain.static_library_compile_format;
         this->config.toolchain.link_format =
             this->config.toolchain.static_library_link_format;
-    } else if (this->type == library_type::shared_library ||
-               this->type == library_type::dynamic_library) {
+    } else if (this->type == library_type::shared_library) {
         this->config.toolchain.compile_format =
             this->config.toolchain.shared_library_compile_format;
         this->config.toolchain.link_format =
@@ -45,8 +44,7 @@ void ccc::library::set_toolchain(const ccc::config& project_cfg) {
         if (this->config.toolchain.target_os == ccc::system_type::windows_os) {
             if (this->type == library_type::static_library) {
                 this->name = "lib" + this->name + ".lib";
-            } else if (this->type == library_type::dynamic_library ||
-                       this->type == library_type::shared_library) {
+            } else if (this->type == library_type::shared_library) {
                 this->name = this->name + ".dll";
             }
         }
@@ -55,8 +53,7 @@ void ccc::library::set_toolchain(const ccc::config& project_cfg) {
                  ccc::system_type::linux_os) {
             if (this->type == library_type::static_library) {
                 this->name = "lib" + this->name + ".a";
-            } else if (this->type == library_type::dynamic_library ||
-                       this->type == library_type::shared_library) {
+            } else if (this->type == library_type::shared_library) {
                 this->name = "lib" + this->name + ".so";
             }
         }
