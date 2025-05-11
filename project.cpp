@@ -79,7 +79,8 @@ project ccc_project(
         default_project.add_dependency(&cccmain, true);
         default_project.add_dependency(&cccproject, true);
         self->add_task(&default_project);
-
+    },
+    [](project* self, string cmd, vector<string> args) {
         // Copy the cccproject/inc directory to the build/inc directory when
         // running the build command.
         if (cmd == "build" && fs::exists("./cccproject/inc") &&
@@ -136,7 +137,6 @@ project ccc_project(
             fs::remove_all("./build/inc");
         }
     },
-    [](project* self, string cmd, vector<string> args) {},
     "\n" + info::help_msg +
         "Note: For the built-in commands and options provided above, you can "
         "use them directly in any project.\n" +
@@ -160,7 +160,7 @@ command debug_cmd(
     [](vector<string> args) {
         cout << "Compile the ccc in debug mode." << endl;
         std::string cmd = "ccc build debug";
-        for (int i = 0; i < args.size(); i++) {
+        for (size_t i = 0; i < args.size(); i++) {
             cmd += " " + args[i];
         }
 #ifdef _WIN32
@@ -177,7 +177,7 @@ command release_cmd(
     [](vector<string> args) {
         cout << "Compile the ccc in release mode." << endl;
         std::string cmd = "ccc build release";
-        for (int i = 0; i < args.size(); i++) {
+        for (size_t i = 0; i < args.size(); i++) {
             cmd += " " + args[i];
         }
 #ifdef _WIN32
@@ -193,7 +193,7 @@ command help_cmd(
     "help",
     [](vector<string> args) {
         std::string cmd = "ccc desc CCC";
-        for (int i = 0; i < args.size(); i++) {
+        for (size_t i = 0; i < args.size(); i++) {
             cmd += " " + args[i];
         }
 #ifdef _WIN32
