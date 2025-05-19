@@ -48,15 +48,6 @@ class library : public ccc::compile_task {
      * @param project_cfg The configuration of the project.
      */
     void link(const ccc::config& project_cfg) override;
-
-    /**
-     * @brief Check if the library task is valid.
-     *
-     * @param project_cfg The configuration of the project.
-     * @return true The library task is valid.
-     * @return false The library task is invalid.
-     */
-    bool check(const ccc::config& project_cfg) override;
 };
 } // namespace ccc
 

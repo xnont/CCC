@@ -23,11 +23,9 @@ ccc::project::project(
 }
 void ccc::project::process() {
     for (const auto& task : tasks) {
-        if (task->check(this->config)) {
-            task->set_toolchain(this->config);
-            task->compile(this->config);
-            task->link(this->config);
-        }
+        task->set_toolchain(this->config);
+        task->compile(this->config);
+        task->link(this->config);
     }
 }
 

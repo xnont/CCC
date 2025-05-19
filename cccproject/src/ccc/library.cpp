@@ -93,12 +93,3 @@ void ccc::library::link(const ccc::config& project_cfg) {
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
                           project_cfg.is_print && this->config.is_print);
 }
-
-#define RED "\033[31m"
-#define ORANGE "\033[38;5;202m"
-#define RESET "\033[0m"
-bool ccc::library::check(const ccc::config& project_cfg) {
-    if (project_cfg.toolchain.is_empty())
-        return true;
-    return true;
-}

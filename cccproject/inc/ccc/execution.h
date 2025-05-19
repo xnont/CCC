@@ -42,15 +42,6 @@ class execution : public ccc::compile_task {
      * @param project_cfg The configuration of the project.
      */
     void link(const ccc::config& project_cfg) override;
-
-    /**
-     * @brief Check if the execution task is valid.
-     *
-     * @param project_cfg The configuration of the project.
-     * @return true The execution task is valid.
-     * @return false The execution task is invalid.
-     */
-    bool check(const ccc::config& project_cfg) override;
 };
 } // namespace ccc
 

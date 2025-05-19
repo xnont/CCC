@@ -101,15 +101,6 @@ class compile_task : public ccc::config_manager {
      */
     virtual void link(const ccc::config& project_cfg) = 0;
 
-    /**
-     * @brief Check whether the task is ready to be compiled.
-     *
-     * @param project_cfg The config of the project.
-     * @return true The task is ready to be compiled.
-     * @return false The task is not ready to be compiled.
-     */
-    virtual bool check(const ccc::config& project_cfg) = 0;
-
     /* The convenient utility functions provided by ccc. */
 
     /**
