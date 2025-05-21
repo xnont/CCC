@@ -15,7 +15,7 @@
 ccc::compile_task::compile_task(std::string name, std::string description) {
     this->name = name;
     // Add description
-    ccc::descs[name] = description;
+    ccc::global_var::add_desc(name, description);
 }
 void ccc::compile_task::compile(const ccc::config& project_cfg) {
     // Process the dependencies.

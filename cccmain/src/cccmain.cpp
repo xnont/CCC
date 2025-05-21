@@ -4,6 +4,7 @@
 #include "ccc/project.h"
 #include "util/io.h"
 
+#include <cstddef>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -110,8 +111,13 @@ void describe(std::vector<std::string> args) {
     }
 
     // Find the target description.
-    if (ccc::descs.find(args[0]) != ccc::descs.end()) {
-        std::cout << args[0] << ": " << ccc::descs[args[0]] << std::endl;
+    auto descs = ccc::global_var::get_descs(args[0]);
+    if (descs.size() != 0) {
+        for (size_t i = 0; i < descs.size(); i++) {
+            std::cout << args[0] << ": " << descs[i] << std::endl;
+            if (i != descs.size() - 1)
+                std::cout << std::endl;
+        }
         // Exit all projects.
         for (auto project : ccc::projects) {
             project->exit_func(project, "describe", args);

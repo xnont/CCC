@@ -8,7 +8,7 @@ ccc::command::command(std::string name,
     : run(run) {
     // Register the command.
     cmds[name] = this;
-    ccc::descs[name] = description;
+    ccc::global_var::add_desc(name, description);
 }
 
 ccc::command::command(std::initializer_list<std::string> names,
@@ -18,6 +18,6 @@ ccc::command::command(std::initializer_list<std::string> names,
     // Register the command.
     for (auto name : names) {
         cmds[name] = this;
-        ccc::descs[name] = description;
+        ccc::global_var::add_desc(name, description);
     }
 }

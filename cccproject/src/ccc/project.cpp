@@ -19,7 +19,7 @@ ccc::project::project(
     // Add project
     ccc::projects.push_back(this);
     // Add description
-    ccc::descs[name] = description;
+    ccc::global_var::add_desc(name, description);
 }
 void ccc::project::process() {
     for (const auto& task : tasks) {
