@@ -7,7 +7,7 @@ ccc::project::project(
     auto (*exit_func)(project*, std::string, std::vector<std::string>)->void)
     : init_func(init_func), exit_func(exit_func) {
     // Add project
-    ccc::projects.push_back(this);
+    ccc::global_var::add_project(this);
 }
 
 ccc::project::project(
@@ -17,7 +17,7 @@ ccc::project::project(
     std::string description)
     : init_func(init_func), exit_func(exit_func) {
     // Add project
-    ccc::projects.push_back(this);
+    ccc::global_var::add_project(this);
     // Add description
     ccc::global_var::add_desc(name, description);
 }
