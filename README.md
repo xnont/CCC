@@ -233,6 +233,7 @@ g++ ./build/obj//./math_exe/src/main.obj ./build//libmymath.lib -o ./build//myex
     ##### Use the 'ccc cccver' to get the version of ccc.
 ##### Custom Command
 ###### You can add your own command to ccc by declaring the command variable in project.cpp.
+###### Also, you can override the built-in commands provided by CCC by defining custom commands.
 ###### For example, We use 'ccc release' instead of 'ccc build release' by defining the 'release' command in this project.
 ```cpp
 command release_cmd(

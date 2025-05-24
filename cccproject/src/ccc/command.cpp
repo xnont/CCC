@@ -12,8 +12,8 @@ ccc::command::command(std::string name,
 
     // Check if the command is defined.
     if (ccc::global_var::get_cmd(name) != nullptr)
-        std::cout << "ccc: \033[33mwarn:\033[0m Command " << name
-                  << " is defined repeatedly." << std::endl;
+        std::cout << "ccc: \033[33mwarn:\033[0m The " << name
+                  << " command is defined repeatedly." << std::endl;
 
     // Register the command.
     ccc::global_var::add_cmd(name, this);
@@ -30,8 +30,8 @@ ccc::command::command(std::initializer_list<std::string> names,
 
         // Check if the command is defined.
         if (ccc::global_var::get_cmd(name) != nullptr)
-            std::cout << "ccc: \033[33mwarn:\033[0m Command " << name
-                      << " is defined repeatedly." << std::endl;
+            std::cout << "ccc: \033[33mwarn:\033[0m The " << name
+                      << " command is defined repeatedly." << std::endl;
 
         // Register the command.
         ccc::global_var::add_cmd(name, this);
