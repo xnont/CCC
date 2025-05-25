@@ -4,6 +4,7 @@
 #include "ccc/command.h"
 #include "ccc/project.h"
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace ccc {
@@ -17,7 +18,10 @@ class global_var {
     static std::vector<ccc::project*> projects;
 
     /* This static variable stores commands. */
-    static std::unordered_map<std::string, ccc::command*> cmds;
+    static std::unordered_map<
+        std::string,
+        std::unordered_map<ccc::command::priority, std::vector<ccc::command*>>>
+        cmds;
 
   public:
     /**
@@ -41,22 +45,23 @@ class global_var {
     static std::vector<std::string> get_descs(const std::string name);
 
     /**
-     * @brief Add a command to the global variable cmds. If the command
-     * corresponding to the name already exists, the original commandn will be
-     * overwritten. Please call the is_cmd method to check before using this
-     * method.
+     * @brief Add the commands based on name and priority.
      *
-     * @param name Name of the command.
-     * @param cmd Command to be added.
+     * @param name The name of the command.
+     * @param cmd The command to be added.
+     * @param prio The priority of the command.
      */
-    static void add_cmd(const std::string name, const ccc::command* cmd);
+    static void add_cmd(const std::string name, const ccc::command* cmd,
+                        ccc::command::priority prio);
 
     /**
-     * @brief Get the command by name from the global variable cmds.
+     * @brief Get the highest priority command by name. If there are multiple
+     * commands with the highest priority of the target, a runtime exception
+     * will be thrown. If the command corresponding to the target does not
+     * exist, a runtime exception will be thrown.
      *
      * @param name Name of the command.
-     * @return const ccc::command* The command. If the command does not exist,
-     * return nullptr.
+     * @return const ccc::command* The command.
      */
     static const ccc::command* get_cmd(const std::string name);
 

@@ -27,21 +27,14 @@ int main(int argc, char* argv[]) {
         args.push_back(argv[i]);
 
     // Run the target command
-    if (auto cmd = ccc::global_var::get_cmd(target_cmd); cmd != nullptr) {
-        try {
-            cmd->run(args);
-        }
-        // Catch the exception and print the error message.
-        catch (const std::exception& e) {
-            std::cerr << "ccc: " << RED << "error: " << RESET << e.what()
-                      << std::endl;
-            return -1;
-        }
-        return 0;
+    try {
+        ccc::global_var::get_cmd(target_cmd)->run(args);
     }
-
-    // If the target command is not found, print an error message.
-    std::cerr << "ccc: " << RED << "error: " << RESET << "Unknown command "
-              << target_cmd << "." << std::endl;
-    return -1;
+    // Catch the exception and print the error message.
+    catch (const std::exception& e) {
+        std::cerr << "ccc: " << RED << "error: " << RESET << e.what()
+                  << std::endl;
+        return -1;
+    }
+    return 0;
 }

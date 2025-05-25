@@ -17,9 +17,11 @@ std::unordered_map<std::string, std::vector<std::string>>
 
 std::vector<ccc::project*> ccc::global_var::projects;
 
-std::unordered_map<std::string, ccc::command*> ccc::global_var::cmds;
+std::unordered_map<std::string, std::unordered_map<ccc::command::priority,
+                                                   std::vector<ccc::command*>>>
+    ccc::global_var::cmds;
 /* Built-in commands. */
-ccc::command build_cmd(
+static ccc::command build_cmd(
     "build",
     [](std::vector<std::string> args) {
         // Check if the project.cpp exists.
@@ -35,7 +37,7 @@ ccc::command build_cmd(
         ccc::global_var::exit_projects("build", args);
     },
     "Build the projects based on project.cpp.");
-ccc::command desc_cmd(
+static ccc::command desc_cmd(
     {"desc", "describe"},
     [](std::vector<std::string> args) {
         if (args.size() != 1) {
@@ -69,7 +71,7 @@ ccc::command desc_cmd(
         }
     },
     "Get a description of what you want to know.");
-ccc::command clean_cmd(
+static ccc::command clean_cmd(
     "clean",
     [](std::vector<std::string> args) {
         // Remove function.
@@ -105,14 +107,14 @@ ccc::command clean_cmd(
         }
     },
     "Remove products from the projects.");
-ccc::command version_cmd(
+static ccc::command version_cmd(
     "cccver",
     [](std::vector<std::string> args) {
         args.push_back("--version");
         std::cout << "ccc version: " << ccc::info::version << std::endl;
     },
     "Print the version of ccc.");
-ccc::command help_cmd(
+static ccc::command help_cmd(
     "ccchelp",
     [](std::vector<std::string> args) {
         if (args.size() == 0 && args.size() != 0)
@@ -120,7 +122,7 @@ ccc::command help_cmd(
         ccc::io::print(ccc::info::help_msg);
     },
     "Print the help message about ccc.");
-ccc::command project_cmd(
+static ccc::command project_cmd(
     "project",
     [](std::vector<std::string> args) {
         if (args.size() == 0)
@@ -136,12 +138,55 @@ std::vector<std::string> ccc::global_var::get_descs(const std::string name) {
     return descs[name];
 }
 
-void ccc::global_var::add_cmd(const std::string name, const ccc::command* cmd) {
-    cmds[name] = const_cast<ccc::command*>(cmd);
+void ccc::global_var::add_cmd(const std::string name, const ccc::command* cmd,
+                              ccc::command::priority prio) {
+    cmds[name][prio].push_back(const_cast<ccc::command*>(cmd));
 }
 
 const ccc::command* ccc::global_var::get_cmd(const std::string name) {
-    return cmds[name];
+    // Check if the command exists
+    if (cmds.find(name) == cmds.end()) {
+        throw std::runtime_error("The command '" + name +
+                                 "' is not registered.");
+    }
+
+    // Get priority map
+    auto& priority_map = cmds[name];
+
+    // Find the highest priority (high > normal > low)
+    auto max_prio = ccc::command::priority::low;
+    for (const auto& [prio, cmds] : priority_map) {
+        if (!cmds.empty() && prio > max_prio) {
+            max_prio = prio;
+        }
+    }
+
+    // Determine the priority name
+    std::string prio_name;
+    switch (max_prio) {
+    case ccc::command::priority::high:
+        prio_name = "high";
+        break;
+    case ccc::command::priority::normal:
+        prio_name = "normal";
+        break;
+    case ccc::command::priority::low:
+        prio_name = "low";
+        break;
+    }
+
+    // Get the command list for the highest priority
+    auto& candidates = priority_map.at(max_prio);
+
+    // Check if there are multiple candidates
+    if (candidates.size() != 1) {
+        throw std::runtime_error("The multiple commands are registered for '" +
+                                 name + "' with the same(" + prio_name +
+                                 ") priority.");
+    }
+
+    // Return the single command
+    return candidates.front();
 }
 
 void ccc::global_var::add_project(ccc::project* project) {
