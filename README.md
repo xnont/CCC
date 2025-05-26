@@ -241,7 +241,7 @@ command release_cmd(
     [](vector<string> args) {
         cout << "Compile the ccc in release mode." << endl;
         std::string cmd = "ccc build release";
-        for (int i = 2; i < args.size(); i++) {
+        for (size_t i = 0; i < args.size(); i++) {
             cmd += " " + args[i];
         }
 #ifdef _WIN32

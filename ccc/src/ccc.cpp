@@ -64,12 +64,12 @@ int main(int argc, char** argv) {
     "/libcccmain.a";
 #endif
 
-    std::string cccproject_path = std::string(CCC_LIBRARY_PATH) +
+    std::string cccunit_path = std::string(CCC_LIBRARY_PATH) +
 #ifdef _WIN32
-                                  "/cccproject.dll";
+                               "/cccunit.dll";
 #endif
 #ifdef __linux__
-    "/libcccproject.so";
+    "/libcccunit.so";
 #endif
 
     // For the 'project' command, delete the 'project_bin_file' file to update
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
     if (!fs::exists(project_bin_file) ||
         !compareFileModificationTime(project_config_file, project_bin_file) ||
         !compareFileModificationTime(cccmain_path, project_bin_file) ||
-        !compareFileModificationTime(cccproject_path, project_bin_file)) {
+        !compareFileModificationTime(cccunit_path, project_bin_file)) {
 
 #ifdef _WIN32
         std::string compile_cmd = CCC_COMPILER + std::string(" ") +
@@ -91,8 +91,8 @@ int main(int argc, char** argv) {
                                   project_config_file + " " +
                                   // cccmain
                                   cccmain_path + " " +
-                                  // cccproject
-                                  cccproject_path + " " +
+                                  // cccunit
+                                  cccunit_path + " " +
                                   // project bin
                                   " -o " + project_bin_file + " -I " +
                                   CCC_INCLUDE_PATH;
@@ -103,8 +103,8 @@ int main(int argc, char** argv) {
                                   cccmain_path + " " +
                                   // project.cpp
                                   project_config_file + " " +
-                                  // cccproject
-                                  cccproject_path + " " +
+                                  // cccunit
+                                  cccunit_path + " " +
                                   // project bin
                                   " -o " + project_bin_file + " -I " +
                                   CCC_INCLUDE_PATH;

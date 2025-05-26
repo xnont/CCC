@@ -3,4 +3,4 @@ clang++
 -Wall 
 -Wextra 
 -std=c++17
--I./cccproject/inc
+-I./cccunit/inc

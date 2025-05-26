@@ -35,37 +35,36 @@ project ccc_project(
         /* Describe the executable program ccc. */
         execution ccc(
             "ccc",
-            "The ccc does not rely on cccmain and cccproject, but its working "
-            "principle is to link project.cpp, cccmain, and cccproject in a "
+            "The ccc does not rely on cccmain and cccunit, but its working "
+            "principle is to link project.cpp, cccmain, and cccunit in a "
             "directory with project.cpp to generate and call project, and call "
             "defautl_project in a directory without project.cpp.");
         ccc.obj_path = "./ccc/build/obj";
         ccc.output_path = "./build/bin";
         ccc.add_source_files({"./ccc/src/ccc.cpp"});
-        ccc.add_header_folder_paths({"./cccproject/inc", "./ccc/inc"});
+        ccc.add_header_folder_paths({"./cccunit/inc", "./ccc/inc"});
         self->add_task(&ccc);
 
         /* Describe the library file cccmain. */
         library cccmain("cccmain", static_library,
-                        "The cccmain relies on cccproject and defines the "
+                        "The cccmain relies on cccunit and defines the "
                         "built-in commands of "
-                        "ccc using the interfaces provided in cccproject.");
+                        "ccc using the interfaces provided in cccunit.");
         cccmain.obj_path = "./cccmain/build/obj";
         cccmain.output_path = "./build/lib";
         cccmain.add_source_files({"./cccmain/src/cccmain.cpp"});
-        cccmain.add_header_folder_paths({"./cccproject/inc"});
+        cccmain.add_header_folder_paths({"./cccunit/inc"});
         self->add_task(&cccmain);
 
-        /* Describe the library file cccproject. */
-        library cccproject(
-            "cccproject", shared_library,
-            "The ccc project is the main component of the project, "
-            "defining how to describe the project when using ccc.");
-        cccproject.obj_path = "./cccproject/build/obj";
-        cccproject.output_path = "./build/lib";
-        cccproject.add_source_files({"./cccproject/src/"}, {".cpp"});
-        cccproject.add_header_folder_paths({"./cccproject/inc"});
-        self->add_task(&cccproject);
+        /* Describe the library file cccunit. */
+        library cccunit("cccunit", shared_library,
+                        "The ccc project is the main component of the project, "
+                        "defining how to describe the project when using ccc.");
+        cccunit.obj_path = "./cccunit/build/obj";
+        cccunit.output_path = "./build/lib";
+        cccunit.add_source_files({"./cccunit/src/"}, {".cpp"});
+        cccunit.add_header_folder_paths({"./cccunit/inc"});
+        self->add_task(&cccunit);
 
         /* Describe the executable program default_project. */
         execution default_project(
@@ -77,14 +76,14 @@ project ccc_project(
             "ccc.");
         default_project.output_path = "./build/bin";
         default_project.add_dependency(&cccmain, true);
-        default_project.add_dependency(&cccproject, true);
+        default_project.add_dependency(&cccunit, true);
         self->add_task(&default_project);
     },
     [](project* self, string cmd, vector<string> args) {
-        // Copy the cccproject/inc directory to the build/inc directory when
+        // Copy the cccunit/inc directory to the build/inc directory when
         // running the build command.
-        if (cmd == "build" && fs::exists("./cccproject/inc") &&
-            fs::is_directory("./cccproject/inc")) {
+        if (cmd == "build" && fs::exists("./cccunit/inc") &&
+            fs::is_directory("./cccunit/inc")) {
 
             // AI generated
             function<void(const fs::path& source, const fs::path& destination)>
@@ -129,7 +128,7 @@ project ccc_project(
                     cerr << "General error: " << e.what() << endl;
                 }
             };
-            copy_directory("./cccproject/inc", "./build/inc");
+            copy_directory("./cccunit/inc", "./build/inc");
         }
 
         // Clean the build/inc directory when running the clean command.
@@ -210,7 +209,7 @@ command line_cmd(
     // AI generated
     [](vector<string> args) {
         int total_lines = 0;
-        vector<string> directories = {"./ccc", "./cccmain", "./cccproject"};
+        vector<string> directories = {"./ccc", "./cccmain", "./cccunit"};
         unordered_set<string> valid_ext = {".cpp", ".h", ".hpp", ".c"};
 
         auto count_lines = [&](const fs::path& path) {

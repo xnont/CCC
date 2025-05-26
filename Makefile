@@ -21,18 +21,18 @@ release:
 build:
 	make -f ./ccc/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 	make -f ./cccmain/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
-	make -f ./cccproject/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
+	make -f ./cccunit/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 ifeq ($(OS_TYPE), windows)
-	$(COMPILER) build/lib/libcccmain.lib build/lib/cccproject.dll -o ./build/bin/default_project
+	$(COMPILER) build/lib/libcccmain.lib build/lib/cccunit.dll -o ./build/bin/default_project
 else ifeq ($(OS_TYPE), linux)
-	$(COMPILER) build/lib/libcccmain.a build/lib/libcccproject.so -o ./build/bin/default_project
+	$(COMPILER) build/lib/libcccmain.a build/lib/libcccunit.so -o ./build/bin/default_project
 endif
-	cp -r ./cccproject/inc ./build
+	cp -r ./cccunit/inc ./build
 
 clean:
 	make -f ./ccc/Makefile clean
 	make -f ./cccmain/Makefile clean
-	make -f ./cccproject/Makefile clean
+	make -f ./cccunit/Makefile clean
 
 install:
 	mkdir -p $(shell echo $$HOME)/.ccc

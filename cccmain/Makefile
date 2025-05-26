@@ -17,9 +17,9 @@ else ifeq ($(OS_TYPE), linux)
 endif
 	mkdir -p ./build/lib
 ifeq ($(OS_TYPE), windows)
-	$(COMPILER) ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.lib -c -I./cccproject/inc $(COMPILE_FLAGS)
+	$(COMPILER) ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.lib -c -I./cccunit/inc $(COMPILE_FLAGS)
 else ifeq ($(OS_TYPE), linux)
-	$(COMPILER) ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.a -c -I./cccproject/inc $(COMPILE_FLAGS)
+	$(COMPILER) ./cccmain/src/cccmain.cpp -o ./build/lib/libcccmain.a -c -I./cccunit/inc $(COMPILE_FLAGS)
 endif
 
 clean:
