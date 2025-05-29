@@ -30,8 +30,9 @@ if __name__ == '__main__':
     # Add the directory where the ccc executable program is located to the Path variable.
     Path_Value = get_user_environment_variable('Path')
     if r"%USERPROFILE%\.ccc\bin" not in Path_Value.split(';'):
-        set_user_environment_variable('Path', Path_Value + r";%USERPROFILE%\.ccc\bin")
+        set_user_environment_variable('Path', r"%USERPROFILE%\.ccc\bin;" + Path_Value)
+    Path_Value = get_user_environment_variable('Path')
     if r"%USERPROFILE%\.ccc\lib" not in Path_Value.split(';'):
-        set_user_environment_variable('Path', Path_Value + r";%USERPROFILE%\.ccc\lib")
+        set_user_environment_variable('Path', r"%USERPROFILE%\.ccc\lib;" + Path_Value)
 
     pass
