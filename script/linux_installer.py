@@ -27,4 +27,6 @@ if __name__ == '__main__':
     # Add the directory where the ccc executable program is located to the Path variable.
     if get_user_environment_variable('PATH') != '$PATH:~/.ccc/bin':
         set_user_environment_variable('PATH', '$PATH:~/.ccc/bin')
+    if get_user_environment_variable('LD_LIBRARY_PATH') != '$LD_LIBRARY_PATH:~/.ccc/lib':
+        set_user_environment_variable('LD_LIBRARY_PATH', '$LD_LIBRARY_PATH:~/.ccc/lib')
     pass
