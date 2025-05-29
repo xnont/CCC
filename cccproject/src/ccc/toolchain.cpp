@@ -173,11 +173,15 @@ ccc::toolchain msvc_toolchain(ccc::system_type target_os,
 
         ccc::Format(""), // link_format
         ccc::Format("cl /Fe$(OUTPUT_FILE) $(OBJECT_FILES) "
-                    "$(LINK_FLAGS)"), // execution_link_format
+                    "$(LINK_FLAGS) /link "
+                    "{/libpath:\"$(LIBRARY_FOLDERS)\"} "
+                    "{$(LIBRARY_FILES).lib}"), // execution_link_format
         ccc::Format("lib /OUT:$(OUTPUT_FILE) $(OBJECT_FILES) "
                     "$(LINK_FLAGS)"), // static_library_link_format
         ccc::Format("link /DLL /OUT:$(OUTPUT_FILE) {$(OBJECT_FILES)} "
-                    "$(LINK_FLAGS)") // shared_library_link_format
+                    "$(LINK_FLAGS) "
+                    "{/libpath:\"$(LIBRARY_FOLDERS)\"} "
+                    "{$(LIBRARY_FILES).lib} ") // shared_library_link_format
     );
 
     // Add the '/EHsc' compile flag when compiling C++ code

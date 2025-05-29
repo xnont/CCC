@@ -2,6 +2,7 @@
 
 #include "util/file.hpp"
 #include "util/io.h"
+#include <string>
 
 ccc::library::library(std::string name, ccc::library_type type,
                       std::string description)
@@ -96,13 +97,29 @@ void ccc::library::link(const ccc::config& project_cfg) {
 void ccc::library::transmit(ccc::compile_task& super) {
     // For static libraries
     if (this->type == static_library) {
-        this->set_toolchain(super.config);
+        // Determine whether to add the prefix and the suffix.
+        if (this->name.find(".") == std::string::npos)
+            this->set_toolchain(super.config);
         super.obj_files.push_back(this->output_path + "/" + this->name);
     }
 
     // For dynamic libraries
     else if (this->type == shared_library) {
+        // Remove the prefix and suffix of the library name.
+        std::string lib_name = this->name;
+        if (lib_name.size() >= 4 &&
+            lib_name.substr(lib_name.size() - 4) == ".dll") {
+            lib_name = lib_name.substr(0, lib_name.size() - 4);
+        }
+        if (lib_name.size() >= 3 &&
+            lib_name.substr(lib_name.size() - 3) == ".so") {
+            lib_name = lib_name.substr(0, lib_name.size() - 3);
+        }
+        if (lib_name.size() >= 3 && lib_name.substr(0, 3) == "lib") {
+            lib_name = lib_name.substr(3);
+        }
+
         super.config.library_folder_paths.push_back(this->output_path);
-        super.lib_files.push_back(this->name);
+        super.lib_files.push_back(lib_name);
     }
 }
