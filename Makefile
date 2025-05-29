@@ -25,7 +25,9 @@ build:
 ifeq ($(OS_TYPE), windows)
 	$(COMPILER) build/lib/libcccmain.lib build/lib/cccunit.dll -o ./build/bin/default_project
 else ifeq ($(OS_TYPE), linux)
-	$(COMPILER) build/lib/libcccmain.a build/lib/libcccunit.so -o ./build/bin/default_project
+	cp ./build/lib/libcccunit.so .
+	$(COMPILER) build/lib/libcccmain.a libcccunit.so -o ./build/bin/default_project
+	rm ./libcccunit.so
 endif
 	cp -r ./cccunit/inc ./build
 
