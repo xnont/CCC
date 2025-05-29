@@ -25,8 +25,8 @@ if __name__ == '__main__':
         set_user_environment_variable('CCC_LIBRARY_PATH', os.path.expanduser('~/.ccc/lib'))
     
     # Add the directory where the ccc executable program is located to the Path variable.
-    if get_user_environment_variable('PATH') != '$PATH:~/.ccc/bin':
-        set_user_environment_variable('PATH', '$PATH:~/.ccc/bin')
-    if get_user_environment_variable('LD_LIBRARY_PATH') != '$LD_LIBRARY_PATH:~/.ccc/lib':
-        set_user_environment_variable('LD_LIBRARY_PATH', '$LD_LIBRARY_PATH:~/.ccc/lib')
+    if get_user_environment_variable('PATH') != os.path.expanduser('~/.ccc/bin')+':$PATH':
+        set_user_environment_variable('PATH', os.path.expanduser('~/.ccc/bin')+':$PATH')
+    if get_user_environment_variable('LD_LIBRARY_PATH') != os.path.expanduser('~/.ccc/lib')+':$LD_LIBRARY_PATH':
+        set_user_environment_variable('LD_LIBRARY_PATH', os.path.expanduser('~/.ccc/lib')+':$LD_LIBRARY_PATH')
     pass
