@@ -42,6 +42,13 @@ class execution : public ccc::compile_task {
      * @param project_cfg The configuration of the project.
      */
     void link(const ccc::config& project_cfg) override;
+
+    /**
+     * @brief Execution does not anything in the transmit method.
+     *
+     * @param super The parent task.
+     */
+    void transmit(ccc::compile_task& super) override;
 };
 } // namespace ccc
 

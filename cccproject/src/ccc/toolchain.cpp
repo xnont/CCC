@@ -86,10 +86,12 @@ ccc::toolchain gnu_toolchain(ccc::system_type target_os,
 
         ccc::Format(""),
         ccc::Format(
-            "$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) {$(LINK_FLAGS)} "
+            "$(LINKER) -o $(OUTPUT_FILE) {$(OBJECT_FILES)} "
+            "{-l$(LIBRARY_FILES)} {-L$(LIBRARY_FOLDERS)} {$(LINK_FLAGS)} "
             "-fdiagnostics-color=always 2>&1"),
         ccc::Format("ar rcs $(OUTPUT_FILE) $(OBJECT_FILES)"),
-        ccc::Format("$(LINKER) {$(OBJECT_FILES)} -o $(OUTPUT_FILE) "
+        ccc::Format("$(LINKER) -o $(OUTPUT_FILE) {-l$(LIBRARY_FILES)} "
+                    "{-L$(LIBRARY_FOLDERS)} {$(OBJECT_FILES)} "
                     "{$(LINK_FLAGS)} -shared "
                     "-fdiagnostics-color=always 2>&1"));
 

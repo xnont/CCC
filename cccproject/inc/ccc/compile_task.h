@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace ccc {
 
@@ -30,7 +31,7 @@ class compile_task : public ccc::config_manager {
         : config_manager(other.config), name(other.name),
           output_path(other.output_path), obj_path(other.obj_path),
           source_files(other.source_files), obj_files(other.obj_files),
-          dependencies(other.dependencies) {};
+          lib_files(other.lib_files), dependencies(other.dependencies) {};
 
     /**
      * @brief The subclass of compile_task must implement a clone constructor.
@@ -57,6 +58,9 @@ class compile_task : public ccc::config_manager {
      * compile_task class based on the source files, or can be added by
      * oneself.) */
     std::vector<std::string> obj_files;
+
+    /* This variable stores the name of the library required for this task. */
+    std::vector<std::string> lib_files;
 
     /* The dependencies of the task. */
     std::vector<
@@ -100,6 +104,15 @@ class compile_task : public ccc::config_manager {
      * @param project_cfg The config of the father project.
      */
     virtual void link(const ccc::config& project_cfg) = 0;
+
+    /**
+     * @brief The subclass needs to implement this function. When the parent
+     * task wants to add a subtask directly to itself, this method will be
+     * called.
+     *
+     * @param super The parent task.
+     */
+    virtual void transmit(ccc::compile_task& super) = 0;
 
     /* The convenient utility functions provided by ccc. */
 
