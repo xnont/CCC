@@ -23,11 +23,9 @@ build:
 	make -f ./cccmain/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 	make -f ./cccunit/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j
 ifeq ($(OS_TYPE), windows)
-	$(COMPILER) build/lib/libcccmain.lib build/lib/cccunit.dll -o ./build/bin/default_project
+	$(COMPILER) build/lib/libcccmain.lib -lcccunit -L./build/lib/ -o ./build/bin/default_project
 else ifeq ($(OS_TYPE), linux)
-	cp ./build/lib/libcccunit.so .
-	$(COMPILER) build/lib/libcccmain.a libcccunit.so -o ./build/bin/default_project
-	rm ./libcccunit.so
+	$(COMPILER) build/lib/libcccmain.a -lcccunit -L./build/lib/ -o ./build/bin/default_project
 endif
 	cp -r ./cccunit/inc ./build
 

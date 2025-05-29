@@ -65,6 +65,10 @@ void ccc::execution::link(const ccc::config& project_cfg) {
             {"OUTPUT_FILE",
              {(this->output_path.empty() ? "./build/bin" : this->output_path) +
               "/" + this->name}},
+            {"LIBRARY_FILES", {this->lib_files.begin(), this->lib_files.end()}},
+            {"LIBRARY_FOLDERS",
+             {this->config.library_folder_paths.begin(),
+              this->config.library_folder_paths.end()}},
             {"LINK_FLAGS",
              {this->config.link_flags.begin(), this->config.link_flags.end()}}};
 
@@ -73,4 +77,9 @@ void ccc::execution::link(const ccc::config& project_cfg) {
     // Link
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
                           project_cfg.is_print && this->config.is_print);
+}
+
+void ccc::execution::transmit(ccc::compile_task& super) {
+    if (super.name.length())
+        return;
 }

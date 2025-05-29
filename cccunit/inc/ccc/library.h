@@ -32,6 +32,14 @@ class library : public ccc::compile_task {
      */
     ccc::library* clone() const override { return new ccc::library(*this); }
 
+    /**
+     * @brief Add information to the parent task based on different library
+     * types.
+     *
+     * @param super The parent task.
+     */
+    void transmit(ccc::compile_task& super) override;
+
     library_type type = library_type::static_library;
 
     /**

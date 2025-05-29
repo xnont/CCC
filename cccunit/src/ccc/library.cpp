@@ -2,6 +2,7 @@
 
 #include "util/file.hpp"
 #include "util/io.h"
+#include <string>
 
 ccc::library::library(std::string name, ccc::library_type type,
                       std::string description)
@@ -36,26 +37,21 @@ void ccc::library::set_toolchain(const ccc::config& project_cfg) {
             this->config.toolchain.shared_library_link_format;
     }
 
-    // If the given library name does not have a suffix, add the prefix and
-    // suffix according to the operating system.
-    if (this->name.find(".") == std::string::npos) {
-        // Set the library name prefix and suffix according to the target
-        // operating system. Windows
-        if (this->config.toolchain.target_os == ccc::system_type::windows_os) {
-            if (this->type == library_type::static_library) {
-                this->name = "lib" + this->name + ".lib";
-            } else if (this->type == library_type::shared_library) {
-                this->name = this->name + ".dll";
-            }
+    // Set the library name prefix and suffix according to the target
+    // operating system. Windows
+    if (this->config.toolchain.target_os == ccc::system_type::windows_os) {
+        if (this->type == library_type::static_library) {
+            this->name = "lib" + this->name + ".lib";
+        } else if (this->type == library_type::shared_library) {
+            this->name = this->name + ".dll";
         }
-        // Linux
-        else if (this->config.toolchain.target_os ==
-                 ccc::system_type::linux_os) {
-            if (this->type == library_type::static_library) {
-                this->name = "lib" + this->name + ".a";
-            } else if (this->type == library_type::shared_library) {
-                this->name = "lib" + this->name + ".so";
-            }
+    }
+    // Linux
+    else if (this->config.toolchain.target_os == ccc::system_type::linux_os) {
+        if (this->type == library_type::static_library) {
+            this->name = "lib" + this->name + ".a";
+        } else if (this->type == library_type::shared_library) {
+            this->name = "lib" + this->name + ".so";
         }
     }
 }
@@ -85,6 +81,10 @@ void ccc::library::link(const ccc::config& project_cfg) {
             {"OUTPUT_FILE",
              {(this->output_path.empty() ? "./build/lib" : this->output_path) +
               "/" + this->name}},
+            {"LIBRARY_FILES", {this->lib_files.begin(), this->lib_files.end()}},
+            {"LIBRARY_FOLDERS",
+             {this->config.library_folder_paths.begin(),
+              this->config.library_folder_paths.end()}},
             {"LINK_FLAGS",
              {this->config.link_flags.begin(), this->config.link_flags.end()}}};
 
@@ -92,4 +92,34 @@ void ccc::library::link(const ccc::config& project_cfg) {
     // Link
     ccc::io::exec_command(cmd, project_cfg.is_print && this->config.is_print,
                           project_cfg.is_print && this->config.is_print);
+}
+
+void ccc::library::transmit(ccc::compile_task& super) {
+    // For static libraries
+    if (this->type == static_library) {
+        // Determine whether to add the prefix and the suffix.
+        if (this->name.find(".") == std::string::npos)
+            this->set_toolchain(super.config);
+        super.obj_files.push_back(this->output_path + "/" + this->name);
+    }
+
+    // For dynamic libraries
+    else if (this->type == shared_library) {
+        // Remove the prefix and suffix of the library name.
+        std::string lib_name = this->name;
+        if (lib_name.size() >= 4 &&
+            lib_name.substr(lib_name.size() - 4) == ".dll") {
+            lib_name = lib_name.substr(0, lib_name.size() - 4);
+        }
+        if (lib_name.size() >= 3 &&
+            lib_name.substr(lib_name.size() - 3) == ".so") {
+            lib_name = lib_name.substr(0, lib_name.size() - 3);
+        }
+        if (lib_name.size() >= 3 && lib_name.substr(0, 3) == "lib") {
+            lib_name = lib_name.substr(3);
+        }
+
+        super.config.library_folder_paths.push_back(this->output_path);
+        super.lib_files.push_back(lib_name);
+    }
 }

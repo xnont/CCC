@@ -20,6 +20,9 @@ class config {
     /* The header folder paths */
     std::vector<std::string> header_folder_paths;
 
+    /* The library folder paths */
+    std::vector<std::string> library_folder_paths;
+
     /* The macros */
     std::vector<std::string> macros;
 
@@ -39,8 +42,10 @@ class config {
     config(const config& other)
         : toolchain(other.toolchain), compile_flags(other.compile_flags),
           link_flags(other.link_flags),
-          header_folder_paths(other.header_folder_paths), macros(other.macros),
-          thread_num(other.thread_num), is_print(other.is_print) {}
+          header_folder_paths(other.header_folder_paths),
+          library_folder_paths(other.library_folder_paths),
+          macros(other.macros), thread_num(other.thread_num),
+          is_print(other.is_print) {}
 
     config& operator=(const config& other) = default;
 };

@@ -100,10 +100,9 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
     }
 
     for (auto& [dep, dep_desc] : dependencies) {
-        // If the is_transmit is true, add the dependency to the obj_files list.
+        // If the is_transmit is true, transmit the dependency.
         if (dep_desc.is_transmit) {
-            dep->set_toolchain(project_cfg);
-            this->obj_files.push_back(dep->output_path + "/" + dep->name);
+            dep->transmit(*this);
         }
     }
 }
