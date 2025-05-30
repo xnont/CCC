@@ -41,7 +41,7 @@ void process_project(std::string source, std::string target,
                               // Target
                               target + " " +
                               // cccmain library
-                              user_home + "/.ccc/lib/libcccmain.lib " +
+                              user_home + "/.ccc/lib/" + cccmain_name + " " +
                               // Source
                               source + " " +
                               // cccunit library
@@ -54,16 +54,20 @@ void process_project(std::string source, std::string target,
         !compareFileModificationTime(user_home + "/.ccc/lib/" + cccmain_name,
                                      target) ||
         !compareFileModificationTime(user_home + "/.ccc/lib/" + cccunit_name,
-                                     target))
-        std::system(compile_cmd.c_str());
-
+                                     target)) {
+        if (std::system(compile_cmd.c_str()) != 0) {
+            std::exit(1);
+        }
+    }
     // Run the project.exe
 #ifdef __linux__
-    std::strin run_cmd = "bash -c '" + target + " " + cmd + "'";
+    std::string run_cmd = "bash -c '" + target + " " + run_args + "'";
 #elif _WIN32
     std::string run_cmd = target + " " + run_args;
 #endif
-    std::system(run_cmd.c_str());
+    if (std::system(run_cmd.c_str()) != 0) {
+        std::exit(1);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -80,6 +84,19 @@ int main(int argc, char** argv) {
         }
         // Obtain the run arguments(Used to run the project.exe).
         else {
+            // Special case for 'project' command
+            if (run_args.size() == 0 && arg == "project") {
+#ifdef __linux__
+                std::string bin = "project";
+#elif _WIN32
+                std::string bin = "project.exe";
+#endif
+                if (fs::exists(bin))
+                    fs::remove(bin);
+                else if (fs::exists(user_home + "/" + bin))
+                    fs::remove(user_home + "/" + bin);
+            }
+
             run_args += " " + arg;
         }
     }
@@ -87,7 +104,7 @@ int main(int argc, char** argv) {
     // If there is a project.cpp file, compile and run it.
     if (fs::exists("project.cpp")) {
 #ifdef __linux__
-        process_project("project.cpp", "project", compile_flags, run_args);
+        process_project("project.cpp", "./project", compile_flags, run_args);
 #elif _WIN32
         process_project("project.cpp", "project.exe", compile_flags, run_args);
 #endif
