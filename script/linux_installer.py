@@ -19,10 +19,6 @@ if __name__ == '__main__':
     # Set three environment variables required for ccc runtime.
     if get_user_environment_variable('CCC_COMPILER') == '':
         set_user_environment_variable('CCC_COMPILER', 'g++')
-    if get_user_environment_variable('CCC_INCLUDE_PATH') == '':
-        set_user_environment_variable('CCC_INCLUDE_PATH', os.path.expanduser('~/.ccc/inc'))
-    if get_user_environment_variable('CCC_LIBRARY_PATH') == '':
-        set_user_environment_variable('CCC_LIBRARY_PATH', os.path.expanduser('~/.ccc/lib'))
     
     # Add the directory where the ccc executable program is located to the Path variable.
     if get_user_environment_variable('PATH') != os.path.expanduser('~/.ccc/bin')+':$PATH':
