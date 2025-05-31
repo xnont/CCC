@@ -13,10 +13,10 @@ COMPILER=g++
 
 
 debug:
-	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-g -std=c++17 -W -Wall -Wextra" -B
+	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-g -std=c++20 -W -Wall -Wextra" -B
 
 release:
-	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-O2 -std=c++17 -W -Wall -Wextra" -B
+	make build COMPILER=$(COMPILER) COMPILE_FLAGS="-O2 -std=c++20 -W -Wall -Wextra" -B
 
 build:
 	make -f ./ccc/Makefile COMPILER=$(COMPILER) COMPILE_FLAGS="$(COMPILE_FLAGS)" -j

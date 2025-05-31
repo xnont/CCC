@@ -56,6 +56,8 @@ void process_project(std::vector<std::string> source_list, std::string target,
                               "-lcccunit -L" + user_home + "/.ccc/lib " +
                               // Include path
                               "-I" + user_home + "/.ccc/inc " +
+                              // C++20
+                              "-std=c++20 " +
                               // Compile flags
                               compile_flags;
     for (auto& source_file : source_list) {

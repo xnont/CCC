@@ -22,10 +22,10 @@ project ccc_project(
         unordered_set<string> ccc_args(args.begin(), args.end());
         if (ccc_args.find("release") != ccc_args.end()) {
             self->add_compile_flags(
-                {"-O2", "-std=c++17", "-W", "-Wall", "-Wextra"});
+                {"-O2", "-std=c++20", "-W", "-Wall", "-Wextra"});
         } else {
             self->add_compile_flags(
-                {"-g", "-std=c++17", "-W", "-Wall", "-Wextra"});
+                {"-g", "-std=c++20", "-W", "-Wall", "-Wextra"});
         }
 
         if (ccc_args.count("--noprint")) {
