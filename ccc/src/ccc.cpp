@@ -3,7 +3,9 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <initializer_list>
 #include <string>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -33,8 +35,14 @@ std::string cccunit_name =
 "libcccunit.so";
 #endif
 
-void process_project(std::string source, std::string target,
+void process_project(std::vector<std::string> source_list, std::string target,
                      std::string compile_flags, std::string run_args) {
+    // Obtain the source files.
+    std::string source;
+    for (auto& source_file : source_list) {
+        source += source_file + " ";
+    }
+
     // Compile the project.cpp
     std::string compiler = std::getenv("CCC_COMPILER");
     std::string compile_cmd = compiler + " -o " +
@@ -50,13 +58,17 @@ void process_project(std::string source, std::string target,
                               "-I" + user_home + "/.ccc/inc " +
                               // Compile flags
                               compile_flags;
-    if (!fs::exists(target) || !compareFileModificationTime(source, target) ||
-        !compareFileModificationTime(user_home + "/.ccc/lib/" + cccmain_name,
-                                     target) ||
-        !compareFileModificationTime(user_home + "/.ccc/lib/" + cccunit_name,
-                                     target)) {
-        if (std::system(compile_cmd.c_str()) != 0) {
-            std::exit(1);
+    for (auto& source_file : source_list) {
+        if (!fs::exists(target) ||
+            !compareFileModificationTime(source_file, target) ||
+            !compareFileModificationTime(
+                user_home + "/.ccc/lib/" + cccmain_name, target) ||
+            !compareFileModificationTime(
+                user_home + "/.ccc/lib/" + cccunit_name, target)) {
+            if (std::system(compile_cmd.c_str()) != 0) {
+                std::exit(1);
+            }
+            break;
         }
     }
     // Run the project.exe
@@ -101,27 +113,31 @@ int main(int argc, char** argv) {
         }
     }
 
+    // If there is not a project.cpp file in the ~/.ccc directory, create it.
+    if (!fs::exists(user_home + "/.ccc/project.cpp"))
+        std::ofstream(user_home + "/.ccc/project.cpp").close();
+
+    std::vector<std::string> source_list{user_home + "/.ccc/project.cpp"};
+
     // If there is a project.cpp file, compile and run it.
     if (fs::exists("project.cpp")) {
+        source_list.push_back("project.cpp");
 #ifdef __linux__
-        process_project("project.cpp", "./project", compile_flags, run_args);
+        process_project(source_list, "./project", compile_flags, run_args);
 #elif _WIN32
-        process_project("project.cpp", "project.exe", compile_flags, run_args);
+        process_project(source_list, "project.exe", compile_flags, run_args);
 #endif
     }
 
     // If there is no project.cpp file, use the default project.cpp file(Located
     // in the ~/.ccc directory).
     else {
-        if (!fs::exists(user_home + "/.ccc/project.cpp"))
-            std::ofstream(user_home + "/.ccc/project.cpp").close();
 #ifdef __linux__
-        process_project(user_home + "/.ccc/project.cpp",
-                        user_home + "/.ccc/project", compile_flags, run_args);
-#elif _WIN32
-        process_project(user_home + "/.ccc/project.cpp",
-                        user_home + "/.ccc/project.exe", compile_flags,
+        process_project(source_list, user_home + "/.ccc/project", compile_flags,
                         run_args);
+#elif _WIN32
+        process_project(source_list, user_home + "/.ccc/project.exe",
+                        compile_flags, run_args);
 #endif
     }
 
