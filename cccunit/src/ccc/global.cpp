@@ -36,7 +36,7 @@ static ccc::command build_cmd(
         ccc::global_var::process_projects();
         ccc::global_var::exit_projects("build", args);
     },
-    "Build the projects based on project.cpp.");
+    "Build the projects based on project.cpp.", ccc::command::priority::high);
 static ccc::command desc_cmd(
     {"desc", "describe"},
     [](std::vector<std::string> args) {
@@ -70,7 +70,8 @@ static ccc::command desc_cmd(
             return;
         }
     },
-    "Get a description of what you want to know.");
+    "Get a description of what you want to know.",
+    ccc::command::priority::high);
 static ccc::command clean_cmd(
     "clean",
     [](std::vector<std::string> args) {
@@ -106,22 +107,23 @@ static ccc::command clean_cmd(
             project->exit_func(project, "clean", args);
         }
     },
-    "Remove products from the projects.");
+    "Remove products from the projects.", ccc::command::priority::high);
 static ccc::command version_cmd(
-    "cccver",
+    "version",
     [](std::vector<std::string> args) {
-        args.push_back("--version");
+        if (args.size() == 0 && args.size() != 0)
+            return;
         std::cout << "ccc version: " << ccc::info::version << std::endl;
     },
-    "Print the version of ccc.");
+    "Print the version of ccc.", ccc::command::priority::low);
 static ccc::command help_cmd(
-    "ccchelp",
+    "help",
     [](std::vector<std::string> args) {
         if (args.size() == 0 && args.size() != 0)
             return;
         ccc::io::print(ccc::info::help_msg);
     },
-    "Print the help message about ccc.");
+    "Print the help message about ccc.", ccc::command::priority::low);
 static ccc::command project_cmd(
     "project",
     [](std::vector<std::string> args) {
@@ -129,7 +131,8 @@ static ccc::command project_cmd(
             return;
     },
     "Only generate the executable project file without performing any "
-    "other operations.");
+    "other operations.",
+    ccc::command::priority::high);
 void ccc::global_var::add_desc(const std::string name, const std::string desc) {
     descs[name].push_back(desc);
 }
