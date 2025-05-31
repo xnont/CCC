@@ -105,8 +105,8 @@ int main(int argc, char** argv) {
 #endif
                 if (fs::exists(bin))
                     fs::remove(bin);
-                else if (fs::exists(user_home + "/" + bin))
-                    fs::remove(user_home + "/" + bin);
+                else if (fs::exists(user_home + "/.ccc/" + bin))
+                    fs::remove(user_home + "/.ccc/" + bin);
             }
 
             run_args += " " + arg;
