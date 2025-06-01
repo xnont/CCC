@@ -4,6 +4,7 @@
 #include "ccc/info.hpp"
 #include "ccc/project.h"
 #include "util/io.h"
+#include <cstddef>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -164,28 +165,26 @@ const ccc::command* ccc::global_var::get_cmd(const std::string name) {
         }
     }
 
-    // Determine the priority name
-    std::string prio_name;
-    switch (max_prio) {
-    case ccc::command::priority::high:
-        prio_name = "high";
-        break;
-    case ccc::command::priority::normal:
-        prio_name = "normal";
-        break;
-    case ccc::command::priority::low:
-        prio_name = "low";
-        break;
-    }
-
     // Get the command list for the highest priority
     auto& candidates = priority_map.at(max_prio);
 
     // Check if there are multiple candidates
     if (candidates.size() != 1) {
-        throw std::runtime_error("The multiple commands are registered for '" +
-                                 name + "' with the same(" + prio_name +
-                                 ") priority.");
+        std::string msg = "The multiple commands are registered for '" + name +
+                          "' with the same and highest priority(" + max_prio +
+                          ").\n";
+
+        // Add the position information of the candidates to the message
+        for (size_t i = 0; i < candidates.size(); i++) {
+            msg += std::string("[") + std::to_string(i) + "] " +
+                   std::string(candidates[i]->loc.file_name()) + ":" +
+                   std::to_string(candidates[i]->loc.line());
+            if (i != candidates.size() - 1) {
+                msg += "\n";
+            }
+        }
+
+        throw std::runtime_error(msg);
     }
 
     // Return the single command
