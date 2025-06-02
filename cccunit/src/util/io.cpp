@@ -5,6 +5,7 @@
 #include <windows.h>
 #elif __linux__
 #include <sys/ioctl.h>
+#include <unistd.h>
 #endif
 
 static std::mutex out_mutex;
@@ -72,7 +73,7 @@ int ccc::io::get_terminal_width() {
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
     return csbi.srWindow.Right - csbi.srWindow.Left + 1;
 #else
-    struct winsize w{};
+    struct winsize w {};
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     return w.ws_col;
 #endif
