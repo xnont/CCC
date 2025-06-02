@@ -11,8 +11,10 @@ class execution : public ccc::compile_task {
      *
      * @param name The name of the execution task.
      * @param description The description of the execution task.
+     * @param loc The location of the execution.
      */
-    execution(std::string name, std::string description);
+    execution(std::string name, std::string description,
+              std::source_location loc = std::source_location::current());
 
     /**
      * @brief Construct a new execution object by copy.

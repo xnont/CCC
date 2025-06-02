@@ -3,8 +3,9 @@
 #include "util/file.hpp"
 #include "util/io.h"
 
-ccc::execution::execution(std::string name, std::string description)
-    : ccc::compile_task(name, description) {}
+ccc::execution::execution(std::string name, std::string description,
+                          std::source_location loc)
+    : ccc::compile_task(name, description, loc) {}
 
 void ccc::execution::set_toolchain(const ccc::config& project_cfg) {
     // Set toolchain
@@ -24,6 +25,12 @@ void ccc::execution::set_toolchain(const ccc::config& project_cfg) {
         this->config.toolchain.execution_compile_format;
     this->config.toolchain.link_format =
         this->config.toolchain.execution_link_format;
+
+    // Add the suffix '.exe' when the target os is windows.
+    if (this->config.toolchain.target_os == system_type::windows_os &&
+        this->name.find(".exe") == std::string::npos) {
+        this->name += ".exe";
+    }
 }
 
 void ccc::execution::link(const ccc::config& project_cfg) {
@@ -45,12 +52,6 @@ void ccc::execution::link(const ccc::config& project_cfg) {
                 file = file.substr(0, file.size() - 4) + ".lib";
             }
         }
-    }
-
-    // Add the suffix '.exe' when the target os is windows.
-    if (this->config.toolchain.target_os == system_type::windows_os &&
-        this->name.find(".exe") == std::string::npos) {
-        this->name += ".exe";
     }
 
     auto replacements =

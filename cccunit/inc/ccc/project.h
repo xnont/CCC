@@ -6,6 +6,7 @@
 #include "ccc/execution.h"
 #include "ccc/library.h"
 
+#include <source_location>
 #include <vector>
 
 namespace ccc {
@@ -14,27 +15,22 @@ class project : public ccc::config_manager {
     /**
      * @brief Construct a new project object.
      *
-     * @param init_func The init_func is executed before processing the project.
-     * @param exit_func The exit_func is executed after processing the project.
-     */
-    project(auto (*init_func)(project*, std::string, std::vector<std::string>)
-                ->void,
-            auto (*exit_func)(project*, std::string, std::vector<std::string>)
-                ->void);
-    /**
-     * @brief Construct a new project object.
-     *
      * @param name The name of the project.
      * @param init_func The init_func is executed before processing the project.
      * @param exit_func The exit_func is executed after processing the project.
      * @param description The description of the project.
+     * @param loc The location of the project.
      */
     project(std::string name,
             auto (*init_func)(project*, std::string, std::vector<std::string>)
                 ->void,
             auto (*exit_func)(project*, std::string, std::vector<std::string>)
                 ->void,
-            std::string description);
+            std::string description,
+            std::source_location loc = std::source_location::current());
+
+    /* The name of the project. */
+    std::string name;
 
     /* The init_func is executed before processing the project. */
     void (*init_func)(project*, std::string, std::vector<std::string>);
@@ -45,6 +41,9 @@ class project : public ccc::config_manager {
     void* arg;
 
     std::vector<std::shared_ptr<ccc::compile_task>> tasks;
+
+    /* The location of the project */
+    std::source_location loc;
 
     /* Process the project.  */
     void process();

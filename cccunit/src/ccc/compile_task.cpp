@@ -8,25 +8,39 @@
 #include <array>
 #include <atomic>
 #include <condition_variable>
+#include <cstddef>
 #include <cstdio>
 #include <mutex>
+#include <string>
 #include <thread>
 
-ccc::compile_task::compile_task(std::string name, std::string description) {
+ccc::compile_task::compile_task(std::string name, std::string description,
+                                std::source_location loc) {
     this->name = name;
+    this->loc = loc;
     // Add description
     ccc::global_var::add_desc(name, description);
 }
-void ccc::compile_task::compile(const ccc::config& project_cfg) {
+void ccc::compile_task::compile(const ccc::config& project_cfg,
+                                std::vector<std::string>& path) {
+
+    // Set the toolchain.
+    this->set_toolchain(project_cfg);
+
+    // Add the compile task to the path.
+    path.push_back(this->name + "(" + this->loc.file_name() + ":" +
+                   std::to_string(this->loc.line()) + ")");
+
     // Process the dependencies.
     for (auto& [dep, dep_desc] : dependencies) {
         // If the dependency does not exist and the is_compile is true, process
         // it.
         if (!fs::exists(dep->output_path + "/" + dep->name) &&
             dep_desc.is_compile) {
-            dep->set_toolchain(project_cfg);
-            dep->compile(project_cfg);
+            // Process the dependency.
+            dep->compile(project_cfg, path);
             dep->link(project_cfg);
+            ccc::io::println("");
         }
 
         // Add header paths.
@@ -34,6 +48,20 @@ void ccc::compile_task::compile(const ccc::config& project_cfg) {
             this->config.header_folder_paths.push_back(header_folder_path);
         }
     }
+
+    // Print the path.
+    std::string msg;
+    for (size_t i = 0; i < path.size(); i++) {
+        if (i == 0) {
+            msg += "[" + path[i] + "]:";
+        } else {
+            msg += " => " + path[i];
+        }
+    }
+    ccc::io::println(msg);
+
+    // Remove the compile task from the path.
+    path.pop_back();
 
     // Create a thread pool.
     unsigned int core_num = std::thread::hardware_concurrency();

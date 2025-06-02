@@ -47,6 +47,13 @@ void println(const char* message);
  */
 bool exec_command(const std::string& cmd, bool is_cmd_print, bool is_res_print);
 
+/**
+ * @brief Get the terminal width.
+ *
+ * @return int The terminal width.
+ */
+int get_terminal_width();
+
 } // namespace io
 
 } // namespace ccc

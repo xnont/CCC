@@ -1,6 +1,11 @@
 #include "util/io.h"
 #include <cstdio>
 #include <mutex>
+#ifdef _WIN32
+#include <windows.h>
+#elif __linux__
+#include <sys/ioctl.h>
+#endif
 
 static std::mutex out_mutex;
 
@@ -59,4 +64,16 @@ bool ccc::io::exec_command(const std::string& cmd, bool is_cmd_print,
 
     pclose(pipe);
     return true;
+}
+
+int ccc::io::get_terminal_width() {
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    return csbi.srWindow.Right - csbi.srWindow.Left + 1;
+#else
+    struct winsize w{};
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return w.ws_col;
+#endif
 }

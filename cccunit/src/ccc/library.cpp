@@ -5,11 +5,8 @@
 #include <string>
 
 ccc::library::library(std::string name, ccc::library_type type,
-                      std::string description)
-    : ccc::compile_task(name, description) {
-    // Set the type
-    this->type = type;
-}
+                      std::string description, std::source_location loc)
+    : ccc::compile_task(name, description, loc), type(type) {}
 
 void ccc::library::set_toolchain(const ccc::config& project_cfg) {
     // Set toolchain

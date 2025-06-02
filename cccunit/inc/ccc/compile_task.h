@@ -5,6 +5,7 @@
 #include "ccc/dependency.h"
 
 #include <memory>
+#include <source_location>
 #include <string>
 #include <vector>
 
@@ -18,8 +19,10 @@ class compile_task : public ccc::config_manager {
      *
      * @param name The name of the task.
      * @param description The description of the task.
+     * @param loc The location of the task.
      */
-    compile_task(std::string name, std::string description);
+    compile_task(std::string name, std::string description,
+                 std::source_location loc);
 
     /**
      * @brief Construct a new compile task object by copying another compile
@@ -31,7 +34,8 @@ class compile_task : public ccc::config_manager {
         : config_manager(other.config), name(other.name),
           output_path(other.output_path), obj_path(other.obj_path),
           source_files(other.source_files), obj_files(other.obj_files),
-          lib_files(other.lib_files), dependencies(other.dependencies) {};
+          lib_files(other.lib_files), dependencies(other.dependencies),
+          loc(other.loc) {};
 
     /**
      * @brief The subclass of compile_task must implement a clone constructor.
@@ -67,6 +71,9 @@ class compile_task : public ccc::config_manager {
         std::pair<std::shared_ptr<ccc::compile_task>, dependency_description>>
         dependencies;
 
+    /* The location of the project */
+    std::source_location loc;
+
     /**
      * @brief Add a dependency to the compile task.
      *
@@ -86,8 +93,10 @@ class compile_task : public ccc::config_manager {
      * @brief Compile all source files in source_files.
      *
      * @param project_cfg The config of the father project.
+     * @param path The path indicating the compilation order relationship.
      */
-    virtual void compile(const ccc::config& project_cfg) final;
+    virtual void compile(const ccc::config& project_cfg,
+                         std::vector<std::string>& path) final;
 
     /**
      * @brief Set the toolchain object.

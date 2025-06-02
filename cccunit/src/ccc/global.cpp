@@ -205,7 +205,25 @@ void ccc::global_var::init_projects(std::string cmd,
 void ccc::global_var::process_projects() {
     // Traverse and process all projects.
     for (auto project : ccc::global_var::projects) {
+        std::string msg = "Processing project: " + project->name + "(" +
+                          project->loc.file_name() + ":" +
+                          std::to_string(project->loc.line()) + ")";
+
+        // Padding the message to the center of the terminal.
+        int term_width = ccc::io::get_terminal_width();
+        int msg_width = msg.length();
+        if (term_width - msg_width > 0) {
+            int pad_width = (term_width - msg_width) / 2;
+            msg =
+                std::string(pad_width, '=') + msg + std::string(pad_width, '=');
+        }
+
+        // Print the message and process the project.
+        ccc::io::println(msg);
         project->process();
+        ccc::io::println(std::string(term_width, '='));
+        if (project != projects[projects.size() - 1])
+            ccc::io::println("");
     }
 }
 

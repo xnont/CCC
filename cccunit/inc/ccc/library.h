@@ -14,8 +14,10 @@ class library : public ccc::compile_task {
      * @param name The name of the library.
      * @param type The type of the library.
      * @param description The description of the library.
+     * @param loc The location of the library.
      */
-    library(std::string name, ccc::library_type type, std::string description);
+    library(std::string name, ccc::library_type type, std::string description,
+            std::source_location loc = std::source_location::current());
 
     /**
      * @brief Construct a new library object by copying another library object.
